@@ -34,6 +34,7 @@
 #include <itkCastImageFilter.h>
 
 #include "jhmrCommon.h"
+#include "jhmrAssert.h"
 
 namespace jhmr
 {
@@ -234,13 +235,12 @@ Eigen::Matrix<CoordScalar,N,1> GetITKOriginPoint(const itk::Image<tPixel,N>* img
   return pt;
 }
 
-/// \brief Sets the ITK origin point
-///
-/// Input is any point type that allows for indexing via the
-/// () operator; e.g. p(i)
-template <class tPixel, unsigned N>
-void SetITKOriginPoint(itk::Image<tPixel,N>* img,
-                       const Eigen::Matrix<CoordScalar,int(N),1>& orig_pt)
+namespace detail
+{
+
+template <class tPixel, unsigned int N, int N1, int N2>
+void SetITKOriginPointHelper(itk::Image<tPixel,N>* img,
+                             const Eigen::Matrix<CoordScalar,N1,N2>& orig_pt)
 {
   using ImageType            = itk::Image<tPixel,N>;
   using ImagePointType       = typename ImageType::PointType;
@@ -254,6 +254,57 @@ void SetITKOriginPoint(itk::Image<tPixel,N>* img,
   }
 
   img->SetOrigin(img_orig_pt);
+}
+
+}  // detail
+
+/// \brief Sets the ITK origin point
+///
+template <class tPixel, unsigned int N>
+void SetITKOriginPoint(itk::Image<tPixel,N>* img,
+                       const Eigen::Matrix<CoordScalar,static_cast<unsigned int>(N),1>& orig_pt)
+{
+  detail::SetITKOriginPointHelper(img, orig_pt);
+}
+
+/// \brief Sets the ITK origin point
+///
+template <class tPixel, unsigned int N>
+void SetITKOriginPoint(itk::Image<tPixel,N>* img,
+                       const Eigen::Matrix<CoordScalar,1,static_cast<unsigned int>(N)>& orig_pt)
+{
+  detail::SetITKOriginPointHelper(img, orig_pt);
+}
+
+/// \brief Sets the ITK origin point
+///
+template <class tPixel, unsigned int N>
+void SetITKOriginPoint(itk::Image<tPixel,N>* img,
+                       const Eigen::Matrix<CoordScalar,Eigen::Dynamic,1>& orig_pt)
+{
+  jhmrASSERT(orig_pt.rows() == static_cast<int>(N));
+  detail::SetITKOriginPointHelper(img, orig_pt);
+}
+
+/// \brief Sets the ITK origin point
+///
+template <class tPixel, unsigned int N>
+void SetITKOriginPoint(itk::Image<tPixel,N>* img,
+                       const Eigen::Matrix<CoordScalar,1,Eigen::Dynamic>& orig_pt)
+{
+  jhmrASSERT(orig_pt.cols() == static_cast<int>(N));
+  detail::SetITKOriginPointHelper(img, orig_pt);
+}
+
+/// \brief Sets the ITK origin point
+///
+template <class tPixel, unsigned int N>
+void SetITKOriginPoint(itk::Image<tPixel,N>* img,
+                       const Eigen::Matrix<CoordScalar,Eigen::Dynamic,Eigen::Dynamic>& orig_pt)
+{
+  jhmrASSERT(((orig_pt.rows() == static_cast<int>(N)) && (orig_pt.cols() == 1)) ||
+             ((orig_pt.rows() == 1) && (orig_pt.cols() == static_cast<int>(N))));
+  detail::SetITKOriginPointHelper(img, orig_pt);
 }
 
 /// \brief Deep copies an ITK image's pixels and metadata.

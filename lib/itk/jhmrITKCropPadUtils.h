@@ -115,7 +115,7 @@ CropImage2DBoundary(const itk::Image<tPixelType,2>* src_img, const unsigned long
  return img_roi_filter->GetOutput();
 }
 
-template <class tPixelScalar, unsigned int tN, class tSizeScalar, unsigned long tN2>
+template <class tPixelScalar, unsigned int tN, class tSizeScalar>
 typename itk::Image<tPixelScalar,tN>::Pointer
 ITKPadImage(const itk::Image<tPixelScalar,tN>* src_img,
             const std::array<tSizeScalar,static_cast<unsigned long>(tN)>& start_pad,

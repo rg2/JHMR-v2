@@ -386,7 +386,7 @@ void WriteMatrixRowH5(const double* row_buf, const unsigned long row_idx, H5::Da
 H5::DataSet WriteAffineTransform4x4(const std::string& field_name,
                                     const FrameTransform& xform,
                                     H5::CommonFG* h5,
-                                    const bool compress);
+                                    const bool compress = true);
 
 void WriteImageH5(const itk::Image<unsigned char,2>* img, 
                   H5::CommonFG* h5,
@@ -505,6 +505,9 @@ double ReadSingleScalarH5Double(const std::string& field_name,
 bool ReadSingleScalarH5Bool(const std::string& field_name,
                             const H5::CommonFG& h5);
 
+CoordScalar ReadSingleScalarH5CoordScalar(const std::string& field_name,
+                                          const H5::CommonFG& h5);
+
 std::vector<unsigned char>
 ReadVectorH5UChar(const std::string& field_name, const H5::CommonFG& h5);
 
@@ -537,6 +540,8 @@ ReadVectorH5Double(const std::string& field_name, const H5::CommonFG& h5);
 
 std::vector<bool>
 ReadVectorH5Bool(const std::string& field_name, const H5::CommonFG& h5);
+
+MatMxN ReadMatrixH5CoordScalar(const std::string& field_name, const H5::CommonFG& h5);
 
 MatMxN ReadMatrixH5Float(const std::string& field_name, const H5::CommonFG& h5);
 

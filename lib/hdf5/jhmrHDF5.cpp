@@ -1166,7 +1166,7 @@ void jhmr::WriteMatrixRowH5(const double* row_buf, const unsigned long row_idx, 
 H5::DataSet jhmr::WriteAffineTransform4x4(const std::string& field_name,
                                           const FrameTransform& xform,
                                           H5::CommonFG* h5,
-                                          const bool compress = true)
+                                          const bool compress)
 {
   return WriteMatrixH5(field_name, xform.matrix(), h5, compress);
 }
@@ -1378,6 +1378,12 @@ bool jhmr::ReadSingleScalarH5Bool(const std::string& field_name,
   return static_cast<bool>(ReadSingleScalarH5UChar(field_name, h5));
 }
 
+jhmr::CoordScalar jhmr::ReadSingleScalarH5CoordScalar(const std::string& field_name,
+                                                      const H5::CommonFG& h5)
+{
+  return ReadSingleScalarH5Helper<CoordScalar>(field_name, h5);
+}
+
 std::vector<unsigned char>
 jhmr::ReadVectorH5UChar(const std::string& field_name, const H5::CommonFG& h5)
 {
@@ -1452,6 +1458,11 @@ jhmr::ReadVectorH5Bool(const std::string& field_name, const H5::CommonFG& h5)
   }
 
   return v;
+}
+
+jhmr::MatMxN jhmr::ReadMatrixH5CoordScalar(const std::string& field_name, const H5::CommonFG& h5)
+{
+  return ReadMatrixH5Helper<CoordScalar>(field_name, h5);
 }
 
 jhmr::MatMxN jhmr::ReadMatrixH5Float(const std::string& field_name, const H5::CommonFG& h5)

@@ -27,7 +27,9 @@ add_library(jhmr_file_formats OBJECT jhmrDICOMUtils.cpp
                                      jhmrFCSVUtils.cpp
                                      jhmrSTLMeshIO.cpp
                                      jhmrH5MeshIO.cpp
-                                     jhmrMeshIO.cpp)
+                                     jhmrMeshIO.cpp
+                                     jhmrH5PAOIO.cpp
+                                     jhmrPAOIO.cpp)
 
 target_link_libraries(jhmr_file_formats PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

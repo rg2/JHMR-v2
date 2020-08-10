@@ -59,6 +59,15 @@ struct Plane3
   CoordScalar scalar;
 };
 
+/// \brief Applies a rigid transformation to a plane
+///
+/// 4x4 homogenous matrix is used to represent the transformation.
+/// It is permitted to provide the inputs as outputs.
+Plane3 TransformPlane(const Plane3& src_plane, const FrameTransform& xform);
+
+/// \brief Applies a translation to a plane
+Plane3 TranslatePlane(const Plane3& src_plane, const Pt3& translation);
+
 /// \brief Finds the closest point on a plane to a given point (and plane).
 ///
 /// The plane normal does not necessarily have to be a unit vector.

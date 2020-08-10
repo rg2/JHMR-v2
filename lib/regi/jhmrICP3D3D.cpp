@@ -184,12 +184,12 @@ jhmr::PointToSurRegiICP::run()
 
     ++iter;
   }
-
-  return cur_xform;
-
+  
   if (end_of_processing_callback_fn)
   {
     end_of_processing_callback_fn(this);
   }
+
+  return cur_xform;
 }
 

@@ -83,7 +83,7 @@ jhmr::Mat3x3 jhmr::ExpSO3(const Pt3& x)
 jhmr::Mat3x3 jhmr::ExpSO3(const Mat3x3& W)
 {
   // verify the input is skew-symmetric
-  jhmrASSERT((W - W.transpose()).norm() < 1.0e-4);
+  jhmrASSERT((W + W.transpose()).norm() < 1.0e-4);
   
   Mat3x3 R = Mat3x3::Identity();
 

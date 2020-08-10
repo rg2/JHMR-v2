@@ -32,7 +32,8 @@ set(JHMR_LIB_SUB_DIRS common
                       regi
                       basic_math
                       spatial
-                      optim)
+                      optim
+                      hip_surgery)
                     #ray_cast)
 
 # build up the list of include directories for the jhmr library

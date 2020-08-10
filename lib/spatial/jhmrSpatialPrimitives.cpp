@@ -77,6 +77,27 @@ jhmr::Pt3List jhmr::SampleAASlab3PtsIso(const AASlab3& slab, const CoordScalar i
   return pts;
 }
 
+jhmr::Plane3 jhmr::TransformPlane(const Plane3& src_plane, const FrameTransform& xform)
+{
+  Plane3 rot_plane;
+
+  rot_plane.normal = xform.matrix().block(0,0,3,3) * src_plane.normal;
+  
+  rot_plane.scalar = src_plane.scalar + (xform.matrix().block(0,3,3,1).transpose() * rot_plane.normal)(0);
+
+  return rot_plane;
+}
+
+jhmr::Plane3 jhmr::TranslatePlane(const Plane3& src_plane, const Pt3& translation)
+{
+  Plane3 trans_plane;
+  
+  trans_plane.normal = src_plane.normal;
+  trans_plane.scalar = src_plane.scalar + src_plane.normal.dot(translation);
+
+  return trans_plane;
+}
+
 jhmr::Pt3 jhmr::FindClosestOnPlane(const Pt3& query_pt, const Plane3& plane)
 {
   return query_pt - ((plane.normal.dot(query_pt) - plane.scalar) * (plane.normal / plane.normal.norm()));

@@ -1,7 +1,7 @@
 # JHMR-v2
 This repository contains library routines and stand-alone programs for various tasks relating to medical image analysis for intraoperative navigation, preoperative planning, and postoperative analysis.
 The acronym JHMR was originally derived from this software's original development by Rob Grupp while working with the "Johns Hopkins Models and Registration" research group.
-This is the second iteration of the JHMR repository and focuses on minimizing compile times and being resuable to novice developers/researchers.
+This is the second iteration of the JHMR repository and focuses on minimizing compile times and being reusable to novice developers/researchers.
 
 ## Library Features:
 * Registration:
@@ -46,6 +46,12 @@ This is the second iteration of the JHMR repository and focuses on minimizing co
   * [Timer class for measuring runtimes with a stopwatch-like interface](lib/common/jhmrTimer.h)
   * [Basic filesystem utilities](lib/common/jhmrFilesystemUtils.h)
   * [Runtime assertions](lib/common/jhmrAssert.h)
+* Hip Surgery:
+  * [Guessing labels of bones from segmentation volumes](lib/hip_surgery/jhmrHipSegUtils.h)
+  * [Planning and modeling of osteotomies](lib/hip_surgery/jhmrPAOCuts.h)
+  * [Visualization of osteotomies in 3D](lib/hip_surgery/jhmrPAODrawBones.h)
+  * [Modeling of surgical objects, such as screws and K-wires](lib/hip_surgery/jhmrMetalObjs.h)
+  * Support for simulated data creation, including [randomized screw and K-wire shapes and poses](lib/hip_surgery/jhmrMetalObjSampling.h), and [volumetric data incorporating osteotomies, repositioned bones, and inserted screws and K-wires](lib/hip_surgery/jhmrPAOVolAfterRepo.h)
 
 ## Programs
 Some of the capabilities provided by individual programs contained with the apps directory include:
@@ -61,6 +67,12 @@ Some of the capabilities provided by individual programs contained with the apps
   * [Warping FCSV files](apps/point_clouds/xform_fcsv)
 * Registration
   * [ICP for 3D point cloud to 3D surface registration](apps/mesh/sur_regi)
+* Hip Surgery: Periacetabular Osteotomy (PAO)
+  * [Osteotomy planning and modeling](apps/hip_surgery/pao/create_fragment)
+  * [Osteotomy 3D visualization](apps/hip_surgery/pao/draw_bones)
+  * [Randomized simulation of fragment adjustments](apps/hip_surgery/pao/sample_frag_moves)
+  * [Volumetric modeling of fragment adjustments](apps/hip_surgery/pao/create_repo_vol)
+  * [Volumetric modeling of fragment fixation using screws and K-wires](apps/hip_surgery/pao/add_screw_kwires_to_vol)
 
 ## Planned Work
 Although the following capabilities currently only exist in the first iteration of JHMR software, they will be incorporated into this repository at a future date:
@@ -68,8 +80,7 @@ Although the following capabilities currently only exist in the first iteration 
 * Advanced visualization of projective geometry coordinate frames with a scene of 3D objects
 * Advanced debugging tools for 2D/3D registration methods
 * Creation of simulated fluoroscopy for 2D/3D registration experiments
-* Preoperative planning of PAO osteotomies
-* Intraoperative reconstruction of PAO bone fragment
+* Intraoperative reconstruction of PAO bone fragments
 * Utilities for creation and manipulation of statistical shape models
 * Shape completion from partial shapes and statistical models
 * More point cloud manipulation utilities

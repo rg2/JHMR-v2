@@ -23,4 +23,5 @@
 add_subdirectory(image_io)
 add_subdirectory(mesh)
 add_subdirectory(point_clouds)
+add_subdirectory(hip_surgery)
 

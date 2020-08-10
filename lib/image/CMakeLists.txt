@@ -20,7 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_image OBJECT jhmrVariableSpacedSlices.cpp)
+add_library(jhmr_image OBJECT jhmrVariableSpacedSlices.cpp
+                              jhmrLabelWarping.cpp)
 
 target_link_libraries(jhmr_image PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

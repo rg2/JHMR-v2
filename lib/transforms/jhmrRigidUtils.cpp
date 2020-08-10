@@ -371,21 +371,3 @@ jhmr::RigidXformToEulerXYZAndTrans(const FrameTransform& xform)
                          xform.matrix()(0,3), xform.matrix()(1,3), xform.matrix()(2,3));
 }
 
-std::tuple<jhmr::Pt3,jhmr::CoordScalar>
-jhmr::ApplyRigidXformToPlane(const Pt3& src_plane_normal,
-                             const CoordScalar src_plane_scalar,
-                             const FrameTransform& xform)
-{
-  const Pt3 Rn = xform.matrix().block(0,0,3,3) * src_plane_normal;
-
-  return std::make_tuple(Rn, src_plane_scalar + (xform.matrix().block(0,3,3,1).transpose() * Rn)(0));
-}
-
-std::tuple<jhmr::Pt3,jhmr::CoordScalar>
-jhmr::ApplyTransToPlane(const Pt3& src_plane_normal,
-                        const CoordScalar src_plane_scalar,
-                        const Pt3& translation)
-{
-  return std::make_tuple(src_plane_normal, src_plane_scalar + (src_plane_normal.dot(translation)));
-}
-

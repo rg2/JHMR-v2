@@ -40,6 +40,136 @@
 namespace jhmr
 {
 
+  /// \brief Finds the index-based bounding box about all locations with a certain label.
+///
+/// TODO: Handle dimensionality besides 3
+template <class tLabelType>
+typename itk::Image<tLabelType,3>::RegionType
+FindBoundBoxAboutLabel(const itk::Image<tLabelType,3>* img, const tLabelType label)
+{
+  using LabelType      = tLabelType;
+  using LabelImageType = itk::Image<LabelType,3>;
+  using SizeType       = typename LabelImageType::SizeType;
+  using SizeValueType  = typename LabelImageType::SizeValueType;
+  using RegionType     = typename LabelImageType::RegionType;
+
+  const SizeType img_size = img->GetLargestPossibleRegion().GetSize();
+
+  SizeType min_vals;
+  min_vals[0] = img_size[0] - 1;
+  min_vals[1] = img_size[1] - 1;
+  min_vals[2] = img_size[2] - 1;
+
+  SizeType max_vals;
+  max_vals.Fill(0);
+
+  const LabelType* label_ptr = img->GetBufferPointer();
+
+  for (SizeValueType k = 0; k < img_size[2]; ++k)
+  {
+    const bool k_is_min = k < min_vals[2];
+    const bool k_is_max = k > max_vals[2];
+
+    for (SizeValueType j = 0; j < img_size[1]; ++j)
+    {
+      const bool j_is_min = j < min_vals[1];
+      const bool j_is_max = j > max_vals[1];
+
+      for (SizeValueType i = 0; i < img_size[0]; ++i, ++label_ptr)
+      {
+        if (*label_ptr == label)
+        {
+          if (i < min_vals[0])
+          {
+            min_vals[0] = i;
+          }
+          if (i > max_vals[0])
+          {
+            max_vals[0] = i;
+          }
+
+          if (j_is_min)
+          {
+            min_vals[1] = j;
+          }
+          if (j_is_max)
+          {
+            max_vals[1] = j;
+          }
+
+          if (k_is_min)
+          {
+            min_vals[2] = k;
+          }
+          if (k_is_max)
+          {
+            max_vals[2] = k;
+          }
+        }
+      }
+    }
+  }
+
+  RegionType bb;
+  bb.SetIndex(0, min_vals[0]);
+  bb.SetIndex(1, min_vals[1]);
+  bb.SetIndex(2, min_vals[2]);
+  bb.SetSize(0, max_vals[0] - min_vals[0] + 1);
+  bb.SetSize(1, max_vals[1] - min_vals[1] + 1);
+  bb.SetSize(2, max_vals[2] - min_vals[2] + 1);
+
+  return bb;
+}
+
+/// \brief Finds the index-based bounding box about all locations equal to any certain labels in a collection.
+///
+/// TODO: Handle dimensionality besides 3
+template <class tLabelType>
+typename itk::Image<tLabelType,3>::RegionType
+FindBoundBoxAboutLabels(const itk::Image<tLabelType,3>* img, const std::unordered_set<tLabelType>& labels)
+{
+  using LabelType      = tLabelType;
+  using LabelImageType = itk::Image<LabelType,3>;
+  using SizeType       = typename LabelImageType::SizeType;
+  using SizeValueType  = typename LabelImageType::SizeValueType;
+  using RegionType     = typename LabelImageType::RegionType;
+  using LabelSet       = typename std::decay<decltype(labels)>::type;
+
+  jhmrASSERT(!labels.empty());
+
+  const SizeType img_size = img->GetLargestPossibleRegion().GetSize();
+
+  SizeType min_inds;
+  min_inds[0] = img_size[0] - 1;
+  min_inds[1] = img_size[1] - 1;
+  min_inds[2] = img_size[2] - 1;
+
+  SizeType max_inds;
+  max_inds.Fill(0);
+
+  for (typename LabelSet::const_iterator lit = labels.begin(); lit != labels.end(); ++lit)
+  {
+    const RegionType cur_label_reg = FindBoundBoxAboutLabel(img, *lit);
+    min_inds[0] = std::min(min_inds[0], static_cast<SizeValueType>(cur_label_reg.GetIndex(0)));
+    min_inds[1] = std::min(min_inds[1], static_cast<SizeValueType>(cur_label_reg.GetIndex(1)));
+    min_inds[2] = std::min(min_inds[2], static_cast<SizeValueType>(cur_label_reg.GetIndex(2)));
+
+    max_inds[0] = std::max(max_inds[0], static_cast<SizeValueType>(cur_label_reg.GetIndex(0)) + cur_label_reg.GetSize(0) - 1);
+    max_inds[1] = std::max(max_inds[1], static_cast<SizeValueType>(cur_label_reg.GetIndex(1)) + cur_label_reg.GetSize(1) - 1);
+    max_inds[2] = std::max(max_inds[2], static_cast<SizeValueType>(cur_label_reg.GetIndex(2)) + cur_label_reg.GetSize(2) - 1);
+  }
+
+  RegionType bb;
+  bb.SetIndex(0, min_inds[0]);
+  bb.SetIndex(1, min_inds[1]);
+  bb.SetIndex(2, min_inds[2]);
+  bb.SetSize(0, max_inds[0] - min_inds[0] + 1);
+  bb.SetSize(1, max_inds[1] - min_inds[1] + 1);
+  bb.SetSize(2, max_inds[2] - min_inds[2] + 1);
+
+  return bb;
+}
+
 /// \brief Applies a masking operation to a volume using a specific label from
 ///        a label map.
 ///
@@ -195,136 +325,6 @@ ITKImageMaskOutLabels(const itk::Image<tPixelType,tN>* img, const itk::Image<tLa
   }
 
   return dst_img;
-}
-
-/// \brief Finds the index-based bounding box about all locations with a certain label.
-///
-/// TODO: Handle dimensionality besides 3
-template <class tLabelType>
-typename itk::Image<tLabelType,3>::RegionType
-FindBoundBoxAboutLabel(const itk::Image<tLabelType,3>* img, const tLabelType label)
-{
-  using LabelType      = tLabelType;
-  using LabelImageType = itk::Image<LabelType,3>;
-  using SizeType       = typename LabelImageType::SizeType;
-  using SizeValueType  = typename LabelImageType::SizeValueType;
-  using RegionType     = typename LabelImageType::RegionType;
-
-  const SizeType img_size = img->GetLargestPossibleRegion().GetSize();
-
-  SizeType min_vals;
-  min_vals[0] = img_size[0] - 1;
-  min_vals[1] = img_size[1] - 1;
-  min_vals[2] = img_size[2] - 1;
-
-  SizeType max_vals;
-  max_vals.Fill(0);
-
-  const LabelType* label_ptr = img->GetBufferPointer();
-
-  for (SizeValueType k = 0; k < img_size[2]; ++k)
-  {
-    const bool k_is_min = k < min_vals[2];
-    const bool k_is_max = k > max_vals[2];
-
-    for (SizeValueType j = 0; j < img_size[1]; ++j)
-    {
-      const bool j_is_min = j < min_vals[1];
-      const bool j_is_max = j > max_vals[1];
-
-      for (SizeValueType i = 0; i < img_size[0]; ++i, ++label_ptr)
-      {
-        if (*label_ptr == label)
-        {
-          if (i < min_vals[0])
-          {
-            min_vals[0] = i;
-          }
-          if (i > max_vals[0])
-          {
-            max_vals[0] = i;
-          }
-
-          if (j_is_min)
-          {
-            min_vals[1] = j;
-          }
-          if (j_is_max)
-          {
-            max_vals[1] = j;
-          }
-
-          if (k_is_min)
-          {
-            min_vals[2] = k;
-          }
-          if (k_is_max)
-          {
-            max_vals[2] = k;
-          }
-        }
-      }
-    }
-  }
-
-  RegionType bb;
-  bb.SetIndex(0, min_vals[0]);
-  bb.SetIndex(1, min_vals[1]);
-  bb.SetIndex(2, min_vals[2]);
-  bb.SetSize(0, max_vals[0] - min_vals[0] + 1);
-  bb.SetSize(1, max_vals[1] - min_vals[1] + 1);
-  bb.SetSize(2, max_vals[2] - min_vals[2] + 1);
-
-  return bb;
-}
-
-/// \brief Finds the index-based bounding box about all locations equal to any certain labels in a collection.
-///
-/// TODO: Handle dimensionality besides 3
-template <class tLabelType>
-typename itk::Image<tLabelType,3>::RegionType
-FindBoundBoxAboutLabels(const itk::Image<tLabelType,3>* img, const std::unordered_set<tLabelType>& labels)
-{
-  using LabelType      = tLabelType;
-  using LabelImageType = itk::Image<LabelType,3>;
-  using SizeType       = typename LabelImageType::SizeType;
-  using SizeValueType  = typename LabelImageType::SizeValueType;
-  using RegionType     = typename LabelImageType::RegionType;
-  using LabelSet       = typename std::decay<decltype(labels)>::type;
-
-  jhmrASSERT(!labels.empty());
-
-  const SizeType img_size = img->GetLargestPossibleRegion().GetSize();
-
-  SizeType min_inds;
-  min_inds[0] = img_size[0] - 1;
-  min_inds[1] = img_size[1] - 1;
-  min_inds[2] = img_size[2] - 1;
-
-  SizeType max_inds;
-  max_inds.Fill(0);
-
-  for (typename LabelSet::const_iterator lit = labels.begin(); lit != labels.end(); ++lit)
-  {
-    const RegionType cur_label_reg = FindBoundBoxAboutLabel(img, *lit);
-    min_inds[0] = std::min(min_inds[0], static_cast<SizeValueType>(cur_label_reg.GetIndex(0)));
-    min_inds[1] = std::min(min_inds[1], static_cast<SizeValueType>(cur_label_reg.GetIndex(1)));
-    min_inds[2] = std::min(min_inds[2], static_cast<SizeValueType>(cur_label_reg.GetIndex(2)));
-
-    max_inds[0] = std::max(max_inds[0], static_cast<SizeValueType>(cur_label_reg.GetIndex(0)) + cur_label_reg.GetSize(0) - 1);
-    max_inds[1] = std::max(max_inds[1], static_cast<SizeValueType>(cur_label_reg.GetIndex(1)) + cur_label_reg.GetSize(1) - 1);
-    max_inds[2] = std::max(max_inds[2], static_cast<SizeValueType>(cur_label_reg.GetIndex(2)) + cur_label_reg.GetSize(2) - 1);
-  }
-
-  RegionType bb;
-  bb.SetIndex(0, min_inds[0]);
-  bb.SetIndex(1, min_inds[1]);
-  bb.SetIndex(2, min_inds[2]);
-  bb.SetSize(0, max_inds[0] - min_inds[0] + 1);
-  bb.SetSize(1, max_inds[1] - min_inds[1] + 1);
-  bb.SetSize(2, max_inds[2] - min_inds[2] + 1);
-
-  return bb;
 }
 
 /// \brief Retrieves a list of indices that correspond to a specific label in a

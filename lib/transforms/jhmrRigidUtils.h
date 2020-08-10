@@ -172,21 +172,6 @@ std::tuple<CoordScalar,CoordScalar,CoordScalar,
            CoordScalar,CoordScalar,CoordScalar>
 RigidXformToEulerXYZAndTrans(const FrameTransform& xform);
 
-/// \brief Applies a rigid transformation to a plane
-///
-/// 4x4 homogenous matrix is used to represent the transformation.
-/// It is permitted to provide the inputs as outputs.
-std::tuple<Pt3,CoordScalar>
-ApplyRigidXformToPlane(const Pt3& src_plane_normal,
-                       const CoordScalar src_plane_scalar,
-                       const FrameTransform& xform_mat);
-
-/// \brief Applies a translation to a plane
-std::tuple<Pt3,CoordScalar>
-ApplyTransToPlane(const Pt3& src_plane_normal,
-                  const CoordScalar src_plane_scalar,
-                  const Pt3& translation);
-
 }  // jhmr
 
 #endif
