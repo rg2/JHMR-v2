@@ -47,12 +47,14 @@ using Float = float;
 using CoordScalar = Float;
 //using LabelScalar = unsigned char;
 
-using Pt2 = Eigen::Matrix<CoordScalar,2,1>;
-using Pt3 = Eigen::Matrix<CoordScalar,3,1>;
-using Pt4 = Eigen::Matrix<CoordScalar,4,1>;
-using Pt5 = Eigen::Matrix<CoordScalar,5,1>;
-using Pt6 = Eigen::Matrix<CoordScalar,6,1>;
-using PtN = Eigen::Matrix<CoordScalar,Eigen::Dynamic,1>;
+using Pt2  = Eigen::Matrix<CoordScalar,2,1>;
+using Pt3  = Eigen::Matrix<CoordScalar,3,1>;
+using Pt4  = Eigen::Matrix<CoordScalar,4,1>;
+using Pt5  = Eigen::Matrix<CoordScalar,5,1>;
+using Pt6  = Eigen::Matrix<CoordScalar,6,1>;
+using Pt8  = Eigen::Matrix<CoordScalar,8,1>;
+using Pt16 = Eigen::Matrix<CoordScalar,16,1>;
+using PtN  = Eigen::Matrix<CoordScalar,Eigen::Dynamic,1>;
 
 using Mat2x2 = Eigen::Matrix<CoordScalar,2,2>;
 using Mat3x3 = Eigen::Matrix<CoordScalar,3,3>;
@@ -65,10 +67,14 @@ using FrameTransform = Eigen::Transform<CoordScalar,3,Eigen::Affine>;
 using CoordScalarList = std::vector<CoordScalar>;
 //using PixelScalarList = std::vector<PixelScalar>;
 
-using Pt2List = std::vector<Pt2>;
-using Pt3List = std::vector<Pt3>;
-using Pt4List = std::vector<Pt4>;
-using PtNList = std::vector<PtN>;
+using Pt2List  = std::vector<Pt2>;
+using Pt3List  = std::vector<Pt3>;
+using Pt4List  = std::vector<Pt4>;
+using Pt5List  = std::vector<Pt5>;
+using Pt6List  = std::vector<Pt6>;
+using Pt8List  = std::vector<Pt8>;
+using Pt16List = std::vector<Pt16>;
+using PtNList  = std::vector<PtN>;
 
 using Mat2x3List = std::vector<Mat2x2>;
 using Mat3x3List = std::vector<Mat3x3>;
@@ -92,16 +98,33 @@ using StrList = std::vector<std::string>;
 //using LabelVol    = itk::Image<LabelScalar,3>;
 //using LabelVolPtr = LabelVol::Pointer;
 
-using Pt2_d = Eigen::Matrix<double,2,1>;
-using Pt3_d = Eigen::Matrix<double,3,1>;
-using Pt4_d = Eigen::Matrix<double,4,1>;
-using PtN_d = Eigen::Matrix<double,Eigen::Dynamic,1>;
+using Pt2_f  = Eigen::Matrix<float,2,1>;
+using Pt3_f  = Eigen::Matrix<float,3,1>;
+using Pt4_f  = Eigen::Matrix<float,4,1>;
+using Pt8_f  = Eigen::Matrix<float,8,1>;
+using Pt16_f = Eigen::Matrix<float,16,1>;
+using PtN_f  = Eigen::Matrix<float,Eigen::Dynamic,1>;
+
+using Mat2x2_f = Eigen::Matrix<float,2,2>;
+using Mat3x3_f = Eigen::Matrix<float,3,3>;
+using Mat4x4_f = Eigen::Matrix<float,4,4>;
+using Mat3x4_f = Eigen::Matrix<float,3,4>;
+using MatMxN_f = Eigen::Matrix<float,Eigen::Dynamic,Eigen::Dynamic>;
+
+using Pt2_d  = Eigen::Matrix<double,2,1>;
+using Pt3_d  = Eigen::Matrix<double,3,1>;
+using Pt4_d  = Eigen::Matrix<double,4,1>;
+using Pt8_d  = Eigen::Matrix<double,8,1>;
+using Pt16_d = Eigen::Matrix<double,16,1>;
+using PtN_d  = Eigen::Matrix<double,Eigen::Dynamic,1>;
 
 using Mat2x2_d = Eigen::Matrix<double,2,2>;
 using Mat3x3_d = Eigen::Matrix<double,3,3>;
 using Mat4x4_d = Eigen::Matrix<double,4,4>;
 using Mat3x4_d = Eigen::Matrix<double,3,4>;
 using MatMxN_d = Eigen::Matrix<double,Eigen::Dynamic,Eigen::Dynamic>;
+
+using RayCastPixelScalar = float;
 
 /**
  * @brief A mask on a elements which may be indexed in a 1D vector.

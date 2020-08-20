@@ -219,8 +219,7 @@ jhmr::Mat3x3 jhmr::MakeNaiveIntrins(const CoordScalar focal_len,
 }
 
 void jhmr::CameraModel::setup(const CoordScalar focal_len_arg, const size_type nr, const size_type nc,
-                              const CoordScalar rs, const CoordScalar cs,
-                              const bool do_not_setup_det_grid)
+                              const CoordScalar rs, const CoordScalar cs)
 {
   jhmrASSERT(focal_len_arg > CoordScalar(1.0e-8));
   jhmrASSERT(nr && nc);
@@ -243,17 +242,11 @@ void jhmr::CameraModel::setup(const CoordScalar focal_len_arg, const size_type n
   extrins_inv = FrameTransform::Identity();
 
   pinhole_pt = Pt3::Zero();
-
-  if (!do_not_setup_det_grid)
-  {
-    setup_detector_grid();
-  }
 }
   
 void jhmr::CameraModel::setup(const Mat3x4& proj_mat, const size_type nr, const size_type nc,
                               const CoordScalar rs, const CoordScalar cs,
-                              const bool use_extrins,
-                              const bool do_not_setup_det_grid)
+                              const bool use_extrins)
 {
   jhmrASSERT(nr && nc);
   jhmrASSERT((rs > CoordScalar(1.0e-8)) && (cs > CoordScalar(1.0e-8)));
@@ -295,17 +288,11 @@ void jhmr::CameraModel::setup(const Mat3x4& proj_mat, const size_type nr, const 
 
     pinhole_pt = extrins_inv * pinhole_wrt_cam;
   }
-
-  if (!do_not_setup_det_grid)
-  {
-    setup_detector_grid();
-  }
 }
 
 void jhmr::CameraModel::setup(const Mat3x3& intrins_mat, const Mat4x4& extrins_mat,
                               const size_type nr, const size_type nc,
-                              const CoordScalar rs, const CoordScalar cs,
-                              const bool do_not_setup_det_grid)
+                              const CoordScalar rs, const CoordScalar cs)
 {
   jhmrASSERT(nr && nc);
   jhmrASSERT((rs > CoordScalar(1.0e-8)) && (cs > CoordScalar(1.0e-8)));
@@ -334,11 +321,6 @@ void jhmr::CameraModel::setup(const Mat3x3& intrins_mat, const Mat4x4& extrins_m
     pinhole_wrt_cam(2) = focal_len;
 
     pinhole_pt = extrins_inv * pinhole_wrt_cam;
-  }
-
-  if (!do_not_setup_det_grid)
-  {
-    setup_detector_grid();
   }
 }
   
@@ -453,9 +435,9 @@ bool jhmr::CameraModel::operator!=(const CameraModel& other) const
   return !operator==(other);
 }
 
-void jhmr::CameraModel::setup_detector_grid()
+jhmr::CameraModel::Point3DGrid jhmr::CameraModel::detector_grid() const
 {
-  detector_pts.resize(num_det_rows, num_det_cols);
+  Point3DGrid detector_pts(num_det_rows, num_det_cols);
 
   // for each pixel index find the location of the pixel on the detector plane
   // in "world" coordinates
@@ -484,6 +466,8 @@ void jhmr::CameraModel::setup_detector_grid()
       detector_pts(det_row_idx, det_col_idx) = extrins_inv * ((intrins_inv * tmp_det_idx) + z_adjust);
     }
   }
+
+  return detector_pts;
 }
 
 jhmr::CameraModel jhmr::UpdateCameraModelFor2DROI(const CameraModel& src_cam,
@@ -680,8 +664,7 @@ jhmr::CameraModel jhmr::DownsampleCameraModel(const CameraModel& src_cam, const 
 
 std::vector<jhmr::CameraModel>
 jhmr::CreateCameraWorldUsingFiducial(const std::vector<CameraModel>& orig_cams,
-                                     const std::vector<FrameTransform>& cams_to_fid,
-                                     const bool do_not_setup_det_grid)
+                                     const std::vector<FrameTransform>& cams_to_fid)
 {
   const size_type num_cams = orig_cams.size();
 
@@ -696,8 +679,7 @@ jhmr::CreateCameraWorldUsingFiducial(const std::vector<CameraModel>& orig_cams,
     dst_cam.setup(src_cam.intrins,
                   (src_cam.extrins * cams_to_fid[i].inverse()).matrix(),
                   src_cam.num_det_rows, src_cam.num_det_rows,
-                  src_cam.det_row_spacing, src_cam.det_col_spacing,
-                  do_not_setup_det_grid);
+                  src_cam.det_row_spacing, src_cam.det_col_spacing);
   }
 
   return dst_cams;

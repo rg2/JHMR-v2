@@ -31,6 +31,7 @@
 #include <opencv2/imgproc/imgproc.hpp>  // canny
 
 #include "jhmrITKRemapUtils.h"
+#include "jhmrExceptionUtils.h"
 
 namespace jhmr
 {
@@ -86,12 +87,12 @@ namespace detail
 template <class T, class U>
 typename itk::Image<T,2>::Pointer CopyAndCastOpenCVToITKHelper(const cv::Mat& ocv_img)
 {
-  typedef T PixelType;
-  typedef itk::Image<PixelType,2> ImageType;
-  typedef typename ImageType::RegionType ImageRegionType;
-  typedef typename ImageType::SizeValueType size_type;
+  using PixelType       = T;
+  using ImageType       = itk::Image<PixelType,2>;
+  using ImageRegionType = typename ImageType::RegionType;
+  using size_type       = typename ImageType::SizeValueType;
 
-  typename ImageType::Pointer itk_img = ImageType::New();
+  auto itk_img = ImageType::New();
 
   const size_type num_rows = ocv_img.rows;
   const size_type num_cols = ocv_img.cols;

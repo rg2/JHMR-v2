@@ -431,6 +431,18 @@ MakeITKNDVol(const itk::ImageRegion<tN>& img_reg,
 /// and coordinate frames are not set.
 template <class tPixelType>
 typename itk::Image<tPixelType,2>::Pointer
+MakeITK2DVol(const itk::ImageRegion<2>& img_reg,
+             const tPixelType default_val = detail::ItkZero<tPixelType>::value())
+{
+  return MakeITKNDVol<tPixelType,2>(img_reg, default_val);
+}
+
+/// \brief Create a 2D ITK image volume with specified size.
+///
+/// The pixels are filled with a default value. The spacings
+/// and coordinate frames are not set.
+template <class tPixelType>
+typename itk::Image<tPixelType,2>::Pointer
 MakeITK2DVol(const unsigned long x_len, const unsigned long y_len,
              const tPixelType default_val = detail::ItkZero<tPixelType>::value())
 {
@@ -442,19 +454,19 @@ MakeITK2DVol(const unsigned long x_len, const unsigned long y_len,
   reg.SetSize(0, x_len);
   reg.SetSize(1, y_len);
 
-  return MakeITK2DVol(reg, default_val);
+  return MakeITK2DVol<tPixelType>(reg, default_val);
 }
 
-/// \brief Create a 2D ITK image volume with specified size.
+/// \brief Create a 3D ITK image volume with specified size.
 ///
 /// The pixels are filled with a default value. The spacings
 /// and coordinate frames are not set.
 template <class tPixelType>
-typename itk::Image<tPixelType,2>::Pointer
-MakeITK2DVol(const itk::ImageRegion<2>& img_reg,
+typename itk::Image<tPixelType,3>::Pointer
+MakeITK3DVol(const itk::ImageRegion<3>& img_reg,
              const tPixelType default_val = detail::ItkZero<tPixelType>::value())
 {
-  return MakeITKNDVol(img_reg, default_val);
+  return MakeITKNDVol<tPixelType,3>(img_reg, default_val);
 }
 
 /// \brief Create a 3D ITK image volume with specified size.
@@ -480,19 +492,7 @@ MakeITK3DVol(const unsigned long x_len, const unsigned long y_len,
   return MakeITK3DVol(reg, default_val);
 }
 
-/// \brief Create a 3D ITK image volume with specified size.
-///
-/// The pixels are filled with a default value. The spacings
-/// and coordinate frames are not set.
-template <class tPixelType>
-typename itk::Image<tPixelType,3>::Pointer
-MakeITK3DVol(const itk::ImageRegion<3>& img_reg,
-             const tPixelType default_val = detail::ItkZero<tPixelType>::value())
-{
-  return MakeITKNDVol(img_reg, default_val);
-}
-
-template <class tSrcScalar, unsigned int tN, class tDstScalar>
+template <class tDstScalar, unsigned int tN, class tSrcScalar>
 typename itk::Image<tDstScalar,tN>::Pointer
 MakeITKVolWithSameCoords(const itk::Image<tSrcScalar,tN>* src,
                          const tDstScalar default_val = detail::ItkZero<tDstScalar>::value())

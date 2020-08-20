@@ -22,24 +22,12 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRHDF5_H_
 #define JHMRHDF5_H_
-
-//#include <string>
-//#include <algorithm>
-//#include <unordered_map>
-
-//#include <Eigen/Dense>
-
-//#include <itkImage.h>
 
 #include <fmt/format.h>
 
 #include <H5Cpp.h>
-
-//#include "jhmrItkConvertUtils.h"
 
 #include "jhmrCommon.h"
 #include "jhmrAssert.h"

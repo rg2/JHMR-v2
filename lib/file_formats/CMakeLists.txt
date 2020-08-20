@@ -29,7 +29,9 @@ add_library(jhmr_file_formats OBJECT jhmrDICOMUtils.cpp
                                      jhmrH5MeshIO.cpp
                                      jhmrMeshIO.cpp
                                      jhmrH5PAOIO.cpp
-                                     jhmrPAOIO.cpp)
+                                     jhmrPAOIO.cpp
+                                     jhmrH5CamModelIO.cpp
+                                     jhmrH5ProjDataIO.cpp)
 
 target_link_libraries(jhmr_file_formats PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

@@ -56,9 +56,7 @@
 #include <boost/version.hpp>
 #include <Eigen/Eigen>
 
-#ifdef JHMR_HAS_OPENCL
 #include <boost/compute/system.hpp>
-#endif
 
 #include "jhmrAssert.h"
 
@@ -249,6 +247,16 @@ std::unique_ptr<tbb::task_scheduler_init>& ProgOptsTBBTaskSchedInit()
   static std::unique_ptr<tbb::task_scheduler_init> tbb_sched_init;
 
   return tbb_sched_init;
+}
+
+const std::vector<std::tuple<std::string,std::string>>&
+ValidBackendNameAndDescs()
+{
+  static const std::vector<std::tuple<std::string,std::string>> backend_names_and_descs = 
+      { std::make_tuple(std::string("ocl"), std::string("OpenCL processing, usually GPU, but could be CPU.")),
+        std::make_tuple(std::string("cpu"), std::string("Standard CPU processing, potentially using TBB.")) };
+
+  return backend_names_and_descs;
 }
 
 }  // un-named
@@ -856,9 +864,7 @@ jhmr::ProgOpts::ProgOpts()
   version_num_str_ = jhmrGIT_SHA1;
 #endif
 
-#ifdef JHMR_HAS_OPENCL
   opencl_id_str_to_dev_map_ = BuildDevIDStrsToDevMap();
-#endif
 }
 
 void jhmr::ProgOpts::print_help(std::ostream& out) const
@@ -974,23 +980,39 @@ void jhmr::ProgOpts::print_help(std::ostream& out) const
     out << help_epi_str_ << std::endl;
   }
 
-  if (print_help_gpu_str_)
+  if (print_help_ocl_str_)
   {
-#ifdef JHMR_HAS_OPENCL
     const size_type num_dev = opencl_id_str_to_dev_map_.size();
 
     out << '\n' << num_dev << " Available OpenCL Devices (#: ID, Vender, Name):\n";
 
     size_type dev_idx = 0;
-    for (IDStrDevMap::const_iterator id_dev_map = opencl_id_str_to_dev_map_.begin();
-         id_dev_map != opencl_id_str_to_dev_map_.end(); ++id_dev_map, ++dev_idx)
+    for (const auto& id_dev_map : opencl_id_str_to_dev_map_)
     {
-      const boost::compute::device& dev = id_dev_map->second;
+      const boost::compute::device& dev = id_dev_map.second;
 
-      out << "  " << dev_idx << ": " << id_dev_map->first << ", " << dev.vendor()
+      out << "  " << (dev_idx + 1) << ". " << id_dev_map.first << ", " << dev.vendor()
           << ", " << dev.name() << std::endl;
+      
+      ++dev_idx;
     }
-#endif
+  }
+
+  if (print_help_backend_str_)
+  {
+    const auto& valid_backends = ValidBackendNameAndDescs();
+   
+    const size_type num_backends = valid_backends.size();
+
+    out << '\n' << num_backends << " compute backends are available:\n";
+
+    for (size_type backend_idx = 0; backend_idx < num_backends; ++backend_idx)
+    {
+      const auto& cur_backend_info = valid_backends[backend_idx];
+
+      out << "  " << (backend_idx+1) << ". " << std::get<0>(cur_backend_info)
+          << ": " << std::get<1>(cur_backend_info) << std::endl;
+    }
   }
 
   out << "\nVERSION INFORMATION:\n";
@@ -1000,19 +1022,19 @@ void jhmr::ProgOpts::print_help(std::ostream& out) const
     out << "jhmr Git: " << version_num_str_ << std::endl;
   }
 
-  out << "Boost Version: " << (BOOST_VERSION / 100000) << '.' << ((BOOST_VERSION / 100) % 1000) << '.' << (BOOST_VERSION % 100) << std::endl;
+  out << "  Boost Version: " << (BOOST_VERSION / 100000) << '.' << ((BOOST_VERSION / 100) % 1000) << '.' << (BOOST_VERSION % 100) << std::endl;
 
-  out << "Eigen Version: " << EIGEN_WORLD_VERSION << '.' << EIGEN_MAJOR_VERSION
+  out << "  Eigen Version: " << EIGEN_WORLD_VERSION << '.' << EIGEN_MAJOR_VERSION
       << '.' << EIGEN_MINOR_VERSION << std::endl;
 
-  out << "  ITK Version: " << itk::Version::GetITKVersion() << std::endl;
+  out << "    ITK Version: " << itk::Version::GetITKVersion() << std::endl;
 
-  out << "  VTK Version: " << vtkVersion::GetVTKVersion() << std::endl;
+  out << "    VTK Version: " << vtkVersion::GetVTKVersion() << std::endl;
 
-  out << "  TBB Version: " << TBB_VERSION_MAJOR << '.' << TBB_VERSION_MINOR
+  out << "    TBB Version: " << TBB_VERSION_MAJOR << '.' << TBB_VERSION_MINOR
       << " (interface: "<< TBB_INTERFACE_VERSION_MAJOR << '.' << (TBB_INTERFACE_VERSION - (TBB_INTERFACE_VERSION_MAJOR * 1000)) << ')' << std::endl;
 
-  out << "OpenCV Version: " << CV_MAJOR_VERSION << '.' << CV_MINOR_VERSION << std::endl;
+  out << " OpenCV Version: " << CV_MAJOR_VERSION << '.' << CV_MINOR_VERSION << std::endl;
 
 #ifdef JHMR_HAS_NLOPT
   {
@@ -1025,18 +1047,14 @@ void jhmr::ProgOpts::print_help(std::ostream& out) const
   }
 #endif
 
-#ifdef JHMR_HAS_OPENCL
   {
     std::vector<boost::compute::platform> plats = boost::compute::system::platforms();
 
-    const size_type num_plats = plats.size();
-
-    for (size_type i = 0; i < num_plats; ++i)
+    for (const auto& plat : plats)
     {
-      out << "OpenCL Platform: " << plats[i].vendor() << " " << plats[i].version() << std::endl;
+      out << "OpenCL Platform: " << plat.vendor() << " " << plat.version() << std::endl;
     }
   }
-#endif
 
   if (!compile_date_.empty())
   {
@@ -1317,6 +1335,31 @@ void jhmr::ProgOpts::parse(int argc, char* argv[])
     ProgOptsTBBTaskSchedInit().reset(
         new tbb::task_scheduler_init(get(kTBB_MAX_NUM_THREADS_ARG_STR).as_uint32()));
   }
+
+  if (print_help_backend_str_ && has("backend"))
+  {
+    // Backend specification is enabled, check that the passed string is valid.
+
+    const std::string backend_str = get("backend");
+    
+    bool backend_is_valid = false;
+
+    const auto& backend_info = ValidBackendNameAndDescs();
+
+    for (const auto& cur_info : backend_info)
+    {
+      if (std::get<0>(cur_info) == backend_str)
+      {
+        backend_is_valid = true;
+        break;
+      }
+    }
+    
+    if (!backend_is_valid)
+    {
+      jhmrThrow("Invalid backend identifier string: %s", backend_str.c_str());
+    } 
+  }
 }
 
 bool jhmr::ProgOpts::has(const std::string& opt_name) const
@@ -1572,40 +1615,64 @@ void jhmr::ProgOpts::add_tbb_max_num_threads_flag()
   tbb_max_num_threads_opt_added_ = true; 
 }
 
-void jhmr::ProgOpts::add_gpu_select_flag()
+void jhmr::ProgOpts::add_backend_flags()
 {
-#ifdef JHMR_HAS_OPENCL
-  set_print_help_gpu_str(true);
+  add_ocl_select_flag();
 
-  add("gpu-id", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_STRING, "gpu-id",
-      "Specify the GPU to use with a unique identifier string - the available GPU ID strings "
+  const auto& valid_backends = ValidBackendNameAndDescs();
+
+  std::stringstream ss;
+  
+  ss << "Specify the compute backend to use. Valid backends are: ";
+
+  const size_type num_backends = valid_backends.size();
+
+  for (size_type backend_idx = 0; backend_idx < num_backends; ++backend_idx)
+  {
+    const auto& cur_name = std::get<0>(valid_backends[backend_idx]);
+
+    ss << '\"' << cur_name << '\"' << ((backend_idx == (num_backends - 1)) ? ". " : ", ");
+  }
+
+  ss << "See the epilogue of this help message for descriptions of each backend.";
+
+  add("backend", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_STRING, "backend", ss.str())
+    << std::get<0>(valid_backends[0]);
+
+  print_help_backend_str_ = true;
+}
+
+void jhmr::ProgOpts::add_ocl_select_flag()
+{
+  set_print_help_ocl_str(true);
+
+  add("ocl-id", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_STRING, "ocl-id",
+      "Specify the OpenCL device to use with a unique identifier string - the available device ID strings "
       "may be obtained with the help print-out. The default behavior is to use the default "
       "device specified by the boost::compute library, which may not be constant (e.g. it "
       "may vary depending on system resources, etc.).")
     << "";
-#endif
 }
 
-#ifdef JHMR_HAS_OPENCL
-boost::compute::device jhmr::ProgOpts::selected_gpu()
+boost::compute::device jhmr::ProgOpts::selected_ocl() const
 {
   // creating a default instance of boost::compute::device
   // should not throw an exception, it will initialize the
   // device ID to null.
   boost::compute::device dev;
 
-  const std::string gpu_id = get("gpu-id").as_string();
+  const std::string ocl_id = get("ocl-id").as_string();
   
-  if (!gpu_id.empty())
+  if (!ocl_id.empty())
   {
-    IDStrDevMap::iterator id_dev_it = opencl_id_str_to_dev_map_.find(gpu_id);
+    auto id_dev_it = opencl_id_str_to_dev_map_.find(ocl_id);
     if (id_dev_it != opencl_id_str_to_dev_map_.end())
     {
       dev = id_dev_it->second;
     }
     else
     {
-      jhmrThrow("Invalid GPU ID String: %s", gpu_id.c_str());
+      jhmrThrow("Invalid OpenCL Device ID String: %s", ocl_id.c_str());
     }
   }
   else
@@ -1627,7 +1694,6 @@ boost::compute::device jhmr::ProgOpts::selected_gpu()
 
   return dev;
 }
-#endif
 
 bool jhmr::ProgOpts::dest_exists(const std::string& dest_str) const
 {
@@ -1697,7 +1763,7 @@ void jhmr::ProgOpts::set_version_num_str(const std::string& s)
   version_num_str_ = s;
 }
 
-void jhmr::ProgOpts::set_print_help_gpu_str(const bool print_gpu)
+void jhmr::ProgOpts::set_print_help_ocl_str(const bool print_ocl)
 {
-  print_help_gpu_str_ = print_gpu;
+  print_help_ocl_str_ = print_ocl;
 }

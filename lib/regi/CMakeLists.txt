@@ -21,7 +21,21 @@
 # SOFTWARE.
 
 add_library(jhmr_regi OBJECT jhmrPairedPointRegi3D3D.cpp
-                             jhmrICP3D3D.cpp)
+                             jhmrICP3D3D.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2D.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DCombine.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DPatchCommon.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DSSDCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DNCCCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DGradImgCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DGradNCCCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DGradDiffCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DGradOrientCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DBoundaryEdgesCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DPatchNCCCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DPatchGradNCCCPU.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DOCL.cpp)
 
 target_link_libraries(jhmr_regi PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRBASICSTATS_H_
 #define JHMRBASICSTATS_H_
 
@@ -42,6 +40,50 @@ CoordScalar SampleStdDev(const CoordScalarList& x, const CoordScalar sample_mean
 
 // Computes the sample mean and sample standard deviation, returned as a tuple (mean, std. dev.)
 std::tuple<CoordScalar,CoordScalar> SampleMeanAndStdDev(const CoordScalarList& x);
+
+template <class tDerived>
+typename tDerived::Scalar
+SampleMean(const Eigen::ArrayBase<tDerived>& a)
+{
+  return a.mean();
+}
+
+template <class tDerived>
+typename tDerived::Scalar
+SampleStdDev(const Eigen::ArrayBase<tDerived>& a, const typename tDerived::Scalar& a_mean)
+{
+  return std::sqrt((a - a_mean).square().sum() / ((a.rows() * a.cols()) - 1));
+}
+
+template <class tDerived>
+typename tDerived::Scalar
+SampleStdDev(const Eigen::ArrayBase<tDerived>& a)
+{
+  return SampleStdDev(a, SampleMean(a));
+}
+
+template <class tDerived>
+typename tDerived::Scalar
+SampleMean(const Eigen::MatrixBase<tDerived>& m)
+{
+  return SampleMean(m.array());
+}
+
+template <class tDerived>
+typename tDerived::Scalar
+SampleStdDev(const Eigen::MatrixBase<tDerived>& m, const typename tDerived::Scalar& m_mean)
+{
+  return SampleStdDev(m.array(), m_mean);
+}
+
+template <class tDerived>
+typename tDerived::Scalar
+SampleStdDev(const Eigen::MatrixBase<tDerived>& m)
+{
+  auto a = m.array();
+
+  return SampleStdDev(a, SampleMean(a));
+}
 
 }  // jhmr
 

@@ -56,10 +56,10 @@ namespace jhmr
 class Path;
 
 ///< List type for storing filesystem path strings
-typedef std::vector<std::string> PathStringList;
+using PathStringList = std::vector<std::string>;
 
 ///< List type for storing filesystem Path objects
-typedef std::vector<Path> PathList;
+using PathList = std::vector<Path>;
 
 ///< File/Path separator token on Windows
 const char kWIN_FILE_SEP   = '\\';
@@ -256,7 +256,7 @@ public:
 
 private:
 
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   /**
    * @brief Determines if the string representation of this path has a trailing separator.
@@ -356,7 +356,7 @@ public:
   virtual bool check_file(const Path& p) const;
 
 private:
-  typedef boost::container::flat_set<std::string> StringSet;
+  using StringSet = boost::container::flat_set<std::string>;
   StringSet exts_;
 };
 

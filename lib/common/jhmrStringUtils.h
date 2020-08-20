@@ -58,7 +58,7 @@ inline std::string StringCast<std::string>(const std::string& s)
 template <class T>
 std::vector<T> StringCast(const std::vector<std::string>& toks)
 {
-  typedef std::vector<std::string>::size_type size_type;
+  using size_type = std::vector<std::string>::size_type;
   const size_type num_toks = toks.size();
 
   std::vector<T> cast_toks(num_toks);

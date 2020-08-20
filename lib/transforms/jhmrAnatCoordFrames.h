@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRANATCOORDFRAMES_H_
 #define JHMRANATCOORDFRAMES_H_
 
@@ -97,7 +95,7 @@ CreateAPViewOfLPSVol(const CoordScalar off_from_cam_origin_dist,
                      const bool src_is_posterior = true,
                      const bool pat_is_up = true,
                      const CameraModel::CameraCoordFrame coord_frame_type =
-                                    CameraModel::kORIGIN_AT_FOCAL_PT_DET_POS_Z);
+                                    CameraModel::kORIGIN_AT_FOCAL_PT_DET_NEG_Z);
 
 /// \brief Create an AP X-Ray view of a volume with LPS coordinate frame.
 ///

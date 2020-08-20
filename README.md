@@ -7,11 +7,33 @@ This is the second iteration of the JHMR repository and focuses on minimizing co
 * Registration:
   * [Paired Point 3D/3D](lib/regi/jhmrPairedPointRegi3D3D.h)
   * [3D Point Cloud to 3D Surface ICP](lib/regi/jhmrICP3D3D.h)
+  * Efficient ray casters for 2D/3D registration and visualization:
+    * Line integral ([CPU](lib/ray_cast/jhmrRayCastLineIntCPU.h) and [OpenCL](lib/ray_cast/jhmrRayCastLineIntOCL.h))
+    * Line integral approximation via splatting ([CPU](lib/ray_cast/jhmrSplatLineIntCPU.h))
+    * Surface rendering ([CPU](lib/ray_cast/jhmrRayCastSurRenderCPU.h) and [OpenCL](lib/ray_cast/jhmrRayCastSurRenderOCL.h))
+    * Depth maps ([CPU](lib/ray_cast/jhmrRayCastDepthCPU.h) and [OpenCL](lib/ray_cast/jhmrRayCastDepthOCL.h))
+    * Occluding contours ([CPU](lib/ray_cast/jhmrRayCastOccContourCPU.h) and [OpenCL](lib/ray_cast/jhmrRayCastOccContourOCL.h))
+    * Sparse collision detection ([CPU](lib/ray_cast/jhmrRayCastSparseCollCPU.h))
+    * Extendable common interface ([CPU](lib/ray_cast/jhmrRayCastBaseCPU.h), [OpenCL](lib/ray_cast/jhmrRayCastBaseOCL.h), and [more](lib/ray_cast/jhmrRayCastInterface.h))
+  * Image similarity metrics for driving 2D/3D registrations:
+    * Sum of squared differences (SSD) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DSSDCPU.h) and [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DSSDOCL.h))
+    * Normalized cross correlation (NCC) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DNCCCPU.h) and [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DNCCOCL.h))
+    * NCC of Sobel Gradients (Grad-NCC) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DGradNCCCPU.h) and [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DGradNCCOCL.h))
+    * Gradient orientation (GO) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DGradOrientCPU.h))
+    * Gradient difference (Grad-Diff) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DGradDiffCPU.h))
+    * Patch-wise NCC (Patch-NCC) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DPatchNCCCPU.h) and [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DPatchNCCOCL.h))
+    * Patch-wise Grad-NCC (Patch-Grad-NCC) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DPatchGradNCCCPU.h) and [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DPatchGradNCCOCL.h))
+    * Boundary contour distance ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DBoundaryEdgesCPU.h))
+    * Extendable common interface ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DCPU.h), [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DOCL.h), and [more](lib/regi/sim_metrics_2d/jhmrImgSimMetric2D.h))
 * Mesh Processing:
   * [Triangular and tetrahedral mesh representations](lib/common/jhmrMesh.h)
 * Image/Volume Processing:
   * [Interpolation of non-uniform spaced slices](lib/image/jhmrVariableSpacedSlices.h)
   * Image processing operations leveraging lower-level [ITK](lib/itk) and [OpenCV](lib/opencv/jhmrOpenCVUtils.h) routines
+  * [Conversion of Hounsfield units (HU) to linear attenuation](lib/image/jhmrHUToLinAtt.h)
+  * [Poisson noise](lib/image/jhmrImageAddPoissonNoise.h)
+  * [Image intensity log transform](lib/image/jhmrImageIntensLogTrans.h)
+  * [Piecewise rigid volume warping using label maps](lib/image/jhmrLabelWarping.h)
 * Numerical Optimization:
   * [Configurable line search implementation](lib/optim/jhmrLineSearchOpt.h)
   * Implementations of several derivative-free methods, including [Differential Evolution](lib/optim/jhmrDiffEvo.h), [Simulated Annealing](lib/optim/jhmrSimAnn.h), and [Particle Swarm Optimization](lib/optim/jhmrPSO.h)
@@ -39,6 +61,7 @@ This is the second iteration of the JHMR repository and focuses on minimizing co
 * Basic Math Utilities:
   * [Basic statistics](lib/basic_math/jhmrBasicStats.h)
   * [Distribution fitting](lib/basic_math/jhmrNormDistFit.h)
+  * [Uniformly distributed N-D unit vector sampling](lib/basic_math/jhmrSampleUniformUnitVecs.h)
 * General/Common:
   * [String parsing/manipulation utilities](lib/common/jhmrStringUtils.h)
   * [Serialization streams](lib/common/jhmrStreams.h)
@@ -67,19 +90,21 @@ Some of the capabilities provided by individual programs contained with the apps
   * [Warping FCSV files](apps/point_clouds/xform_fcsv)
 * Registration
   * [ICP for 3D point cloud to 3D surface registration](apps/mesh/sur_regi)
+* General utilities for projection data:
+  * [Advanced visualization of projective geometry coordinate frames with a scene of 3D objects](apps/image_io/draw_xray_scene)
+  * [Remap and tile projection data for visualization](apps/image_io/remap_and_tile_proj_data)
 * Hip Surgery: Periacetabular Osteotomy (PAO)
   * [Osteotomy planning and modeling](apps/hip_surgery/pao/create_fragment)
   * [Osteotomy 3D visualization](apps/hip_surgery/pao/draw_bones)
   * [Randomized simulation of fragment adjustments](apps/hip_surgery/pao/sample_frag_moves)
   * [Volumetric modeling of fragment adjustments](apps/hip_surgery/pao/create_repo_vol)
   * [Volumetric modeling of fragment fixation using screws and K-wires](apps/hip_surgery/pao/add_screw_kwires_to_vol)
+  * [Creation of simulated fluoroscopy for 2D/3D registration experiments](apps/hip_surgery/pao/create_synthetic_fluoro)
 
 ## Planned Work
 Although the following capabilities currently only exist in the first iteration of JHMR software, they will be incorporated into this repository at a future date:
 * 2D/3D Registration (intensity-based and feature-based)
-* Advanced visualization of projective geometry coordinate frames with a scene of 3D objects
 * Advanced debugging tools for 2D/3D registration methods
-* Creation of simulated fluoroscopy for 2D/3D registration experiments
 * Intraoperative reconstruction of PAO bone fragments
 * Utilities for creation and manipulation of statistical shape models
 * Shape completion from partial shapes and statistical models
@@ -90,6 +115,7 @@ Although the following capabilities currently only exist in the first iteration 
 ## Dependencies
 * C++ 11 compatible compiler
 * External libraries (compatible versions are listed):
+  * OpenCL (1.x) (typically provided with your graphics drivers or CUDA SDK)
   * [Intel Threading Building Blocks (TBB)](https://github.com/oneapi-src/oneTBB) (20170919oss)
   * [Boost](https://www.boost.org) (header only) (1.65)
   * [Eigen3](http://eigen.tuxfamily.org) (3.3.4)
@@ -97,11 +123,12 @@ Although the following capabilities currently only exist in the first iteration 
   * [ITK](https://itk.org) (4.13.2)
   * [VTK](https://vtk.org) (7.1.1)
   * [OpenCV](https://opencv.org) (3.2.0)
+  * [ViennaCL](http://viennacl.sourceforge.net) (1.7.1)
 
 ## Building
 A standard CMake configure/generate process is used.
 It is recommended to generate Ninja build files for fast and efficient compilation. 
-<!--An example script for building all dependencies and the JHMR-v2 repository is also provided [here](TODO).-->
+An example script for building all dependencies (except OpenCL) and the JHMR-v2 repository is also provided [here](example_build_script).
 
 ## License and Attribution
 The software is available for use under the [MIT License](LICENSE).

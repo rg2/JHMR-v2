@@ -272,10 +272,15 @@ void jhmr::DrawPAOBones::operator()()
   FrameTransform ap_pose;
   FrameTransform oblique_pose;
   FrameTransform lat_pose;
+   
+  // NOTE: The plotter expects the pose to be consistent with proj. axes
+  // that orient the source to detector direction moving from the
+  // focal point/X-ray source towards the detector
 
   if (use_vol_frame)
   {
-    ap_pose = CreateAPViewOfLPSVol(800, femur_pt, false);
+    ap_pose = CreateAPViewOfLPSVol(800, femur_pt, false, true,
+                                   CameraModel::kORIGIN_AT_FOCAL_PT_DET_POS_Z);
   
     const FrameTransform move_to_femur_pt = EulerRotXYZTransXYZFrame(
                                  0, 0, 0, -femur_pt(0), -femur_pt(1), -femur_pt(2));
@@ -294,7 +299,9 @@ void jhmr::DrawPAOBones::operator()()
   {
     // This is the default branch
     CameraModel cam;
-    cam.setup(1200, 768, 768, 0.388, 0.388, true); 
+    cam.coord_frame_type = CameraModel::kORIGIN_AT_FOCAL_PT_DET_POS_Z;
+    cam.setup(1200, 768, 768, 0.388, 0.388); 
+    
     ap_pose = app_to_vol * CreateAPViewOfAPP(cam, 0.5, false);
 
     oblique_pose = app_to_vol *

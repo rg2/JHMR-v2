@@ -451,7 +451,7 @@ std::string jhmr::ConvertToPosixPath(const std::string& path)
 
 std::string jhmr::GetFileName(const std::string& path)
 {
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   const size_type path_str_len = path.size();
 
@@ -506,7 +506,7 @@ std::string jhmr::GetFileName(const std::string& path)
 
 std::string jhmr::GetFileExtension(const std::string& path)
 {
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   std::string ext_str;
 
@@ -768,9 +768,8 @@ void jhmr::CopyFileSystemItem(const std::string& src_path, const std::string& ds
       std::ofstream out(dst_path_obj.string().c_str(), std::ofstream::binary);
       if (out.is_open())
       {
-        typedef std::vector<char> ByteBuf;
-        const ByteBuf::size_type kBUF_SIZE = 8192;  // 8 KB
-        ByteBuf buf(kBUF_SIZE);
+        constexpr size_type kBUF_SIZE = 8192;  // 8 KB
+        std::vector<char> buf(kBUF_SIZE);
 
         while (in.good())
         {
@@ -799,7 +798,7 @@ void jhmr::CopyFileSystemItem(const std::string& src_path, const std::string& ds
 
 std::string jhmr::GetUniqueNumericIDPath(const std::string& path_pattern)
 {
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   std::string cur_str;
 
@@ -902,14 +901,11 @@ void jhmr::MakeDir(const std::string& path)
 
 void jhmr::MakeDirRecursive(const std::string& path)
 {
-  typedef std::vector<std::string> TokensList;
-  typedef TokensList::size_type size_type;
-
   // convert to posix path so we can tokenize on a single separator
   const std::string posix_path = ConvertToPosixPath(path);
 
   char path_sep_str[2] = { kPOSIX_FILE_SEP, '\0' };
-  const TokensList path_components = StringSplit(posix_path, path_sep_str);
+  const auto path_components = StringSplit(posix_path, path_sep_str);
   // by default the splitting will ignore empty tokens and we will lose whether
   // or not the path is absolute, we do a check below to handle this.
 

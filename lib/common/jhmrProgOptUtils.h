@@ -36,10 +36,7 @@
 #include <vector>
 #include <algorithm>
 
-#ifdef JHMR_HAS_OPENCL
-#include "jhmrOpenCL.h"
-#endif
-
+#include "jhmrOpenCLSys.h"
 #include "jhmrExceptionUtils.h"
 #include "jhmrSizedTypeUtils.h"
 
@@ -474,15 +471,15 @@ public:
 
   void set_version_num_str(const std::string& s);
 
-  void set_print_help_gpu_str(const bool print_gpu);
+  void set_print_help_ocl_str(const bool print_ocl);
 
-  void add_gpu_select_flag();
+  void add_ocl_select_flag();
+
+  void add_backend_flags();
 
   void add_tbb_max_num_threads_flag();
 
-#ifdef JHMR_HAS_OPENCL
-  boost::compute::device selected_gpu();
-#endif
+  boost::compute::device selected_ocl() const;
 
   /// \brief Checks to see if a variable/argument with a specific destination
   ///        string has been added.
@@ -523,7 +520,9 @@ private:
 
   std::string help_epi_str_;
 
-  bool print_help_gpu_str_ = false;
+  bool print_help_backend_str_ = false;
+
+  bool print_help_ocl_str_ = false;
 
   size_type min_num_pos_args_ = 0;
 
@@ -544,11 +543,7 @@ private:
   std::string compile_date_;
   std::string version_num_str_;
 
-#ifdef JHMR_HAS_OPENCL
-  using IDStrDevMap = std::map<std::string, boost::compute::device>;
-
-  IDStrDevMap opencl_id_str_to_dev_map_;
-#endif
+  OpenCLNameDevMap opencl_id_str_to_dev_map_;
 
   bool tbb_max_num_threads_opt_added_ = false;
 };

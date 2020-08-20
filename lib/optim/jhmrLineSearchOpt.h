@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRLINESEARCHOPTIMIZATION_H_
 #define JHMRLINESEARCHOPTIMIZATION_H_
 
@@ -92,11 +90,13 @@ struct LineSearchOptimization : public ObjWithOStream
   // 0 --> no limit
   size_type max_its = 0;
   
+  LineSearchOptimization() = default;
+
   // no copying
   LineSearchOptimization(const LineSearchOptimization&) = delete;
   LineSearchOptimization& operator=(const LineSearchOptimization&) = delete;
 
-  std::tuple<TermStatus,Pt,Scalar,size_type> solve(const Pt& init_x);
+  std::tuple<TermStatus,Pt,Scalar,size_type> solve(const Pt& init_x) const;
 
   static std::string TermStatusString(const TermStatus status);
 };

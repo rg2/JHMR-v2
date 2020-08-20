@@ -115,10 +115,6 @@ int main(int argc, char* argv[])
 
   const bool verbose = po.get("verbose");
   std::ostream& vout = po.vout();
-  
-  po.set_arg_usage("<Input CT vol.> <Input PAO Segmentation> <APP Landmarks> "
-                   "<side> <frag+femur tranform> <insertion surf. labels> "
-                   "<Output CT vol.> [<Output definitions of inserted objects>]");
 
   const std::string src_intens_path   = po.pos_args()[0];
   const std::string src_label_path    = po.pos_args()[1];

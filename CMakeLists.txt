@@ -33,6 +33,13 @@ set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
+find_package(OpenCL REQUIRED)
+
+find_path(VIENNACL_INC_DIR viennacl/matrix.hpp PATHS ${ViennaCL_DIR} ${ViennaCL_DIR}/..)
+if (${VIENNACL_INC_DIR} STREQUAL "VIENNACL_INC_DIR-NOTFOUND")
+  message(SEND_ERROR "ViennaCL not found!")
+endif ()
+
 find_package(TBB REQUIRED)
 install(FILES $<TARGET_FILE:TBB::tbb> TYPE LIB)
 
@@ -57,9 +64,11 @@ set(JHMR_EXT_LIB_INC_DIRS ${Boost_INCLUDE_DIRS}
                           ${FMT_INCLUDE_DIRS}
                           ${ITK_INCLUDE_DIRS}
                           ${OpenCV_INCLUDE_DIRS}
-                          ${VTK_INCLUDE_DIRS})
+                          ${VTK_INCLUDE_DIRS}
+                          ${VIENNACL_INC_DIR})
 
-set(JHMR_EXT_LIBS_TO_LINK fmt::fmt
+set(JHMR_EXT_LIBS_TO_LINK OpenCL::OpenCL
+                          fmt::fmt
                           ${ITK_LIBRARIES}
                           ${OpenCV_LIBS}
                           TBB::tbb

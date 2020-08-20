@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrLineSearchOpt.h"
 
 #include <boost/variant.hpp>
@@ -80,7 +78,7 @@ std::tuple<jhmr::LineSearchOptimization::TermStatus,
            jhmr::LineSearchOptimization::Pt,
            jhmr::LineSearchOptimization::Scalar,
            jhmr::size_type>
-jhmr::LineSearchOptimization::solve(const Pt& init_x)
+jhmr::LineSearchOptimization::solve(const Pt& init_x) const
 {
   jhmrASSERT(bool(obj_fn));
   jhmrASSERT(bool(backtrack_fn));

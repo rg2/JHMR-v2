@@ -53,7 +53,7 @@ std::vector<std::string> jhmr::StringSplit(const std::string& s,
                                            const std::string& sep_toks_str,
                                            const bool ignore_empty_toks)
 {
-  typedef boost::char_separator<char> BoostCharSep;
+  using BoostCharSep = boost::char_separator<char>;
 
   std::unique_ptr<BoostCharSep> sep;
   if (ignore_empty_toks)
@@ -72,7 +72,7 @@ std::vector<std::string> jhmr::StringSplit(const std::string& s,
 
 std::string jhmr::StringStrip(const std::string& s, const std::string& strip_chars)
 {
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   std::string s_stripped;
 
@@ -123,7 +123,7 @@ std::string jhmr::StringStrip(const std::string& s, const std::string& strip_cha
 
 std::string jhmr::StringRemoveAll(const std::string& s, const std::string& strip_chars)
 {
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   const size_type src_str_len = s.size();
 
@@ -145,7 +145,7 @@ std::string jhmr::StringRemoveAll(const std::string& s, const std::string& strip
 
 std::string jhmr::StringStripExtraNulls(const std::string& s)
 {
-  typedef std::string::size_type size_type;
+  using size_type = std::string::size_type;
 
   std::string s_stripped;
 
@@ -174,7 +174,7 @@ std::string jhmr::StringStripExtraNulls(const std::string& s)
 
 void jhmr::ParseMatlabStyleRange(const std::string& range_str, double* start_val, double* end_val, double* inc_val)
 {
-  typedef std::vector<std::string>::size_type size_type;
+  using size_type = std::vector<std::string>::size_type;
 
   std::vector<std::string> toks = StringSplit(range_str, ":");
 
@@ -244,7 +244,7 @@ void jhmr::ParseMatlabStyleRange(const std::string& range_str, double* start_val
 
 std::vector<double> jhmr::ParseMatlabStyleRange(const std::string& range_str)
 {
-  typedef std::vector<double>::size_type size_type;
+  using size_type = std::vector<double>::size_type;
 
   std::vector<double> vals;
 

@@ -33,14 +33,21 @@ set(JHMR_LIB_SUB_DIRS common
                       basic_math
                       spatial
                       optim
-                      hip_surgery)
-                    #ray_cast)
+                      hip_surgery
+                      ray_cast
+                      opencl)
 
 # build up the list of include directories for the jhmr library
 set(JHMR_LIB_INC_DIRS)
 foreach (JHMR_CUR_LIB_DIR ${JHMR_LIB_SUB_DIRS})
   list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/${JHMR_CUR_LIB_DIR}")
 endforeach()
+
+# This is needed for any subdirectories of entries in JHMR_LIB_SUB_DIRS
+# Do something more intelligent with a for loop when more sub-subdirectories are added
+# OR restructure the library to only have one include directory at the root and
+# switch to including longer paths
+list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/regi/sim_metrics_2d")
 
 # blanket set the include directories for all subdirectories added here
 # so we do not need to do it in each subdirectory's CMakeLists

@@ -81,12 +81,16 @@ Mat3x3 MakeNaiveIntrins(const CoordScalar focal_len,
 
 /// \brief Data used to define a pinhole camera and the projection geometry
 ///
-/// This model is capable of representing two different camera coordinate frames:
-/// 1) (DEFAULT) Origin at focal point, z axis towards the detector and intersecting
+/// This model is capable of representing three different camera coordinate frames:
+/// 1) (DEFAULT) Origin at focal point, z axis pointing away from the detector and
+///    intersecting with the center, x axis aligned with detector column direction
+///    and y axis aligned with detector row direction. The camera origin index is 
+///    in the top left of the image. 
+/// 2) Origin at focal point, z axis towards the detector and intersecting
 ///    with the center, x axis aligned with detector column direction and y axis
 ///    aligned with detector row direction. The camera origin index is in the top
 ///    left of the image. 
-/// 2) Origin on the detector, z axis towards the focal point and
+/// 3) Origin on the detector, z axis towards the focal point and
 ///    intersecting it, axis aligned with detector column direction and y axis
 ///    aligned with the detector row direction. The camera origin index is in the
 ///    bottom left of the image.
@@ -165,45 +169,32 @@ struct CameraModel
   CoordScalar det_row_spacing = 0;  ///< The spacing between detector rows/pixels (Equivalent to pixel size when the spacing is zero).
   CoordScalar det_col_spacing = 0;  ///< The spacing between detector columns/pixels (Equivalent to pixel size when the spacing is zero).
 
-  /// \brief Virtual camera focal plane specified as a grid of detector points
-  ///        in 3D.
-  ///
-  /// This is a "virtual" camera focal plane in the sense that it lies in "front"
-  /// of the camera, so that the image does not need to be flipped.
-  /// The points are with respect to "world" coordinates.
-  Point3DGrid detector_pts;
-
   /// \brief Defines where the camera origin and axes are.
   ///
   /// \see CameraCoordFrame
-  CameraCoordFrame coord_frame_type = kORIGIN_AT_FOCAL_PT_DET_POS_Z;
+  CameraCoordFrame coord_frame_type = kORIGIN_AT_FOCAL_PT_DET_NEG_Z;
 
   /// \brief Initialize a basic camera model.
   ///
   /// Useful when we do not have digital information; e.g. from a projection matrix
-  /// This will construct the grid of detector points (by calling setup_detector_grid)
   /// TODO: This can be made more general by having optional parameters for the
   ///       principal point and shear.
   void setup(const CoordScalar focal_len_arg, const size_type nr, const size_type nc,
-             const CoordScalar rs, const CoordScalar cs,
-             const bool do_not_setup_det_grid = false);
+             const CoordScalar rs, const CoordScalar cs);
 
   /// \brief Initialize a camera model using a projection matrix.
   ///
-  /// This will construct the grid of detector points (by calling setup_detector_grid).
   /// This is consistent with the projection information provided in a PRS file,
-  /// obtained from the Siemens flat panel.
+  /// obtained from the prototype Siemens flat panel.
   void setup(const Mat3x4& proj_mat, const size_type nr, const size_type nc,
              const CoordScalar rs, const CoordScalar cs,
-             const bool use_extrins = true,
-             const bool do_not_setup_det_grid = false);
+             const bool use_extrins = true);
 
   /// \brief Initialize a camera model using existing intrinsic and extrinsic
   ///        matrices.
   void setup(const Mat3x3& intrins_mat, const Mat4x4& extrins_mat,
              const size_type nr, const size_type nc,
-             const CoordScalar rs, const CoordScalar cs,
-             const bool do_not_setup_det_grid = false);
+             const CoordScalar rs, const CoordScalar cs);
 
   /// \brief Project a single point onto the detector plane.
   ///
@@ -273,13 +264,14 @@ struct CameraModel
   bool operator==(const CameraModel& other) const;
 
   bool operator!=(const CameraModel& other) const;
-
-private:
+  
   /// \brief Given valid detector parameters already set, this creates the grid
-  ///        of detector points.
+  ///        of 3D detector points.
   ///
-  /// The detector points are with respect to "world" coordinates.
-  void setup_detector_grid();
+  /// This is a "virtual" camera focal plane in the sense that it lies in "front"
+  /// of the camera, so that the image does not need to be flipped.
+  /// The points are with respect to "world" coordinates.
+  Point3DGrid detector_grid() const;
 };
 
 /// \brief Creates a new camera model that corresponds to a ROI in an existing
@@ -349,8 +341,7 @@ CameraModel DownsampleCameraModel(const CameraModel& src_cam, const CoordScalar 
 /// as the new camera world frame.
 std::vector<CameraModel>
 CreateCameraWorldUsingFiducial(const std::vector<CameraModel>& orig_cams,
-                               const std::vector<FrameTransform>& cams_to_fid,
-                               const bool do_not_setup_det_grid = false);
+                               const std::vector<FrameTransform>& cams_to_fid);
 
 /// \brief Print Camera parameters to an output stream; useful for debugging.
 void PrintCam(std::ostream& out, const CameraModel& cam);

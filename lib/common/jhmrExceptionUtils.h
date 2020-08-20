@@ -69,7 +69,7 @@ private:
   class DERIVED_NAME : public jhmr::StringMessageException \
   { \
   public: \
-    typedef jhmr::StringMessageException parent_type; \
+    using parent_type = jhmr::StringMessageException; \
     \
     DERIVED_NAME() : parent_type() \
     { } \
