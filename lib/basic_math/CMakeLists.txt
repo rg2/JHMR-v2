@@ -22,6 +22,7 @@
 
 add_library(jhmr_basic_math OBJECT jhmrPolyFit.cpp
                                    jhmrNormDistFit.cpp
+                                   jhmrNormDist.cpp
                                    jhmrPolyFindZeros.cpp
                                    jhmrBasicStats.cpp
                                    jhmrSampleUniformUnitVecs.cpp)
