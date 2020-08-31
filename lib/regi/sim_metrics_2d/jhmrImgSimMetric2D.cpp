@@ -96,7 +96,7 @@ void jhmr::ImgSimMetric2D::set_save_aux_info(const bool save_aux)
   save_aux_info_ = save_aux;
 }
   
-std::shared_ptr<jhmr::DebugRegiSimMetricAux> jhmr::ImgSimMetric2D::aux_info()
+std::shared_ptr<jhmr::H5ReadWriteInterface> jhmr::ImgSimMetric2D::aux_info()
 {
   return nullptr;
 }

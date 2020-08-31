@@ -80,6 +80,7 @@ using Mat2x3List = std::vector<Mat2x2>;
 using Mat3x3List = std::vector<Mat3x3>;
 using Mat4x4List = std::vector<Mat4x4>;
 using Mat3x4List = std::vector<Mat3x4>;
+using MatMxNList = std::vector<MatMxN>;
 
 using LandMap2 = std::unordered_map<std::string,Pt2>;
 using LandMap3 = std::unordered_map<std::string,Pt3>;

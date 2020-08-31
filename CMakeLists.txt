@@ -41,7 +41,7 @@ if (${VIENNACL_INC_DIR} STREQUAL "VIENNACL_INC_DIR-NOTFOUND")
 endif ()
 
 find_package(TBB REQUIRED)
-install(FILES $<TARGET_FILE:TBB::tbb> TYPE LIB)
+install(FILES $<TARGET_FILE:tbb> TYPE LIB)
 
 find_package(Boost REQUIRED)
 
@@ -57,12 +57,15 @@ include(${VTK_USE_FILE})
 
 find_package(OpenCV REQUIRED)
 
+find_package(NLopt REQUIRED)
+
 add_subdirectory(third_party)
 
 set(JHMR_EXT_LIB_INC_DIRS ${Boost_INCLUDE_DIRS}
                           ${EIGEN3_INCLUDE_DIR}
                           ${FMT_INCLUDE_DIRS}
                           ${ITK_INCLUDE_DIRS}
+                          ${ITK_INCLUDE_DIRS}/itkhdf5
                           ${OpenCV_INCLUDE_DIRS}
                           ${VTK_INCLUDE_DIRS}
                           ${VIENNACL_INC_DIR})
@@ -71,8 +74,9 @@ set(JHMR_EXT_LIBS_TO_LINK OpenCL::OpenCL
                           fmt::fmt
                           ${ITK_LIBRARIES}
                           ${OpenCV_LIBS}
-                          TBB::tbb
+                          tbb
                           ${VTK_LIBRARIES}
+                          ${NLOPT_LIBRARIES}
                           cmaes)
 
 include_directories(SYSTEM ${JHMR_EXT_LIB_INC_DIRS})

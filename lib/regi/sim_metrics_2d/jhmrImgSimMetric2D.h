@@ -32,7 +32,7 @@ namespace jhmr
 
 // Forward Declarations
 class  RayCaster;
-struct DebugRegiSimMetricAux;
+struct H5ReadWriteInterface;
 
 /// \brief Base class for computing a similarity metric between a fixed (static)
 ///        image and a collection of moving (changing) images.
@@ -133,7 +133,7 @@ public:
 
   void set_save_aux_info(const bool save_aux);
 
-  virtual std::shared_ptr<DebugRegiSimMetricAux> aux_info();
+  virtual std::shared_ptr<H5ReadWriteInterface> aux_info();
 
 protected:
   size_type num_pix_per_proj();

@@ -304,7 +304,7 @@ void jhmr::ImgSimMetric2DPatchGradNCCCPU::set_use_mov_img_patch_variances_as_wgt
   use_mov_img_patch_variances_as_wgts_ = use_vars_as_wgts;
 }
 
-std::shared_ptr<jhmr::DebugRegiSimMetricAux>
+std::shared_ptr<jhmr::H5ReadWriteInterface>
 jhmr::ImgSimMetric2DPatchGradNCCCPU::aux_info()
 {
   return sim_aux_;

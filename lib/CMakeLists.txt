@@ -47,7 +47,10 @@ endforeach()
 # Do something more intelligent with a for loop when more sub-subdirectories are added
 # OR restructure the library to only have one include directory at the root and
 # switch to including longer paths
-list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/regi/sim_metrics_2d")
+list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/regi/sim_metrics_2d"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/regi/pnp_solvers"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/regi/penalty_fns_2d_3d"
+                              "${CMAKE_CURRENT_SOURCE_DIR}/regi/interfaces_2d_3d")
 
 # blanket set the include directories for all subdirectories added here
 # so we do not need to do it in each subdirectory's CMakeLists

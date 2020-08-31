@@ -25,7 +25,7 @@
 #ifndef JHMRNORMDIST_H_
 #define JHMRNORMDIST_H_
 
-#include "jhmrCommon.h"
+#include "jhmrDistInterface.h"
 
 namespace jhmr
 {
@@ -33,22 +33,28 @@ namespace jhmr
 /// \brief One dimensional Normal distribution
 ///
 /// Pre-computes as much as possible in the constructor.
-class NormalDist1D
+class NormalDist1D final : public Dist
 {
 public:
-  using Scalar = CoordScalar;
-
   NormalDist1D();
 
   NormalDist1D(const Scalar m, const Scalar s);
 
   Scalar operator()(const Scalar x) const;
 
+  Scalar density(const PtN& x) const override;
+
+  Scalar log_density(const PtN& x) const override;
+  
   Scalar log_density(const Scalar x) const;
 
-  Scalar norm_const() const;
+  Scalar norm_const() const override;
 
-  Scalar log_norm_const() const;
+  Scalar log_norm_const() const override;
+
+  bool normalized() const override;
+
+  size_type dim() const override;
 
 private:
   const Scalar mu_;
@@ -69,21 +75,27 @@ private:
 /// This DOES NOT use two NormalDist1D instances, but rather computes as much
 /// as possible in the constructor and only evaluates a single std::exp in
 /// the evaluation operator.
-class NormalDist2DIndep
+class NormalDist2DIndep final : public Dist
 {
 public:
-  using Scalar = CoordScalar;
-
   NormalDist2DIndep(const Scalar m_x, const Scalar m_y,
                     const Scalar s_x, const Scalar s_y);
 
   Scalar operator()(const Scalar x, const Scalar y) const;
   
   Scalar log_density(const Scalar x, const Scalar y) const;
+  
+  Scalar density(const PtN& x) const override;
 
-  Scalar norm_const() const;
+  Scalar log_density(const PtN& x) const override;
 
-  Scalar log_norm_const() const;
+  Scalar norm_const() const override;
+
+  Scalar log_norm_const() const override;
+  
+  bool normalized() const override;
+
+  size_type dim() const override;
 
 private:
 

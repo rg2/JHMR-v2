@@ -22,29 +22,27 @@
  * SOFTWARE.
  */
 
-#ifndef JHMRIMGSIMMETRIC2DDEBUG_H_
-#define JHMRIMGSIMMETRIC2DDEBUG_H_
+#ifndef JHMRINTENSITY2D3DREGIBOBYQA_H_
+#define JHMRINTENSITY2D3DREGIBOBYQA_H_
 
-// Forward declarations
-namespace H5
-{
-
-class CommonFG;
-
-}  // H5
+#include "jhmrIntensity2D3DRegiNLOptInterface.h"
 
 namespace jhmr
 {
 
-class DebugRegiSimMetricAux
+/// \brief 2D/3D Intensity-Based Registration object using the BOBYQA optimization method.
+///
+/// This is a contrained optimization algorithm and requires a search space of
+/// at least two dimensions.
+class Intensity2D3DRegiBOBYQA : public Intensity2D3DRegiNLOptInterface
 {
 public:
-  virtual void write(H5::CommonFG* h5) = 0;
+  Intensity2D3DRegiBOBYQA();
 
-  virtual void read(const H5::CommonFG& h5) = 0;
+protected:
+  void set_nl_opt_max_num_fn_evals_for_max_iters(nlopt::opt* opt_obj) override;
 };
 
 }  // jhmr
 
 #endif
-

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRPOINTCLOUDUTILS_H_
 #define JHMRPOINTCLOUDUTILS_H_
 
@@ -107,9 +105,6 @@ CoordScalar SumOfNormsSquared(const Pt3List& pts);
 void ComputeUnitVectors(const Pt3List& vecs, Pt3List* unit_vecs);
 
 Pt3List ComputeUnitVectors(const Pt3List& vecs);
-
-MatMxN ComputePseudoInverse(const MatMxN& a,
-                            Eigen::JacobiSVD<MatMxN>* svd_work = nullptr);
 
 /**
  * @brief Add scaled points to existing points.

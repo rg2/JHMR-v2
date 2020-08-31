@@ -299,7 +299,7 @@ void jhmr::ImgSimMetric2DPatchNCCCPU::compute()
   }
 }
   
-std::shared_ptr<jhmr::DebugRegiSimMetricAux> jhmr::ImgSimMetric2DPatchNCCCPU::aux_info()
+std::shared_ptr<jhmr::H5ReadWriteInterface> jhmr::ImgSimMetric2DPatchNCCCPU::aux_info()
 {
   return sim_aux_;
 }

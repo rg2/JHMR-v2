@@ -45,6 +45,18 @@ jhmr::NormalDist1D::operator()(const Scalar x) const
 }
 
 jhmr::NormalDist1D::Scalar
+jhmr::NormalDist1D::density(const PtN& x) const
+{
+  return operator()(x[0]);
+}
+
+jhmr::NormalDist1D::Scalar
+jhmr::NormalDist1D::log_density(const PtN& x) const
+{
+  return log_density(x[0]);
+}
+
+jhmr::NormalDist1D::Scalar
 jhmr::NormalDist1D::log_density(const Scalar x) const
 {
   const Scalar x_minus_mu = x - mu_;
@@ -59,6 +71,16 @@ jhmr::NormalDist1D::Scalar jhmr::NormalDist1D::norm_const() const
 jhmr::NormalDist1D::Scalar jhmr::NormalDist1D::log_norm_const() const
 {
   return log_norm_const_;
+}
+  
+bool jhmr::NormalDist1D::normalized() const
+{
+  return true;
+}
+
+jhmr::size_type jhmr::NormalDist1D::dim() const
+{
+  return 1;
 }
 
 jhmr::NormalDist2DIndep::NormalDist2DIndep(const Scalar m_x, const Scalar m_y,
@@ -87,6 +109,18 @@ jhmr::NormalDist2DIndep::log_density(const Scalar x, const Scalar y) const
            * (x_minus_mu_x * x_minus_mu_x * one_over_sigma_x_sq_)
            * (y_minus_mu_y * y_minus_mu_y * one_over_sigma_y_sq_)) - log_norm_const_;
 }
+  
+jhmr::NormalDist2DIndep::Scalar
+jhmr::NormalDist2DIndep::density(const PtN& x) const
+{
+  return operator()(x[0], x[1]);
+}
+
+jhmr::NormalDist2DIndep::Scalar
+jhmr::NormalDist2DIndep::log_density(const PtN& x) const
+{
+  return log_density(x[0], x[1]);
+}
 
 jhmr::NormalDist2DIndep::Scalar
 jhmr::NormalDist2DIndep::norm_const() const
@@ -99,3 +133,14 @@ jhmr::NormalDist2DIndep::log_norm_const() const
 {
   return log_norm_const_;
 }
+
+bool jhmr::NormalDist2DIndep::normalized() const
+{
+  return true;
+}
+
+jhmr::size_type jhmr::NormalDist2DIndep::dim() const
+{
+  return 2;
+}
+

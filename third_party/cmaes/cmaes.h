@@ -108,7 +108,7 @@ typedef struct
   int n2para;
 } readpara_t;
 
-typedef struct 
+typedef struct cmaes_struct
 /* cmaes_t 
  * CMA-ES "object" 
  */

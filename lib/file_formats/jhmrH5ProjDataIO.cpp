@@ -29,6 +29,7 @@
 #include "jhmrHDF5.h"
 #include "internal/jhmrHDF5Internal.h"
 #include "jhmrH5CamModelIO.h"
+#include "jhmrCIOSFusionDICOM.h"
 
 namespace
 {
@@ -71,6 +72,22 @@ void WriteProjDataH5Helper(const std::vector<ProjData<tPixelScalar>>& proj_data,
       {
         WriteMatrixH5(name_and_pt.first, name_and_pt.second, &lands_g, false);
       }
+    }
+
+    if (proj_data[i].rot_to_pat_up)
+    {
+      WriteSingleScalarH5("rot-to-pat-up",
+                          static_cast<int>(*proj_data[i].rot_to_pat_up), &proj_g);
+    }
+
+    if (proj_data[i].orig_meta)
+    {
+      H5::Group orig_meta_g = proj_g.createGroup("orig-meta");
+      
+      // For now we are only storing metadata from the CIOS fusion
+      SetStringAttr("meta-type", "cios-fusion", &orig_meta_g);
+
+      WriteCIOSMetaH5(*proj_data[i].orig_meta, &orig_meta_g);
     }
   }
 }
@@ -337,10 +354,8 @@ ReadProjDataHelper(const H5::CommonFG& h5, const bool read_pixels)
     }
 
     // Read landmarks if present
-    try
+    if (ObjectInGroupH5("landmarks", proj_g))
     {
-      HideH5ExceptionPrints suppress_exception_prints;
-      
       const H5::Group lands_g = proj_g.openGroup("landmarks");
       
       const hsize_t num_lands = lands_g.getNumObjs();
@@ -359,8 +374,21 @@ ReadProjDataHelper(const H5::CommonFG& h5, const bool read_pixels)
         }
       }
     }
-    catch (H5::GroupIException&)
-    { }
+    
+    if (ObjectInGroupH5("rot-to-pat-up", proj_g))
+    {
+      projs[i].rot_to_pat_up = static_cast<typename ProjDataType::RotToPatUp>(
+                                  ReadSingleScalarH5Int("rot-to-pat-up", proj_g));
+    }
+
+    if (ObjectInGroupH5("orig-meta", proj_g))
+    {
+      // TODO: check the "meta-type" attribute after more sensors are added
+      
+      projs[i].orig_meta = std::make_shared<CIOSFusionDICOMInfo>();
+      
+      *projs[i].orig_meta = ReadCIOSMetaH5(proj_g.openGroup("orig-meta"));
+    }
   }
 
   return projs;
@@ -456,6 +484,53 @@ jhmr::ReadSingleImgFromProjDataH5U8FromDisk(const std::string& path, const size_
   return ReadSingleImgFromProjDataFromDiskHelper<unsigned char>(path, proj_idx);
 }
 
+jhmr::ProjDataScalarType jhmr::GetProjDataScalarTypeH5(const H5::CommonFG& h5)
+{
+  const size_type num_projs = ReadSingleScalarH5ULong("num-projs", h5);
+  jhmrASSERT(num_projs > 0);
+
+  auto get_data_type = [&h5] (const size_type proj_idx)
+  {
+    const H5::Group img_g = h5.openGroup(fmt::format("proj-{:03d}/img", proj_idx));
+
+    const H5::DataType data_type_h5 = img_g.openDataSet("pixels").getDataType();
+
+    if (LookupH5DataType<float>() == data_type_h5)
+    {
+      return kPROJ_DATA_TYPE_FLOAT32;
+    }
+    else if (LookupH5DataType<unsigned short>() == data_type_h5)
+    {
+      return kPROJ_DATA_TYPE_UINT16;
+    }
+    else if (LookupH5DataType<unsigned char>() == data_type_h5)
+    {
+      return kPROJ_DATA_TYPE_UINT8;
+    }
+    else
+    {
+      jhmrThrow("unsupported HDF5 datatype for proj data!");
+    }
+  };
+ 
+  const auto pd_dt = get_data_type(0);
+
+  for (size_type i = 1; i < num_projs; ++i)
+  {
+    if (pd_dt != get_data_type(i))
+    {
+      jhmrThrow("Inconsistent proj data pixel types!");
+    }
+  }
+
+  return pd_dt;
+}
+
+jhmr::ProjDataScalarType jhmr::GetProjDataScalarTypeFromDisk(const std::string& path)
+{
+  return GetProjDataScalarTypeH5(H5::H5File(path, H5F_ACC_RDONLY));
+}
+
 namespace  // un-named
 {
 
@@ -507,13 +582,24 @@ DeferredProjReaderHelpler(std::vector<ProjData<tScalar>>* pd_ptr,
 jhmr::DeferredProjReader::DeferredProjReader(const std::string& path, const bool cache_imgs)
   : orig_path_(path), cache_imgs_(cache_imgs)
 {
-  // only reads camera models and landmarks - no image pixels
-  proj_data_F32_ = ReadProjDataH5F32FromDisk(path, false);
+  {
+    H5::H5File h5(path, H5F_ACC_RDONLY);
+
+    scalar_type_on_disk_ = GetProjDataScalarTypeH5(h5);
+
+    // only reads camera models and landmarks - no image pixels
+    proj_data_F32_ = ReadProjDataH5F32(h5, false);
+  }
 
   proj_data_U16_ = CastProjData<unsigned short>(proj_data_F32_);
   proj_data_U8_  = CastProjData<unsigned char>(proj_data_F32_);
 }
-  
+
+jhmr::ProjDataScalarType jhmr::DeferredProjReader::scalar_type_on_disk() const
+{
+  return scalar_type_on_disk_;
+}
+
 const jhmr::ProjDataF32List&
 jhmr::DeferredProjReader::proj_data_F32()
 {

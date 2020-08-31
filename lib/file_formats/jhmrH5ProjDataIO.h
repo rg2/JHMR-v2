@@ -179,6 +179,17 @@ ProjDataU16::ProjPtr ReadSingleImgFromProjDataH5U16FromDisk(const std::string& p
 
 ProjDataU8::ProjPtr ReadSingleImgFromProjDataH5U8FromDisk(const std::string& path, const size_type proj_idx);
 
+enum ProjDataScalarType
+{
+  kPROJ_DATA_TYPE_FLOAT32,
+  kPROJ_DATA_TYPE_UINT16,
+  kPROJ_DATA_TYPE_UINT8
+};
+
+ProjDataScalarType GetProjDataScalarTypeH5(const H5::CommonFG& h5);
+
+ProjDataScalarType GetProjDataScalarTypeFromDisk(const std::string& path);
+
 class DeferredProjReader
 {
 public:
@@ -186,6 +197,8 @@ public:
   
   DeferredProjReader(const DeferredProjReader&) = delete;
   DeferredProjReader& operator=(const DeferredProjReader&) = delete;
+
+  ProjDataScalarType scalar_type_on_disk() const;
 
   const ProjDataF32List& proj_data_F32();
 
@@ -204,6 +217,8 @@ private:
   const std::string orig_path_;
 
   bool cache_imgs_;
+
+  ProjDataScalarType scalar_type_on_disk_;
 
   ProjDataF32List proj_data_F32_;
   ProjDataU16List proj_data_U16_;

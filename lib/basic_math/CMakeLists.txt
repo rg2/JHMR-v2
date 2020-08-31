@@ -21,11 +21,17 @@
 # SOFTWARE.
 
 add_library(jhmr_basic_math OBJECT jhmrPolyFit.cpp
-                                   jhmrNormDistFit.cpp
+                                   jhmrDistInterface.cpp
                                    jhmrNormDist.cpp
+                                   jhmrFoldNormDist.cpp
+                                   jhmrLogNormDist.cpp
+                                   jhmrNullDist.cpp
+                                   jhmrNormDistFit.cpp
                                    jhmrPolyFindZeros.cpp
                                    jhmrBasicStats.cpp
-                                   jhmrSampleUniformUnitVecs.cpp)
+                                   jhmrSampleUniformUnitVecs.cpp
+                                   jhmrNDRange.cpp
+                                   jhmrLinAlgUtils.cpp)
 
 target_link_libraries(jhmr_basic_math PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrICP3D3D.h"
 
 #include "jhmrPointCloudUtils.h"

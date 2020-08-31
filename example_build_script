@@ -83,6 +83,16 @@ if [ "$NEED_TO_DOWNLOAD" = true ]; then
 
   rm $FMT_FILE
 
+  NLOPT_URL="https://github.com/stevengj/nlopt/archive/v2.5.0.zip"
+
+  NLOPT_FILE=`basename $NLOPT_URL`
+
+  wget $NLOPT_URL
+
+  unzip -q $NLOPT_FILE
+
+  rm $NLOPT_FILE
+
   VTK_URL="https://www.vtk.org/files/release/7.1/VTK-7.1.1.zip"
 
   wget $VTK_URL
@@ -125,6 +135,8 @@ VIENNACL_DIR="$BUILD_ROOT/`ls | grep "viennacl-dev-release-*"`"
 
 FMT_DIR="$BUILD_ROOT/`ls | grep "fmt-*"`"
 
+NLOPT_DIR="$BUILD_ROOT/`ls | grep "nlopt-*"`"
+
 VTK_DIR="$BUILD_ROOT/`ls | grep "VTK-*"`"
 
 ITK_DIR="$BUILD_ROOT/`ls | grep "InsightToolkit-*"`"
@@ -144,6 +156,23 @@ if [ "$NEED_TO_BUILD_THIRD_PARTY" = true ] ; then
     -DFMT_TEST:BOOL=OFF \
     -DFMT_INSTALL:BOOL=ON \
     -DFMT_DOC:BOOL=OFF
+  ninja
+  cd ../../
+
+cd $NLOPT_DIR
+  mkdir build
+  cd build
+  cmake -G Ninja .. \
+    -DCMAKE_CXX_STANDARD:STRING="11" \
+    -DCMAKE_BUILD_TYPE:STRING=$BUILD_CONFIG \
+    -DBUILD_SHARED_LIBS:BOOL=OFF \
+    -DNLOPT_CXX:BOOL=OFF \
+    -DNLOPT_PYTHON:BOOL=OFF \
+    -DNLOPT_OCTAVE:BOOL=OFF \
+    -DNLOPT_MATLAB:BOOL=OFF \
+    -DNLOPT_GUILE:BOOL=OFF \
+    -DNLOPT_SWIG:BOOL=OFF \
+    -DNLOPT_LINK_PYTHON:BOOL=OFF
   ninja
   cd ../../
 
@@ -238,6 +267,7 @@ if [ "$NEED_TO_START_JHMR" = true ]; then
     -DViennaCL_DIR:PATH="$VIENNACL_DIR" \
     -DEIGEN3_INCLUDE_DIR:PATH="$EIGEN_DIR" \
     -DBoost_INCLUDE_DIR:PATH="$BOOST_DIR" \
+    -DNLopt_DIR:BOOL="$NLOPT_DIR/build" \
     -DTBB_DIR:PATH="$TBB_DIR" \
     -Dfmt_DIR:PATH="$FMT_DIR/build" \
     -DVTK_DIR:PATH="$VTK_DIR/build" \

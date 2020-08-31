@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRICP3D3D_H_
 #define JHMRICP3D3D_H_
 

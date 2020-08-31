@@ -24,5 +24,6 @@ add_subdirectory(convert_resample_dicom)
 add_subdirectory(report_dicom)
 add_subdirectory(crop_vol)
 add_subdirectory(remap_and_tile_proj_data)
+add_subdirectory(extract_nii_from_proj_data)
 add_subdirectory(draw_xray_scene)
 

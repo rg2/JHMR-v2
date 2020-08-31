@@ -75,14 +75,14 @@ public:
 
   void set_use_mov_img_patch_variances_as_wgts(const bool use_vars_as_wgts);
 
-  std::shared_ptr<DebugRegiSimMetricAux> aux_info() override;
+  std::shared_ptr<H5ReadWriteInterface> aux_info() override;
   
-  struct SimAux : public DebugRegiSimMetricAux
+  struct SimAux : public H5ReadWriteInterface
   {
     using PatchNCCSimAux = ImgSimMetric2DPatchNCCCPU::SimAux;
     
-    std::shared_ptr<DebugRegiSimMetricAux> sim_aux_x;
-    std::shared_ptr<DebugRegiSimMetricAux> sim_aux_y;
+    std::shared_ptr<H5ReadWriteInterface> sim_aux_x;
+    std::shared_ptr<H5ReadWriteInterface> sim_aux_y;
     
     void write(H5::CommonFG* h5) override;
     

@@ -386,7 +386,9 @@ int main(int argc, char* argv[])
       
       dst_pd.cam = cams[proj_idx];
       dst_pd.img = SamplePoissonProjFromAttProj(rc->proj(proj_idx).GetPointer(), num_photons);
-    
+      
+      dst_pd.rot_to_pat_up = is_left ? ProjDataU16::kZERO : ProjDataU16::kONE_EIGHTY;
+
       if (need_to_proj_lands)
       {
         vout << "      projecting landmarks..." << std::endl;

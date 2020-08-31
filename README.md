@@ -25,6 +25,38 @@ This is the second iteration of the JHMR repository and focuses on minimizing co
     * Patch-wise Grad-NCC (Patch-Grad-NCC) ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DPatchGradNCCCPU.h) and [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DPatchGradNCCOCL.h))
     * Boundary contour distance ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DBoundaryEdgesCPU.h))
     * Extendable common interface ([CPU](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DCPU.h), [OpenCL](lib/regi/sim_metrics_2d/jhmrImgSimMetric2DOCL.h), and [more](lib/regi/sim_metrics_2d/jhmrImgSimMetric2D.h))
+  * Various optimization strategies for 2D/3D intensity-based registration:
+    * [CMA-ES](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiCMAES.h)
+    * [Differential Evolution](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiDiffEvo.h)
+    * [Exhaustive/Grid Search](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiExhaustive.h)
+    * [Particle Swarm Optimization](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiPSO.h)
+    * [Hill Climbing](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiHillClimb.h)
+    * Wrappers around [NLOpt](https://github.com/stevengj/nlopt) routines:
+      * [BOBYQA](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiBOBYQA.h)
+      * [CRS](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiCRS.h)
+      * [DESCH](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiDESCH.h)
+      * [Variations of DIRECT](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiDIRECT.h)
+      * [DISRES](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiDISRES.h)
+      * [NEWUOA](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiNEWUOA.h)
+      * [Nelder Mead](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiNelderMead.h)
+      * [PRAXIS](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiPRAXIS.h)
+      * [Sbplx](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegiSbplx.h)
+    * [Extendable common interface](lib/regi/interfaces_2d_3d/jhmrIntensity2D3DRegi.h)
+  * Regularizers for 2D/3D intensity-based registration:
+    * [Rotation and translation magnitudes](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnSE3Mag.h)
+    * [Euler decomposition magnitudes](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnSE3EulerDecomp.h)
+    * [Rotation and translation magnitudes of relative pose between multiple objects](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnRelPose.h)
+    * [Relative pose difference from nominal AP pose](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnPelvisAP.h)
+    * [Landmark re-projection distances](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnLandReproj.h)
+    * [Heuristics for automatic global pelvis registration](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnGlobalPelvis.h)
+    * [Combination of regularizers](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFnCombo.h)
+    * [Extendable common interface](lib/regi/penalty_fns_2d_3d/jhmrRegi2D3DPenaltyFn.h)
+  * [Pipeline for chaining together 2D/3D registrations](lib/regi/interfaces_2d_3d/jhmrMultiObjMultiLevel2D3DRegi.h) (intensity-based and feature-based) for solving registration problems with multiple-resolutions and views
+  * Perspective-n-Point (PnP) solvers (paired point 2D/3D)
+    * [Minimization of re-projection distances](lib/regi/pnp_solvers/jhmrLandmark2D3DRegiReprojDistCMAES.h)
+    * [POSIT](lib/regi/pnp_solvers/jhmrPOSIT.h)
+    * [P3P using C-arm geometry assumptions](lib/regi/pnp_solvers/jhmrP3PCArm.h)
+    * [RANSAC PnP wrapper](lib/regi/pnp_solvers/jhmrRANSACPnP.h)
 * Mesh Processing:
   * [Triangular and tetrahedral mesh representations](lib/common/jhmrMesh.h)
 * Image/Volume Processing:
@@ -62,6 +94,10 @@ This is the second iteration of the JHMR repository and focuses on minimizing co
   * [Basic statistics](lib/basic_math/jhmrBasicStats.h)
   * [Distribution fitting](lib/basic_math/jhmrNormDistFit.h)
   * [Uniformly distributed N-D unit vector sampling](lib/basic_math/jhmrSampleUniformUnitVecs.h)
+  * [Common interface for probability densities](lib/basic_math/jhmrDistInterface.h) and instances for common distributions:
+    * [Normal](lib/basic_math/jhmrNormDist.h)
+    * [Log-normal](lib/basic_math/jhmrLogNormDist.h)
+    * [Folded normal](lib/basic_math/jhmrFoldNormDist.h)
 * General/Common:
   * [String parsing/manipulation utilities](lib/common/jhmrStringUtils.h)
   * [Serialization streams](lib/common/jhmrStreams.h)
@@ -103,7 +139,7 @@ Some of the capabilities provided by individual programs contained with the apps
 
 ## Planned Work
 Although the following capabilities currently only exist in the first iteration of JHMR software, they will be incorporated into this repository at a future date:
-* 2D/3D Registration (intensity-based and feature-based)
+* Executable for running a multiple-view/multiple-resolution 2D/3D registration pipeline defined using a configuration file
 * Advanced debugging tools for 2D/3D registration methods
 * Intraoperative reconstruction of PAO bone fragments
 * Utilities for creation and manipulation of statistical shape models
@@ -120,6 +156,7 @@ Although the following capabilities currently only exist in the first iteration 
   * [Boost](https://www.boost.org) (header only) (1.65)
   * [Eigen3](http://eigen.tuxfamily.org) (3.3.4)
   * [fmt](https://fmt.dev) (5.3.0)
+  * [NLOpt](https://github.com/stevengj/nlopt) (2.5.0)
   * [ITK](https://itk.org) (4.13.2)
   * [VTK](https://vtk.org) (7.1.1)
   * [OpenCV](https://opencv.org) (3.2.0)
@@ -129,6 +166,7 @@ Although the following capabilities currently only exist in the first iteration 
 A standard CMake configure/generate process is used.
 It is recommended to generate Ninja build files for fast and efficient compilation. 
 An example script for building all dependencies (except OpenCL) and the JHMR-v2 repository is also provided [here](example_build_script).
+The [docker](docker) directory demonstrates how Docker may be used to build the software.
 
 ## License and Attribution
 The software is available for use under the [MIT License](LICENSE).

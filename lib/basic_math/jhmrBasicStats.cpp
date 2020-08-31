@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrBasicStats.h"
 
 jhmr::CoordScalar jhmr::SampleMean(const CoordScalarList& x)

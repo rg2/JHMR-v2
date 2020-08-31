@@ -26,6 +26,8 @@
 
 #include "jhmrAssert.h"
 #include "jhmrITKResampleUtils.h"
+#include "jhmrITKOpenCVUtils.h"
+#include "jhmrOpenCVUtils.h"
 
 namespace  // un-named
 {
@@ -439,5 +441,51 @@ void jhmr::UpdateCamModelDetParamsFromImgs(CamImgPairU8List* cam_model_img_pairs
                                            const bool keep_focal_len_const)
 {
   UpdateCamModelDetParamsFromImgsHelper(cam_model_img_pairs, keep_focal_len_const);
+}
+
+namespace  // un-named
+{
+
+using namespace jhmr;
+
+template <class tPixelScalar>
+void ModifyForPatUpHelper(itk::Image<tPixelScalar,2>* img,
+                        const typename ProjData<tPixelScalar>::RotToPatUp rot_to_pat_up)
+{
+  using PixelScalar = tPixelScalar;
+  using PD          = ProjData<PixelScalar>;
+
+  cv::Mat img_ocv = ShallowCopyItkToOpenCV(img);
+
+  if (rot_to_pat_up == PD::kONE_EIGHTY)
+  {
+    FlipImageRows(&img_ocv);
+    FlipImageColumns(&img_ocv);
+  }
+  else if (rot_to_pat_up == PD::kZERO)
+  {
+    // nothing to do
+  }
+  else
+  {
+    jhmrThrow("Unsupported undo pat rot up for undo: %d", static_cast<int>(rot_to_pat_up));
+  }
+}
+
+}  // un-named
+
+void jhmr::ModifyForPatUp(ProjDataF32::Proj* img, const ProjDataF32::RotToPatUp rot_to_pat_up)
+{
+  ModifyForPatUpHelper(img, rot_to_pat_up);
+}
+
+void jhmr::ModifyForPatUp(ProjDataU16::Proj* img, const ProjDataU16::RotToPatUp rot_to_pat_up)
+{
+  ModifyForPatUpHelper(img, rot_to_pat_up);
+}
+
+void jhmr::ModifyForPatUp(ProjDataU8::Proj* img, const ProjDataU8::RotToPatUp rot_to_pat_up)
+{
+  ModifyForPatUpHelper(img, rot_to_pat_up);
 }
 

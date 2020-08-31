@@ -27,7 +27,7 @@
 
 #include "jhmrImgSimMetric2DCPU.h"
 #include "jhmrImgSimMetric2DPatchCommon.h"
-#include "jhmrImgSimMetric2DDebug.h"
+#include "jhmrHDF5ReadWriteInterface.h"
 
 namespace jhmr
 {
@@ -52,9 +52,9 @@ public:
   /// \brief Computation of the similarity metric
   void compute() override;
   
-  std::shared_ptr<DebugRegiSimMetricAux> aux_info() override;
+  std::shared_ptr<H5ReadWriteInterface> aux_info() override;
   
-  struct SimAux : public DebugRegiSimMetricAux
+  struct SimAux : public H5ReadWriteInterface
   {
     std::vector<PatchInfoList>  patch_infos_per_compute_call;
     std::vector<PatchIndexList> patch_indices_per_compute_call;
