@@ -83,6 +83,17 @@ CreateCorrespondencePointLists(const LandMap2& pts1_map, const LandMap3& pts2_ma
 std::tuple<Pt2List,Pt2List,StrList>
 CreateCorrespondencePointLists(const LandMap2& pts1_map, const LandMap2& pts2_map);
 
+LandMap2 DropPtDim(const LandMap3& src_pts, const size_type dim);
+
+LandMap2 PhysPtsToInds(const LandMap2& src_pts,
+                       const CoordScalar pixel_spacing_x,
+                       const CoordScalar pixel_spacing_y);
+
+LandMap3 PhysPtsToInds(const LandMap3& src_pts,
+                       const CoordScalar pixel_spacing_x,
+                       const CoordScalar pixel_spacing_y,
+                       const CoordScalar pixel_spacing_z);
+
 }  // jhmr
 
 #endif

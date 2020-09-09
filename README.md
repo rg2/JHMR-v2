@@ -129,6 +129,9 @@ Some of the capabilities provided by individual programs contained with the apps
 * General utilities for projection data:
   * [Advanced visualization of projective geometry coordinate frames with a scene of 3D objects](apps/image_io/draw_xray_scene)
   * [Remap and tile projection data for visualization](apps/image_io/remap_and_tile_proj_data)
+  * [Tool for creating movie replays of 2D/3D registration processing](apps/image_io/regi2d3d_replay)
+  * [Extract projection into NIFTY format (.nii/.nii.gz)](apps/image_io/extract_nii_from_proj_data)
+  * [Insert landmarks (FCSV) into HDF5 projection data](apps/image_io/add_lands_to_proj_data)
 * Hip Surgery: Periacetabular Osteotomy (PAO)
   * [Osteotomy planning and modeling](apps/hip_surgery/pao/create_fragment)
   * [Osteotomy 3D visualization](apps/hip_surgery/pao/draw_bones)
@@ -136,11 +139,13 @@ Some of the capabilities provided by individual programs contained with the apps
   * [Volumetric modeling of fragment adjustments](apps/hip_surgery/pao/create_repo_vol)
   * [Volumetric modeling of fragment fixation using screws and K-wires](apps/hip_surgery/pao/add_screw_kwires_to_vol)
   * [Creation of simulated fluoroscopy for 2D/3D registration experiments](apps/hip_surgery/pao/create_synthetic_fluoro)
+  * Examples of 2D/3D, fluoroscopy to CT, registration
+    * [Single-view pelvis registration](apps/hip_surgery/pelvis_single_view_regi_2d_3d)
+    * [Multiple-view, pelvis, femur PAO fragment registration](apps/hip_surgery/pao/frag_multi_view_regi_2d_3d)
 
 ## Planned Work
 Although the following capabilities currently only exist in the first iteration of JHMR software, they will be incorporated into this repository at a future date:
 * Executable for running a multiple-view/multiple-resolution 2D/3D registration pipeline defined using a configuration file
-* Advanced debugging tools for 2D/3D registration methods
 * Intraoperative reconstruction of PAO bone fragments
 * Utilities for creation and manipulation of statistical shape models
 * Shape completion from partial shapes and statistical models
@@ -161,6 +166,7 @@ Although the following capabilities currently only exist in the first iteration 
   * [VTK](https://vtk.org) (7.1.1)
   * [OpenCV](https://opencv.org) (3.2.0)
   * [ViennaCL](http://viennacl.sourceforge.net) (1.7.1)
+  * Optional: [ffmpeg](https://ffmpeg.org) is used for writing videos when it is found in the system path. The OpenCV video writer is used if ffmpeg is not available.
 
 ## Building
 A standard CMake configure/generate process is used.

@@ -29,6 +29,7 @@
 #include "jhmrAnatCoordFrames.h"
 #include "jhmrPAOIO.h"
 #include "jhmrMeshIO.h"
+#include "jhmrStringUtils.h"
 
 int main(int argc, char* argv[])
 {
@@ -89,6 +90,12 @@ int main(int argc, char* argv[])
          "The transformation, in the APP, that is applied to the femur only, "
          "prior to the combined fragment and femur transformation.")
    << "";
+
+  po.add("femur-not-rel-to-frag", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE,
+         "femur-not-rel-to-frag",
+         "Indicates that the femur pose is not relative to the fragment - e.g. the "
+         "combined fragment/femur pose will not be used to visualize the femur.")
+    << false;
 
   po.add("femur-frag-xform2", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_STRING,
          "femur-frag-xform2",
@@ -429,6 +436,9 @@ int main(int argc, char* argv[])
     vout << "reading femur only transform..." << std::endl;
     draw_bones.delta_Femur_only = ReadITKAffineTransformFromFile(femur_only_xform_path);
     vout << draw_bones.delta_Femur_only.matrix() << std::endl;
+
+    draw_bones.femur_pose_rel_to_frag = !po.get("femur-not-rel-to-frag").as_bool();
+    vout << "  is rel. to frag. pose? " << BoolToYesNo(draw_bones.femur_pose_rel_to_frag) << std::endl;
   }
   else
   {

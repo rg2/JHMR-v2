@@ -28,6 +28,7 @@
 #include <opencv2/core/core.hpp>
 
 #include "jhmrImgSimMetric2DCPU.h"
+#include "jhmrImgSimMetric2DGradImgParamInterface.h"
 
 namespace jhmr
 {
@@ -38,7 +39,9 @@ namespace jhmr
 /// This base class will compute horizontal and vertical Sobel
 /// derivatives of the fixed and moving images; it is up to the
 /// derived class to compute the appropriate similarity score.
-class ImgSimMetric2DGradImgCPU : public ImgSimMetric2DCPU
+class ImgSimMetric2DGradImgCPU
+  : public ImgSimMetric2DCPU,
+    public ImgSimMetric2DGradImgParamInterface
 {
 public:
   /// \brief Constructor - trivial, no work performed.
@@ -51,11 +54,9 @@ public:
   /// This call also computes the fixed image gradients.
   void allocate_resources() override;
 
-  size_type smooth_img_before_sobel_kernel_radius() const;
+  size_type smooth_img_before_sobel_kernel_radius() const override;
 
-  /// \brief Sets the smoothing kernel radius to be used prior to computing
-  ///        Sobel derivatives. 0 -> no smoothing.
-  void set_smooth_img_before_sobel_kernel_radius(const size_type r);
+  void set_smooth_img_before_sobel_kernel_radius(const size_type r) override;
 
 protected:
   using PixelBuffer = std::vector<Scalar>;

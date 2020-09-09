@@ -35,7 +35,6 @@
 #include "jhmrExceptionUtils.h"
 #include "jhmrITKIOUtils.h"
 #include "jhmrITKOpenCVUtils.h"
-#include "jhmrITKCropPadUtils.h"
 #include "jhmrOpenCVUtils.h"
 #include "jhmrHDF5.h"
 
@@ -455,29 +454,6 @@ ReadCIOSFusionDICOMHelper(const std::string& path, const bool no_rot_or_flip_bas
   return std::make_tuple(img, meta);
 }
 
-template <class tPixelScalar>
-std::tuple<CameraModel, typename itk::Image<tPixelScalar,2>::Pointer>
-CropBoundaryPixelsHelper(const CameraModel& src_cam, const itk::Image<tPixelScalar,2>* src_img,
-                         const size_type boundary_width)
-{
-  using PixelScalar = tPixelScalar;
-
-  const auto src_img_size = src_img->GetLargestPossibleRegion().GetSize();
-  jhmrASSERT((src_img_size[0] == src_cam.num_det_cols) && (src_img_size[1] == src_cam.num_det_rows));
-
-  auto dst_img = CropImage2DBoundary(src_img, boundary_width);
-
-  const auto dst_cam = UpdateCameraModelFor2DROI(src_cam, boundary_width, boundary_width,
-                                                 src_img_size[0] - boundary_width - 1,
-                                                 src_img_size[1] - boundary_width - 1); 
-
-  const auto dst_img_size = dst_img->GetLargestPossibleRegion().GetSize();
-  jhmrASSERT(dst_img_size[0] == dst_cam.num_det_cols);
-  jhmrASSERT(dst_img_size[1] == dst_cam.num_det_rows);
-
-  return std::make_tuple(dst_cam, dst_img);
-}
-
 template <class tPointMapItr>
 void UpdateLandmarkMapForCIOSFusionHelper(const CIOSFusionDICOMInfo& meta,
                                           tPointMapItr begin_it, tPointMapItr end_it,
@@ -545,20 +521,6 @@ std::tuple<itk::Image<float,2>::Pointer,jhmr::CIOSFusionDICOMInfo>
 jhmr::ReadCIOSFusionDICOMFloat(const std::string& path, const bool no_rot_or_flip_based_on_meta)
 {
   return ReadCIOSFusionDICOMHelper<float>(path, no_rot_or_flip_based_on_meta);
-}
-
-std::tuple<jhmr::CameraModel, itk::Image<unsigned short,2>::Pointer>
-jhmr::CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<unsigned short,2>* src_img,
-                         const size_type boundary_width)
-{
-  return CropBoundaryPixelsHelper(src_cam, src_img, boundary_width);
-}
-
-std::tuple<jhmr::CameraModel, itk::Image<float,2>::Pointer>
-jhmr::CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<float,2>* src_img,
-                         const size_type boundary_width)
-{
-  return CropBoundaryPixelsHelper(src_cam, src_img, boundary_width);
 }
 
 void jhmr::UpdateLandmarkMapForCIOSFusion(const CIOSFusionDICOMInfo& meta,

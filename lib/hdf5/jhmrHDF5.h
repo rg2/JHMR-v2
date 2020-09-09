@@ -119,6 +119,8 @@ H5::DataType GetH5StringDataType(const std::string& s);
 
 bool SetStringAttr(const std::string& key, const std::string& val, H5::CommonFG* h5);
 
+std::string GetStringAttr(const std::string& key, const H5::CommonFG& h5);
+
 H5::DataSet WriteStringH5(const std::string& field_name,
                           const std::string& field_val,
                           H5::CommonFG* h5,
@@ -528,6 +530,9 @@ ReadVectorH5Double(const std::string& field_name, const H5::CommonFG& h5);
 
 std::vector<bool>
 ReadVectorH5Bool(const std::string& field_name, const H5::CommonFG& h5);
+
+std::vector<CoordScalar>
+ReadVectorH5CoordScalar(const std::string& field_name, const H5::CommonFG& h5);
 
 MatMxN ReadMatrixH5CoordScalar(const std::string& field_name, const H5::CommonFG& h5);
 

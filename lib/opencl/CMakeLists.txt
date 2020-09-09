@@ -24,7 +24,8 @@ add_library(jhmr_opencl OBJECT jhmrOpenCLConvert.cpp
                                jhmrOpenCLMath.cpp
                                jhmrOpenCLSpatial.cpp
                                jhmrOpenCLSys.cpp
-                               jhmrOpenCLMiscKernels.cpp)
+                               jhmrOpenCLMiscKernels.cpp
+                               jhmrViennaCLManager.cpp)
 
 target_link_libraries(jhmr_opencl PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

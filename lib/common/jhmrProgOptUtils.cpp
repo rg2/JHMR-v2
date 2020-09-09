@@ -48,9 +48,7 @@
 
 #include <opencv2/core/version.hpp>
 
-#ifdef JHMR_HAS_NLOPT
 #include <nlopt.hpp>
-#endif
 
 // just for getting version info
 #include <boost/version.hpp>
@@ -252,9 +250,25 @@ std::unique_ptr<tbb::task_scheduler_init>& ProgOptsTBBTaskSchedInit()
 const std::vector<std::tuple<std::string,std::string>>&
 ValidBackendNameAndDescs()
 {
-  static const std::vector<std::tuple<std::string,std::string>> backend_names_and_descs = 
-      { std::make_tuple(std::string("ocl"), std::string("OpenCL processing, usually GPU, but could be CPU.")),
-        std::make_tuple(std::string("cpu"), std::string("Standard CPU processing, potentially using TBB.")) };
+  static bool need_to_init = true;
+
+  static std::vector<std::tuple<std::string,std::string>> backend_names_and_descs;
+  
+  if (need_to_init)
+  {
+    if (!boost::compute::system::platforms().empty())
+    {
+      backend_names_and_descs.push_back(
+                std::make_tuple(std::string("ocl"),
+                                std::string("OpenCL processing, usually GPU, but could be CPU.")));
+    }
+
+    backend_names_and_descs.push_back(
+                std::make_tuple(std::string("cpu"),
+                                std::string("Standard CPU processing, potentially using TBB.")));
+    
+    need_to_init = false;
+  }
 
   return backend_names_and_descs;
 }
@@ -1036,19 +1050,17 @@ void jhmr::ProgOpts::print_help(std::ostream& out) const
 
   out << " OpenCV Version: " << CV_MAJOR_VERSION << '.' << CV_MINOR_VERSION << std::endl;
 
-#ifdef JHMR_HAS_NLOPT
   {
     int major  = 0;
     int minor  = 0;
     int bugfix = 0;
     nlopt_version(&major, &minor, &bugfix);
 
-    out << "NLopt Version: " << major << '.' << minor << '.' << bugfix << std::endl;
+    out << "  NLopt Version: " << major << '.' << minor << '.' << bugfix << std::endl;
   }
-#endif
 
   {
-    std::vector<boost::compute::platform> plats = boost::compute::system::platforms();
+    const auto plats = boost::compute::system::platforms();
 
     for (const auto& plat : plats)
     {
@@ -1654,45 +1666,59 @@ void jhmr::ProgOpts::add_ocl_select_flag()
     << "";
 }
 
-boost::compute::device jhmr::ProgOpts::selected_ocl() const
+boost::compute::device jhmr::ProgOpts::selected_ocl()
 {
-  // creating a default instance of boost::compute::device
-  // should not throw an exception, it will initialize the
-  // device ID to null.
-  boost::compute::device dev;
-
-  const std::string ocl_id = get("ocl-id").as_string();
-  
-  if (!ocl_id.empty())
+  if (!selected_ocl_dev_.id())
   {
-    auto id_dev_it = opencl_id_str_to_dev_map_.find(ocl_id);
-    if (id_dev_it != opencl_id_str_to_dev_map_.end())
+    const std::string ocl_id = get("ocl-id").as_string();
+    
+    if (!ocl_id.empty())
     {
-      dev = id_dev_it->second;
+      auto id_dev_it = opencl_id_str_to_dev_map_.find(ocl_id);
+      if (id_dev_it != opencl_id_str_to_dev_map_.end())
+      {
+        selected_ocl_dev_ = id_dev_it->second;
+      }
+      else
+      {
+        jhmrThrow("Invalid OpenCL Device ID String: %s", ocl_id.c_str());
+      }
     }
     else
     {
-      jhmrThrow("Invalid OpenCL Device ID String: %s", ocl_id.c_str());
-    }
-  }
-  else
-  {
-    try
-    {
-      dev = boost::compute::system::default_device();
-    }
-    catch (std::exception& e)
-    {
-      std::cerr << "Failed to create default device; "
-                   "exception message: " << e.what()
-                << "\n\nIf you do not have any OpenCL devices, "
-                   "try using a CPU only flag."
-                << std::endl;
-      throw;
+      try
+      {
+        selected_ocl_dev_ = boost::compute::system::default_device();
+      }
+      catch (std::exception& e)
+      {
+        std::cerr << "Failed to create default device; "
+                     "exception message: " << e.what()
+                  << "\n\nIf you do not have any OpenCL devices, "
+                     "try using a CPU only flag."
+                  << std::endl;
+        throw;
+      }
     }
   }
 
-  return dev;
+  return selected_ocl_dev_;
+}
+  
+std::tuple<boost::compute::context,boost::compute::command_queue>
+jhmr::ProgOpts::selected_ocl_ctx_queue()
+{
+  if (!selected_ocl_ctx_queue_set_)
+  {
+    boost::compute::device dev = selected_ocl();
+
+    selected_ocl_ctx_   = boost::compute::context(dev);
+    selected_ocl_queue_ = boost::compute::command_queue(selected_ocl_ctx_, dev);
+    
+    selected_ocl_ctx_queue_set_ = true;
+  }
+
+  return std::make_tuple(selected_ocl_ctx_, selected_ocl_queue_);
 }
 
 bool jhmr::ProgOpts::dest_exists(const std::string& dest_str) const

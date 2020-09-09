@@ -28,7 +28,9 @@
 
 #include <unordered_set>
 
-#include <fmt/printf.h>
+#include <fmt/format.h>
+
+#include "jhmrAssert.h"
 
 namespace
 {
@@ -38,7 +40,7 @@ void PrintLandmark2DMapHelper(tIter begin_it, tIter end_it, std::ostream& out)
 {
   for (tIter it = begin_it; it != end_it; ++it)
   {
-    out << fmt::sprintf("%10s: %+12.6f , %+12.6f\n",
+    out << fmt::format("{:10s}: {:+12.6f} , {:+12.6f}\n",
                               it->first,
                               it->second[0], it->second[1]);
   }
@@ -49,7 +51,7 @@ void PrintLandmark3DMapHelper(tIter begin_it, tIter end_it, std::ostream& out)
 {
   for (tIter it = begin_it; it != end_it; ++it)
   {
-    out << fmt::sprintf("%10s: %+12.6f , %+12.6f , %+12.6f\n",
+    out << fmt::format("{:10s}: {:+12.6f} , {:+12.6f} , {:+12.6f}\n",
                               it->first,
                               it->second[0], it->second[1], it->second[2]);
   }
@@ -295,5 +297,80 @@ jhmr::CreateCorrespondencePointLists(const LandMap2& pts1_map, const LandMap2& p
   CreateCorrespondencePointListsHelper(pts1_map, pts2_map, &pts1, &pts2, &names);
 
   return std::make_tuple(pts1, pts2, names);
+}
+
+namespace
+{
+
+using namespace jhmr;
+
+Pt2 DropPtX(const Pt3& p)
+{
+  return p.tail(2);
+}
+
+Pt2 DropPtY(const Pt3& p)
+{
+  Pt2 q;
+  q[0] = p[0];
+  q[1] = p[2];
+  
+  return q;
+}
+
+Pt2 DropPtZ(const Pt3& p)
+{
+  return p.head(2);
+}
+
+}  // un-named
+
+jhmr::LandMap2 jhmr::DropPtDim(const LandMap3& src_pts, const size_type dim)
+{
+  jhmrASSERT(dim < 3);
+
+  LandMap2 dst_lands;
+  dst_lands.reserve(src_pts.size());
+  
+  auto drop_fn = (dim == 2) ? DropPtZ : ((dim == 0) ? DropPtX : DropPtY);
+
+  for (const auto& kv3 : src_pts)
+  {
+    dst_lands.emplace(kv3.first, drop_fn(kv3.second));
+  }
+
+  return dst_lands;
+}
+
+jhmr::LandMap2 jhmr::PhysPtsToInds(const LandMap2& src_pts,
+                                   const CoordScalar pixel_spacing_x,
+                                   const CoordScalar pixel_spacing_y)
+{
+  auto dst_inds = src_pts;
+  
+  for (auto& kv : dst_inds)
+  {
+    kv.second[0] /= pixel_spacing_x;
+    kv.second[1] /= pixel_spacing_y;
+  }
+
+  return dst_inds;
+}
+
+jhmr::LandMap3 jhmr::PhysPtsToInds(const LandMap3& src_pts,
+                                   const CoordScalar pixel_spacing_x,
+                                   const CoordScalar pixel_spacing_y,
+                                   const CoordScalar pixel_spacing_z)
+{
+  auto dst_inds = src_pts;
+  
+  for (auto& kv : dst_inds)
+  {
+    kv.second[0] /= pixel_spacing_x;
+    kv.second[1] /= pixel_spacing_y;
+    kv.second[2] /= pixel_spacing_z;
+  }
+
+  return dst_inds;
 }
 

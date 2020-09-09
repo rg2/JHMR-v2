@@ -25,7 +25,8 @@ add_library(jhmr_hip_surgery OBJECT jhmrHipSegUtils.cpp
                                     jhmrPAODrawBones.cpp
                                     jhmrPAOVolAfterRepo.cpp
                                     jhmrMetalObjs.cpp
-                                    jhmrMetalObjSampling.cpp)
+                                    jhmrMetalObjSampling.cpp
+                                    jhmrSegMetalInXRay.cpp)
 
 target_link_libraries(jhmr_hip_surgery PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

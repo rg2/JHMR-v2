@@ -22,3 +22,5 @@
 
 add_subdirectory(pao)
 
+add_subdirectory(pelvis_single_view_regi_2d_3d)
+

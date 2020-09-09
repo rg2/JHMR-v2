@@ -29,6 +29,14 @@
 
 #include "jhmrIntensity2D3DRegi.h"
 
+// Forward Declarations
+namespace H5
+{
+
+class CommonFG;
+
+}  // H5
+
 namespace jhmr
 {
 
@@ -127,6 +135,10 @@ struct SingleRegiDebugResults
   void init(SE3OptVarsPtr se3, const IndexList& global_vol_inds,
             const size_type init_num_iters_capacity = 1000);
 };
+
+void WriteSingleRegiDebugResultsH5(const SingleRegiDebugResults& results, H5::CommonFG* h5);
+
+SingleRegiDebugResults ReadSingleRegiDebugResultsH5(const H5::CommonFG& h5);
 
 }  // jhmr
 

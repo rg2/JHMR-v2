@@ -311,6 +311,16 @@ void jhmr::ImgSimMetric2DGradImgOCL::allocate_resources()
     sobel_krnl_.set_arg(0, *this->mov_imgs_buf_);
   }
 }
+  
+jhmr::size_type jhmr::ImgSimMetric2DGradImgOCL::smooth_img_before_sobel_kernel_radius() const
+{
+  return smooth_img_kernel_rad_;
+}
+
+void jhmr::ImgSimMetric2DGradImgOCL::set_smooth_img_before_sobel_kernel_radius(const size_type r)
+{
+  smooth_img_kernel_rad_ = r;
+}
 
 void jhmr::ImgSimMetric2DGradImgOCL::compute_sobel_grads()
 {

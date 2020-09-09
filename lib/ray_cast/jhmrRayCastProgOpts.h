@@ -34,7 +34,9 @@ namespace jhmr
 class ProgOpts;
 class RayCaster;
 
-std::shared_ptr<RayCaster> LineIntRayCasterFromProgOpts(const ProgOpts& po);
+std::shared_ptr<RayCaster> LineIntRayCasterFromProgOpts(ProgOpts& po);
+
+std::shared_ptr<RayCaster> DepthRayCasterFromProgOpts(ProgOpts& po);
 
 }  // jhmr
 

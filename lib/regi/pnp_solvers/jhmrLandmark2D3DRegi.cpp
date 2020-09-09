@@ -66,7 +66,7 @@ const jhmr::Pt3List& jhmr::Landmark2D3DRegi::world_pts_3d() const
  
 void jhmr::Landmark2D3DRegi::set_inds_2d_and_world_pts_3d(const LandMap2& inds_2d, const LandMap3& pts_3d)
 {
-  set_inds_2d_and_world_pts_3d({ inds_2d }, pts_3d);
+  set_inds_2d_and_world_pts_3d(std::vector<LandMap2>{ inds_2d }, pts_3d);
 }
 
 namespace
@@ -107,12 +107,12 @@ void jhmr::Landmark2D3DRegi::set_inds_2d_and_world_pts_3d(const std::vector<Land
   };
 
   auto common_lands = ExtractKeys(pts_3d);
-  
+
   for (const auto& cur_inds_2d : inds_2d)
   {
     common_lands = str_set_inter(common_lands, ExtractKeys(cur_inds_2d));
   }
- 
+  
   const size_type num_lands = common_lands.size();
 
   jhmrASSERT(num_lands);

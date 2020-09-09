@@ -209,8 +209,11 @@ void jhmr::DrawPAOBones::operator()()
     //  This is a transformation from original volume coordinates to a new 
     //  volume coordinate frame
     // (This is important to keep straight for later ray casting).
-    const FrameTransform delta_femur_vol = app_to_vol * delta_Frag_and_Femur
-                                                    * delta_Femur_only * vol_to_app;
+    const FrameTransform delta_femur_vol = app_to_vol *
+                                           (femur_pose_rel_to_frag ?
+                                                      delta_Frag_and_Femur :
+                                                      FrameTransform::Identity()) *
+                                           delta_Femur_only * vol_to_app;
     ApplyTransform(delta_femur_vol, femur_mesh_to_disp.vertices, &femur_mesh_to_disp.vertices);
     femur_mesh_to_disp.normals_valid = false;
 

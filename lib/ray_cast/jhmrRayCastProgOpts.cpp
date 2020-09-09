@@ -28,9 +28,17 @@
 #include "jhmrProgOptUtils.h"
 #include "jhmrRayCastLineIntCPU.h"
 #include "jhmrRayCastLineIntOCL.h"
+#include "jhmrRayCastDepthCPU.h"
+#include "jhmrRayCastDepthOCL.h"
 
-std::shared_ptr<jhmr::RayCaster>
-jhmr::LineIntRayCasterFromProgOpts(const ProgOpts& po)
+namespace  // un-named
+{
+
+using namespace jhmr;
+
+template <class tRayCasterCPU, class tRayCasterOCL>
+std::shared_ptr<RayCaster>
+RayCasterFromProgOptsHelper(ProgOpts& po)
 {
   const std::string backend_str = po.get("backend");
 
@@ -38,11 +46,12 @@ jhmr::LineIntRayCasterFromProgOpts(const ProgOpts& po)
 
   if (backend_str == "cpu")
   {
-    rc = std::make_shared<RayCasterLineIntCPU>();
+    rc = std::make_shared<tRayCasterCPU>();
   }
   else if (backend_str == "ocl")
   {
-    rc = std::make_shared<RayCasterLineIntOCL>(po.selected_ocl());
+    auto ocl_ctx_queue = po.selected_ocl_ctx_queue();
+    rc = std::make_shared<tRayCasterOCL>(std::get<0>(ocl_ctx_queue), std::get<1>(ocl_ctx_queue));
   }
   else
   {
@@ -50,5 +59,19 @@ jhmr::LineIntRayCasterFromProgOpts(const ProgOpts& po)
   }
 
   return rc;
+}
+
+}  // un-named
+
+std::shared_ptr<jhmr::RayCaster>
+jhmr::LineIntRayCasterFromProgOpts(ProgOpts& po)
+{
+  return RayCasterFromProgOptsHelper<RayCasterLineIntCPU,RayCasterLineIntOCL>(po);
+}
+
+std::shared_ptr<jhmr::RayCaster>
+jhmr::DepthRayCasterFromProgOpts(ProgOpts& po)
+{
+  return RayCasterFromProgOptsHelper<RayCasterDepthCPU,RayCasterDepthOCL>(po);
 }
 

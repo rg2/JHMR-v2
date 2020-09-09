@@ -6,3 +6,4 @@ A comprehensive listing of the program's usage may be obtained by passing `-h` o
 ## Examples
 Several examples of this tool are given by:
 * [Synthetic Fluoroscopy Creation Tool](../../hip_surgery/pao/create_synthetic_fluoro)
+* [Single-View Pelvis Registration](../../hip_surgery/pelvis_single_view_regi_2d_3d)

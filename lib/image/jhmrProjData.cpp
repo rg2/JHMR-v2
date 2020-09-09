@@ -26,6 +26,7 @@
 
 #include "jhmrAssert.h"
 #include "jhmrITKResampleUtils.h"
+#include "jhmrITKCropPadUtils.h"
 #include "jhmrITKOpenCVUtils.h"
 #include "jhmrOpenCVUtils.h"
 
@@ -54,6 +55,8 @@ DownsampleProjDataHelper(const ProjData<tPixelScalar>& src_proj, const CoordScal
     dst_proj.landmarks.insert(LandMap2::value_type(src_land.first,
                 LandMap2::mapped_type(src_land.second * ds_factor)));
   }
+  
+  dst_proj.rot_to_pat_up = src_proj.rot_to_pat_up;
 
   return dst_proj;
 }
@@ -487,5 +490,47 @@ void jhmr::ModifyForPatUp(ProjDataU16::Proj* img, const ProjDataU16::RotToPatUp 
 void jhmr::ModifyForPatUp(ProjDataU8::Proj* img, const ProjDataU8::RotToPatUp rot_to_pat_up)
 {
   ModifyForPatUpHelper(img, rot_to_pat_up);
+}
+
+namespace  // un-named
+{
+
+template <class tPixelScalar>
+std::tuple<CameraModel, typename itk::Image<tPixelScalar,2>::Pointer>
+CropBoundaryPixelsHelper(const CameraModel& src_cam, const itk::Image<tPixelScalar,2>* src_img,
+                         const size_type boundary_width)
+{
+  using PixelScalar = tPixelScalar;
+
+  const auto src_img_size = src_img->GetLargestPossibleRegion().GetSize();
+  jhmrASSERT((src_img_size[0] == src_cam.num_det_cols) && (src_img_size[1] == src_cam.num_det_rows));
+
+  auto dst_img = CropImage2DBoundary(src_img, boundary_width);
+
+  const auto dst_cam = UpdateCameraModelFor2DROI(src_cam, boundary_width, boundary_width,
+                                                 src_img_size[0] - boundary_width - 1,
+                                                 src_img_size[1] - boundary_width - 1); 
+
+  const auto dst_img_size = dst_img->GetLargestPossibleRegion().GetSize();
+  jhmrASSERT(dst_img_size[0] == dst_cam.num_det_cols);
+  jhmrASSERT(dst_img_size[1] == dst_cam.num_det_rows);
+
+  return std::make_tuple(dst_cam, dst_img);
+}
+
+}
+
+std::tuple<jhmr::CameraModel, itk::Image<unsigned short,2>::Pointer>
+jhmr::CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<unsigned short,2>* src_img,
+                         const size_type boundary_width)
+{
+  return CropBoundaryPixelsHelper(src_cam, src_img, boundary_width);
+}
+
+std::tuple<jhmr::CameraModel, itk::Image<float,2>::Pointer>
+jhmr::CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<float,2>* src_img,
+                         const size_type boundary_width)
+{
+  return CropBoundaryPixelsHelper(src_cam, src_img, boundary_width);
 }
 

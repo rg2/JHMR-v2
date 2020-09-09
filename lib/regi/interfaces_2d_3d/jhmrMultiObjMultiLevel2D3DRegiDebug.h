@@ -28,26 +28,11 @@
 #include <boost/variant.hpp>
 
 #include "jhmrProjData.h"
+#include "jhmrProjPreProc.h"
 #include "jhmrIntensity2D3DRegiDebug.h"
 
 namespace jhmr
 {
-
-struct ProjPreProcInfo
-{
-  size_type crop_cols;
-  size_type crop_rows;
-
-  bool log_remap;
-
-  bool invert_mask;
-  
-  bool auto_mask;
-  bool iterative_thresh;
-
-  double auto_mask_thresh;
-  double auto_mask_level;
-};
 
 struct DebugRegiResultsMultiLevel
 {
@@ -68,16 +53,27 @@ struct DebugRegiResultsMultiLevel
     std::string label_vol_path;
 
     IndexList labels_used;
+
+    bool paths_on_disk = true;
   };
-  
+
   // List of the volumes used. A variant type is used to allow the user to
   // either provide the volumes directly, in which case they will be serialized
   // into the debug file, or to provide paths on disk in order to avoid duplicating
   // storage of the volumes.
   std::vector<boost::variant<RayCaster::VolPtr,VolPathInfo>> vols;
 
+  struct ProjDataPathInfo
+  {
+    std::string path;
+
+    IndexList projs_used;  // empty --> use all projs
+
+    bool paths_on_disk = true;
+  };
+
   // see above note about using variant - just for proj data this time
-  boost::variant<ProjDataF32List,std::string> fixed_projs;
+  boost::variant<ProjDataF32List,ProjDataPathInfo> fixed_projs;
 
   boost::optional<double> pre_proc_time_secs;
   
@@ -98,13 +94,30 @@ struct DebugRegiResultsMultiLevel
   /// multi-resolution level.
   ListOfStrLists regi_names;
 
-  boost::optional<ProjPreProcInfo> proj_pre_proc_info;
+  boost::optional<ProjPreProcParams> proj_pre_proc_info;
 
   /// \brief Computes the total number of projections (per view) that would
   ///        correspond to each registration's initial and final poses, and each
   ///        iteration within the registration.
   size_type total_num_projs_per_view() const;
 };
+
+void WriteMultiLevel2D3DRegiDebugH5(const DebugRegiResultsMultiLevel& results, H5::CommonFG* h5);
+
+void WriteMultiLevel2D3DRegiDebugToDisk(const DebugRegiResultsMultiLevel& results, const std::string& path);
+
+DebugRegiResultsMultiLevel ReadMultiLevel2D3DRegiDebugH5(const H5::CommonFG& h5);
+
+DebugRegiResultsMultiLevel ReadMultiLevel2D3DRegiDebugFromDisk(const std::string& path);
+
+std::tuple<jhmr::RayCaster::VolList,
+           jhmr::RayCaster::VolList>
+VolDataFromDebug(const DebugRegiResultsMultiLevel& results,
+                 const bool do_hu_to_lin_att,
+                 const H5::CommonFG* h5 = nullptr);
+
+ProjDataF32List ProjDataFromDebug(const DebugRegiResultsMultiLevel& results,
+                                  const H5::CommonFG* h5 = nullptr);
 
 }  // jhmr
 

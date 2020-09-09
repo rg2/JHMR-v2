@@ -68,15 +68,7 @@ int main(int argc, char* argv[])
   po.add("col", 'c', ProgOpts::kSTORE_TRUE, "col",
          "Dimension with control over width is columns, default is rows.")
     << false;
-
-  po.add("flip-rows", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE, "flip-rows",
-         "Flip the rows of each image before tiling.")
-    << false;
-
-  po.add("flip-cols", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE, "flip-cols",
-         "Flip the columns of each image before tiling.")
-    << false;
-
+  
   po.add("overlay-lands", 'o', ProgOpts::kSTORE_TRUE, "overlay-lands",
          "Overlay landmark locations onto the output images.")
     << false;
@@ -146,6 +138,24 @@ int main(int argc, char* argv[])
   po.add("ds-factor", 'd', ProgOpts::kSTORE_DOUBLE, "ds-factor",
          "Downsampling factor applied to projection data")
     << 1.0;
+  
+  po.add("no-pat-rot-up", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE, "no-pat-rot-up",
+         "Ignore any flags for rotating the image to achieve patient \"up\" orientation. ")
+    << false;
+
+  po.add("flip-rows", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE, "flip-rows",
+         "Flip the rows of each image before tiling. "
+         "Unless the \"no-pat-rot-up\" flag is passed, this flag is automatically "
+         "overriden based on metadata within the projection file indicating patient "
+         "up orientation (if the metadata is present).")
+    << false;
+
+  po.add("flip-cols", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE, "flip-cols",
+         "Flip the columns of each image before tiling. "
+         "Unless the \"no-pat-rot-up\" flag is passed, this flag is automatically "
+         "overriden based on metadata within the projection file indicating patient "
+         "up orientation (if the metadata is present).")
+    << false;
 
   try
   {
@@ -170,9 +180,11 @@ int main(int argc, char* argv[])
   const ProgOpts::uint32 width = po.get("width");
 
   const bool tile_as_col = po.get("col");
+  
+  const bool no_pat_rot_up = po.get("no-pat-rot-up");
 
-  const bool flip_rows = po.get("flip-rows");
-  const bool flip_cols = po.get("flip-cols");
+  const bool flip_rows_flag = po.get("flip-rows");
+  const bool flip_cols_flag = po.get("flip-cols");
 
   const bool overlay_lands = po.get("overlay-lands");
 
@@ -289,9 +301,11 @@ int main(int argc, char* argv[])
     {
       const size_type src_proj_idx = static_cast<size_type>(projs_to_use[proj_idx]);
       jhmrASSERT(src_proj_idx < num_src_projs);
+      
+      const auto& src_pd = pd[src_proj_idx];
 
       vout << "remapping " << src_proj_idx << " to 8bpp..." << std::endl;
-      remapped_projs[proj_idx] = ITKImageRemap8bpp(pd[src_proj_idx].img.GetPointer());
+      remapped_projs[proj_idx] = ITKImageRemap8bpp(src_pd.img.GetPointer());
       ocv_imgs[proj_idx] = ShallowCopyItkToOpenCV(remapped_projs[proj_idx].GetPointer());
 
       if (overlay_lands)
@@ -307,7 +321,7 @@ int main(int argc, char* argv[])
 
         const size_type lands_to_show_idx = lands_to_show.empty() ? 0 : (proj_idx % lands_to_show.size());
 
-        for (const auto& lkv : pd[src_proj_idx].landmarks)
+        for (const auto& lkv : src_pd.landmarks)
         {
           if (overlay_all_lands ||
               (lands_to_show[lands_to_show_idx].find(lkv.first) != lands_to_show[lands_to_show_idx].end()))
@@ -354,6 +368,29 @@ int main(int argc, char* argv[])
         }
       }
 
+      bool flip_rows = flip_rows_flag;
+      bool flip_cols = flip_cols_flag;
+
+      if (!no_pat_rot_up && src_pd.rot_to_pat_up)
+      {
+        const auto& rot_to_pat_up = *src_pd.rot_to_pat_up;
+
+        if (rot_to_pat_up == ProjDataF32::kZERO)
+        {
+          flip_rows = false;
+          flip_cols = false;
+        }
+        else if (rot_to_pat_up == ProjDataF32::kONE_EIGHTY)
+        {
+          flip_rows = true;
+          flip_cols = true;
+        }
+        else
+        {
+          vout << "ignoring rot_to_pat_up value of: " << static_cast<int>(rot_to_pat_up) << std::endl;
+        }
+      }
+
       if (flip_rows)
       {
         vout << "  flipping rows..." << std::endl;
@@ -362,7 +399,7 @@ int main(int argc, char* argv[])
 
       if (flip_cols)
       {
-        vout << "flipping cols..." << std::endl;
+        vout << "  flipping cols..." << std::endl;
         FlipImageColumns(&ocv_imgs[proj_idx]);
       }
     }

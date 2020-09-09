@@ -163,6 +163,8 @@ ProjDataU16::ProjPtr ReadSingleImgFromProjDataH5U16(const H5::CommonFG& h5, cons
 
 ProjDataU8::ProjPtr ReadSingleImgFromProjDataH5U8(const H5::CommonFG& h5, const size_type proj_idx);
 
+std::vector<CameraModel> ReadCamModelsFromProjData(const H5::CommonFG& h5);
+
 //////////////////////////////////////////////////
 // Read from HDF5 Files
 //////////////////////////////////////////////////
@@ -179,6 +181,10 @@ ProjDataU16::ProjPtr ReadSingleImgFromProjDataH5U16FromDisk(const std::string& p
 
 ProjDataU8::ProjPtr ReadSingleImgFromProjDataH5U8FromDisk(const std::string& path, const size_type proj_idx);
 
+std::vector<CameraModel> ReadCamModelsFromProjDataFromDisk(const std::string& path);
+
+// Get pixel scalar type from proj data HDF5
+
 enum ProjDataScalarType
 {
   kPROJ_DATA_TYPE_FLOAT32,
@@ -189,6 +195,9 @@ enum ProjDataScalarType
 ProjDataScalarType GetProjDataScalarTypeH5(const H5::CommonFG& h5);
 
 ProjDataScalarType GetProjDataScalarTypeFromDisk(const std::string& path);
+
+// Reader that does not read all projections in simultaneously - they may be read in
+// sequentially as they need to be processed
 
 class DeferredProjReader
 {
@@ -224,6 +233,10 @@ private:
   ProjDataU16List proj_data_U16_;
   ProjDataU8List  proj_data_U8_;
 };
+
+void AddLandsToProjDataH5(const LandMap2& lands, const size_type proj_idx,
+                          H5::CommonFG* h5,
+                          const bool delete_existing = false);
 
 }  // jhmr
 

@@ -352,6 +352,12 @@ GetIndsForSpecificLabel(const itk::Image<tLabelType,tN>* img, const tLabelType l
   return inds;
 }
 
+std::vector<itk::Image<float,3>::Pointer>
+MakeVolListFromVolAndLabels(const itk::Image<float,3>* vol,
+                            const itk::Image<unsigned char,3>* labels,
+                            const std::vector<unsigned char>& labels_to_use,
+                            const float masked_out_val);
+
 }  // jhmr
 
 #endif

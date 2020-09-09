@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrOpenCVUtils.h"
 
 #include <cmath>
@@ -1616,25 +1614,46 @@ void jhmr::FlipImageColumns(cv::Mat* img)
 {
   switch (img->type())
   {
-  case CV_8U:
+  case CV_8UC1:
+  case CV_8UC2:
+  case CV_8UC3:
+  case CV_8UC4:
     FlipImageColumnsHelper<unsigned char>(img);
     break;
-  case CV_8S:
+  case CV_8SC1:
+  case CV_8SC2:
+  case CV_8SC3:
+  case CV_8SC4:
     FlipImageColumnsHelper<char>(img);
     break;
-  case CV_16U:
+  case CV_16UC1:
+  case CV_16UC2:
+  case CV_16UC3:
+  case CV_16UC4:
     FlipImageColumnsHelper<unsigned short>(img);
     break;
-  case CV_16S:
+  case CV_16SC1:
+  case CV_16SC2:
+  case CV_16SC3:
+  case CV_16SC4:
     FlipImageColumnsHelper<short>(img);
     break;
-  case CV_32S:
+  case CV_32SC1:
+  case CV_32SC2:
+  case CV_32SC3:
+  case CV_32SC4:
     FlipImageColumnsHelper<int>(img);
     break;
-  case CV_32F:
+  case CV_32FC1:
+  case CV_32FC2:
+  case CV_32FC3:
+  case CV_32FC4:
     FlipImageColumnsHelper<float>(img);
     break;
-  case CV_64F:
+  case CV_64FC1:
+  case CV_64FC2:
+  case CV_64FC3:
+  case CV_64FC4:
     FlipImageColumnsHelper<double>(img);
     break;
   default:
@@ -1647,25 +1666,46 @@ void jhmr::FlipImageRows(cv::Mat* img)
 {
   switch (img->type())
   {
-  case CV_8U:
+  case CV_8UC1:
+  case CV_8UC2:
+  case CV_8UC3:
+  case CV_8UC4:
     FlipImageRowsHelper<unsigned char>(img);
     break;
-  case CV_8S:
+  case CV_8SC1:
+  case CV_8SC2:
+  case CV_8SC3:
+  case CV_8SC4:
     FlipImageRowsHelper<char>(img);
     break;
-  case CV_16U:
+  case CV_16UC1:
+  case CV_16UC2:
+  case CV_16UC3:
+  case CV_16UC4:
     FlipImageRowsHelper<unsigned short>(img);
     break;
-  case CV_16S:
+  case CV_16SC1:
+  case CV_16SC2:
+  case CV_16SC3:
+  case CV_16SC4:
     FlipImageRowsHelper<short>(img);
     break;
-  case CV_32S:
+  case CV_32SC1:
+  case CV_32SC2:
+  case CV_32SC3:
+  case CV_32SC4:
     FlipImageRowsHelper<int>(img);
     break;
-  case CV_32F:
+  case CV_32FC1:
+  case CV_32FC2:
+  case CV_32FC3:
+  case CV_32FC4:
     FlipImageRowsHelper<float>(img);
     break;
-  case CV_64F:
+  case CV_64FC1:
+  case CV_64FC2:
+  case CV_64FC3:
+  case CV_64FC4:
     FlipImageRowsHelper<double>(img);
     break;
   default:

@@ -71,6 +71,8 @@ struct DrawPAOBones : ObjWithOStream
   
   FrameTransform delta_Femur_only = FrameTransform::Identity();
 
+  bool femur_pose_rel_to_frag = true;
+
   boost::optional<FrameTransform> delta_sec_frag;
 
   bool do_frag_alpha = false;

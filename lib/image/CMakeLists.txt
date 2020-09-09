@@ -25,7 +25,8 @@ add_library(jhmr_image OBJECT jhmrVariableSpacedSlices.cpp
                               jhmrHUToLinAtt.cpp
                               jhmrProjData.cpp
                               jhmrImageIntensLogTrans.cpp
-                              jhmrImageAddPoissonNoise.cpp)
+                              jhmrImageAddPoissonNoise.cpp
+                              jhmrProjPreProc.cpp)
 
 target_link_libraries(jhmr_image PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 

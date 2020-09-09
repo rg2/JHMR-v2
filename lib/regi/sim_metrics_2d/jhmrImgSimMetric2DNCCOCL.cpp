@@ -129,7 +129,7 @@ void jhmr::ImgSimMetric2DNCCOCL::allocate_resources()
   ss << DivideBufElemsOutOfPlaceKernelSrc
      << kNCC_OPENCL_SRC;
   
-  bc::program prog = bc::program::create_with_source(kNCC_OPENCL_SRC, this->ctx_);
+  bc::program prog = bc::program::create_with_source(ss.str(), this->ctx_);
   
   try
   {

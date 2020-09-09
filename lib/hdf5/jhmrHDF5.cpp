@@ -57,6 +57,25 @@ bool jhmr::SetStringAttr(const std::string& key, const std::string& val, H5::Com
   return attr_set;
 }
 
+std::string jhmr::GetStringAttr(const std::string& key, const H5::CommonFG& h5)
+{
+  const auto* h5_g = dynamic_cast<const H5::Group*>(&h5);
+
+  if (h5_g)
+  {
+    const H5::Attribute attr = h5_g->openAttribute(key);
+    
+    std::string val;
+    attr.read(attr.getDataType(), val);
+
+    return val;
+  }
+  else
+  {
+    jhmrThrow("Invalid hdf5 type - cannot cast to group and openAttribute()");
+  }
+}
+
 H5::DataSet jhmr::WriteStringH5(const std::string& field_name,
                                 const std::string& field_val,
                                 H5::CommonFG* h5,
@@ -812,6 +831,12 @@ jhmr::ReadVectorH5Bool(const std::string& field_name, const H5::CommonFG& h5)
   }
 
   return v;
+}
+
+std::vector<jhmr::CoordScalar>
+jhmr::ReadVectorH5CoordScalar(const std::string& field_name, const H5::CommonFG& h5)
+{
+  return detail::ReadVectorH5Helper<CoordScalar>(field_name, h5);
 }
 
 jhmr::MatMxN jhmr::ReadMatrixH5CoordScalar(const std::string& field_name, const H5::CommonFG& h5)

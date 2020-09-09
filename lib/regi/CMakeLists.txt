@@ -43,6 +43,7 @@ add_library(jhmr_regi OBJECT jhmrPairedPointRegi3D3D.cpp
                              sim_metrics_2d/jhmrImgSimMetric2DGradNCCOCL.cpp
                              sim_metrics_2d/jhmrImgSimMetric2DPatchNCCOCL.cpp
                              sim_metrics_2d/jhmrImgSimMetric2DPatchGradNCCOCL.cpp
+                             sim_metrics_2d/jhmrImgSimMetric2DProgOpts.cpp
                              pnp_solvers/jhmrLandmark2D3DRegi.cpp
                              pnp_solvers/jhmrLandmark2D3DRegiReprojDist.cpp
                              pnp_solvers/jhmrLandmark2D3DRegiReprojDistCMAES.cpp

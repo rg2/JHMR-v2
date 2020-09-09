@@ -37,6 +37,7 @@
 #include "jhmrRayCastInterface.h"
 #include "jhmrAssert.h"
 #include "jhmrExceptionUtils.h"
+#include "jhmrViennaCLManager.h"
 
 namespace vcl = viennacl;
 
@@ -76,9 +77,10 @@ void jhmr::ImgSimMetric2DOCL::allocate_resources()
 
   if (setup_vienna_cl_ctx_)
   {
-    vcl::ocl::setup_context(vienna_cl_ctx_idx_, ctx_, ctx_.get_device().id(), queue_);
-    vcl::ocl::switch_context(vienna_cl_ctx_idx_); 
+    setup_vcl_ctx_if_needed(vienna_cl_ctx_idx_, ctx_, queue_);
   }
+  
+  vcl::ocl::switch_context(vienna_cl_ctx_idx_); 
   
   this->process_updated_mask();
 }
@@ -174,6 +176,8 @@ void jhmr::ImgSimMetric2DOCL::set_fixed_image_dev(std::shared_ptr<DevBuf>& fixed
 
 void jhmr::ImgSimMetric2DOCL::pre_compute()
 {
+  vcl::ocl::switch_context(vienna_cl_ctx_idx_); 
+  
   if (sync_ocl_buf_)
   {
     sync_ocl_buf_->sync();

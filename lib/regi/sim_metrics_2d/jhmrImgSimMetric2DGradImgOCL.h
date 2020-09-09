@@ -28,11 +28,14 @@
 #include <array>
 
 #include "jhmrImgSimMetric2DOCL.h"
+#include "jhmrImgSimMetric2DGradImgParamInterface.h"
 
 namespace jhmr
 {
 
-class ImgSimMetric2DGradImgOCL : public ImgSimMetric2DOCL
+class ImgSimMetric2DGradImgOCL
+  : public ImgSimMetric2DOCL,
+    public ImgSimMetric2DGradImgParamInterface
 {
 public:
   ImgSimMetric2DGradImgOCL() = default;
@@ -44,17 +47,9 @@ public:
   
   void allocate_resources() override;
 
-  size_type smooth_img_before_sobel_kernel_radius() const
-  {
-    return smooth_img_kernel_rad_;
-  }
+  size_type smooth_img_before_sobel_kernel_radius() const override;
 
-  /// \brief Sets the smoothing kernel radius to be used prior to computing
-  ///        Sobel derivatives. 0 -> no smoothing.
-  void set_smooth_img_before_sobel_kernel_radius(const size_type r)
-  {
-    smooth_img_kernel_rad_ = r;
-  }
+  void set_smooth_img_before_sobel_kernel_radius(const size_type r) override;
 
 protected:
   

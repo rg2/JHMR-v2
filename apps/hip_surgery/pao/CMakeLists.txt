@@ -26,4 +26,5 @@ add_subdirectory(sample_frag_moves)
 add_subdirectory(create_repo_vol)
 add_subdirectory(add_screw_kwires_to_vol)
 add_subdirectory(create_synthetic_fluoro)
+add_subdirectory(frag_multi_view_regi_2d_3d)
 

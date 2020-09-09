@@ -215,6 +215,23 @@ void ModifyForPatUp(ProjDataU16::Proj* img, const ProjDataU16::RotToPatUp rot_to
 
 void ModifyForPatUp(ProjDataU8::Proj* img, const ProjDataU8::RotToPatUp rot_to_pat_up);
 
+/// \brief Crops out boundary pixels using a constant sized border; updates the image and
+///        the camera model.
+///
+/// This is useful for removing collimation effections.
+std::tuple<CameraModel, itk::Image<unsigned short,2>::Pointer>
+CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<unsigned short,2>* src_img,
+                   const size_type boundary_width = 20);
+
+/// \brief Crops out boundary pixels using a constant sized border; updates the image and
+///        the camera model.
+///
+/// This is useful for removing collimation effections.
+std::tuple<CameraModel, itk::Image<float,2>::Pointer>
+CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<float,2>* src_img,
+                   const size_type boundary_width = 20);
+
+
 }  // jhmr
 
 #endif

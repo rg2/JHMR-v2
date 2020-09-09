@@ -36,6 +36,8 @@
 #include <vector>
 #include <algorithm>
 
+#include <boost/compute/command_queue.hpp>
+
 #include "jhmrOpenCLSys.h"
 #include "jhmrExceptionUtils.h"
 #include "jhmrSizedTypeUtils.h"
@@ -479,7 +481,9 @@ public:
 
   void add_tbb_max_num_threads_flag();
 
-  boost::compute::device selected_ocl() const;
+  boost::compute::device selected_ocl();
+
+  std::tuple<boost::compute::context,boost::compute::command_queue> selected_ocl_ctx_queue();
 
   /// \brief Checks to see if a variable/argument with a specific destination
   ///        string has been added.
@@ -544,6 +548,16 @@ private:
   std::string version_num_str_;
 
   OpenCLNameDevMap opencl_id_str_to_dev_map_;
+
+  // creating a default instance of boost::compute::device
+  // should not throw an exception, it will initialize the
+  // device ID to null.
+  boost::compute::device selected_ocl_dev_;
+
+  bool selected_ocl_ctx_queue_set_ = false;
+
+  boost::compute::context selected_ocl_ctx_;
+  boost::compute::command_queue selected_ocl_queue_;
 
   bool tbb_max_num_threads_opt_added_ = false;
 };

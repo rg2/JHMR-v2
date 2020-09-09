@@ -38,6 +38,25 @@ using namespace jhmr;
 
 const char* kJHMR_PROJ_DATA_ATTR_STR = "proj-data";
 
+void AddProjDataLandsHelper(const LandMap2& lands, H5::CommonFG* h5,
+                            const bool delete_existing = false)
+{
+  if (delete_existing && ObjectInGroupH5("landmarks", *h5))
+  {
+    h5->unlink("landmarks");
+  }
+  
+  if (!lands.empty())
+  {
+    H5::Group lands_g = h5->createGroup("landmarks");
+    
+    for (const auto& name_and_pt : lands)
+    {
+      WriteMatrixH5(name_and_pt.first, name_and_pt.second, &lands_g, false);
+    }
+  }
+}
+
 template <class tPixelScalar>
 void WriteProjDataH5Helper(const std::vector<ProjData<tPixelScalar>>& proj_data,
                            H5::CommonFG* h5,
@@ -63,16 +82,7 @@ void WriteProjDataH5Helper(const std::vector<ProjData<tPixelScalar>>& proj_data,
     H5::Group cam_g = proj_g.createGroup("cam");
     WriteCamModelH5(proj_data[i].cam, &cam_g);
   
-    const auto& lands = proj_data[i].landmarks;
-    if (!lands.empty())
-    {
-      H5::Group lands_g = proj_g.createGroup("landmarks");
-      
-      for (const auto& name_and_pt : lands)
-      {
-        WriteMatrixH5(name_and_pt.first, name_and_pt.second, &lands_g, false);
-      }
-    }
+    AddProjDataLandsHelper(proj_data[i].landmarks, &proj_g);
 
     if (proj_data[i].rot_to_pat_up)
     {
@@ -451,6 +461,11 @@ jhmr::ProjDataU8::ProjPtr jhmr::ReadSingleImgFromProjDataH5U8(const H5::CommonFG
   return ReadSingleImgFromProjDataHelper<unsigned char>(h5, proj_idx);
 }
 
+std::vector<jhmr::CameraModel> jhmr::ReadCamModelsFromProjData(const H5::CommonFG& h5)
+{
+  return ExtractCamModels(ReadProjDataH5F32(h5, false));
+}
+
 jhmr::ProjDataF32List jhmr::ReadProjDataH5F32FromDisk(const std::string& path, const bool read_pixels)
 {
   return ReadProjDataH5FromDiskHelper<float>(path, read_pixels);
@@ -482,6 +497,11 @@ jhmr::ProjDataU8::ProjPtr
 jhmr::ReadSingleImgFromProjDataH5U8FromDisk(const std::string& path, const size_type proj_idx)
 {
   return ReadSingleImgFromProjDataFromDiskHelper<unsigned char>(path, proj_idx);
+}
+
+std::vector<CameraModel> ReadCamModelsFromProjDataFromDisk(const std::string& path)
+{
+  return ExtractCamModels(ReadProjDataH5F32FromDisk(path, false));
 }
 
 jhmr::ProjDataScalarType jhmr::GetProjDataScalarTypeH5(const H5::CommonFG& h5)
@@ -635,3 +655,16 @@ jhmr::DeferredProjReader::read_proj_U8(const size_type proj_idx)
 {
   return DeferredProjReaderHelpler<unsigned char>(&proj_data_U8_, proj_idx, orig_path_, cache_imgs_);
 }
+
+void jhmr::AddLandsToProjDataH5(const LandMap2& lands, const size_type proj_idx,
+                                H5::CommonFG* h5,
+                                const bool delete_existing)
+{
+  const size_type num_projs = ReadSingleScalarH5ULong("num-projs", *h5);
+  jhmrASSERT(proj_idx < num_projs);
+
+  H5::Group proj_g = h5->openGroup(fmt::format("proj-{:03d}", proj_idx));
+  
+  AddProjDataLandsHelper(lands, &proj_g, delete_existing);
+}
+

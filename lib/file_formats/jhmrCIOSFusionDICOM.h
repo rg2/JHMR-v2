@@ -152,22 +152,6 @@ ReadCIOSFusionDICOMUShort(const std::string& path, const bool no_rot_or_flip_bas
 std::tuple<itk::Image<float,2>::Pointer,CIOSFusionDICOMInfo>
 ReadCIOSFusionDICOMFloat(const std::string& path, const bool no_rot_or_flip_based_on_meta = false);
 
-/// \brief Crops out boundary pixels using a constant sized border; updates the image and
-///        the camera model.
-///
-/// This is useful for removing collimation effections.
-std::tuple<CameraModel, itk::Image<unsigned short,2>::Pointer>
-CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<unsigned short,2>* src_img,
-                   const size_type boundary_width = 20);
-
-/// \brief Crops out boundary pixels using a constant sized border; updates the image and
-///        the camera model.
-///
-/// This is useful for removing collimation effections.
-std::tuple<CameraModel, itk::Image<float,2>::Pointer>
-CropBoundaryPixels(const CameraModel& src_cam, const itk::Image<float,2>* src_img,
-                   const size_type boundary_width = 20);
-
 /// \brief Updates a landmark mapping from ITK physical points to continuous indices.
 void UpdateLandmarkMapForCIOSFusion(const CIOSFusionDICOMInfo& meta,
                                     LandMap2* pts,

@@ -3004,6 +3004,9 @@ void ERRORMESSAGE( char const *s1, char const *s2,
       sprintf(szBuf, "%f:%f", gen, gen*lambda);
   */
   time_t t = time(NULL);
+  
+  // RG: changing CMA-ES error output to stderr instead of file
+#if 0
   FILE *fp = fopen( "errcmaes.err", "a");
   if (!fp)
     {
@@ -3013,9 +3016,11 @@ void ERRORMESSAGE( char const *s1, char const *s2,
       fflush(stdout);
       exit(1);
     }
-  fprintf( fp, "\n -- %s %s\n", asctime(localtime(&t)), 
-           s2 ? szCat(s1, s2, s3, s4) : s1);
-  fclose (fp);
+#endif
+
+  fprintf(stderr, "\n -- %s %s\n", asctime(localtime(&t)), 
+                  s2 ? szCat(s1, s2, s3, s4) : s1);
+  //fclose (fp);
 #endif
 }
 
