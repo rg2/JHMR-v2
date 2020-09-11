@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRTIMER_H_
 #define JHMRTIMER_H_
 

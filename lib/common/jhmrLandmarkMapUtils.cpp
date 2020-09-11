@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrLandmarkMapUtils.h"
 
 #include <unordered_set>

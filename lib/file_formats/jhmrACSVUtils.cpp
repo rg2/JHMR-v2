@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrACSVUtils.h"
 
 #include <fstream>

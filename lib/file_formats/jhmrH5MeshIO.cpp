@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrH5MeshIO.h"
 
 #include "jhmrHDF5.h"

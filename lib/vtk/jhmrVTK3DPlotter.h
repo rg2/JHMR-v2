@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRVTK3DPLOTTER_H_
 #define JHMRVTK3DPLOTTER_H_
 

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrPSO.h"
 
 #include <algorithm>

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrSpatialPrimitives.h"
 
 #include "jhmrAssert.h"

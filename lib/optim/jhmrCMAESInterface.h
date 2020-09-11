@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRCMAESINTERFACE_H_
 #define JHMRCMAESINTERFACE_H_
 

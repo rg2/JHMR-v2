@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #ifndef JHMROPENCLSYS_H_
 #define JHMROPENCLSYS_H_
 

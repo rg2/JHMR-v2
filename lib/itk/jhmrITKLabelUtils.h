@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRITKLABELUTILS_H_
 #define JHMRITKLABELUTILS_H_
 

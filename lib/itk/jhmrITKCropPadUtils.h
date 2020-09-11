@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRITKCROPPADUTILS_H_
 #define JHMRITKCROPPADUTILS_H_
 

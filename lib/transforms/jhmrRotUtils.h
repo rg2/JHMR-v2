@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRROTUTILS_H_
 #define JHMRROTUTILS_H_
 

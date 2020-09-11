@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrTimer.h"
 
 void jhmr::Timer::start()

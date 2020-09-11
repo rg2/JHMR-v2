@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrNormDistFit.h"
 
 #include "jhmrPolyFit.h"

@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include "jhmrLabelWarping.h"
 
 #include <itkImageRegionConstIteratorWithIndex.h>

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRPOLYFIT_H_
 #define JHMRPOLYFIT_H_
 

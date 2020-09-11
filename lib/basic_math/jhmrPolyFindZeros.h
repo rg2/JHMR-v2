@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRPOLYFINDZEROS_H_
 #define JHMRPOLYFINDZEROS_H_
 

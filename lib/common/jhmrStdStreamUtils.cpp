@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrStdStreamUtils.h"
 
 #include <ostream>  // std::ostream

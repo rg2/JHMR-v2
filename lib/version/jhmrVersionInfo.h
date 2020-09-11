@@ -22,30 +22,23 @@
  * SOFTWARE.
  */
 
-#include "jhmrLinAlgUtils.h"
+#ifndef JHMRVERSIONINFO_H_
+#define JHMRVERSIONINFO_H_
 
-jhmr::MatMxN jhmr::ComputePseudoInverse(const MatMxN& a,
-                                        Eigen::JacobiSVD<MatMxN>* svd_work)
+#include <string>
+
+namespace jhmr
 {
-  constexpr CoordScalar eps = std::numeric_limits<CoordScalar>::epsilon();
-  
-  // Adapted from: http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257
 
-  Eigen::JacobiSVD<MatMxN> local_svd;
+std::string ProjVerStr();
 
-  Eigen::JacobiSVD<MatMxN>* svd = svd_work;
-  if (!svd)
-  {
-    svd = &local_svd;
-  }
+bool HasGitSHA1();
 
-  svd->compute(a, Eigen::ComputeThinU | Eigen::ComputeThinV);
+std::string GitSHA1();
 
-  const CoordScalar tol = eps * std::max(a.cols(), a.rows()) * svd->singularValues().array().abs().maxCoeff();
+std::string ProjVerStrAndGitSHA1IfAvail();
 
-  return svd->matrixV() *
-         MatMxN((svd->singularValues().array().abs() > tol).select(
-                     svd->singularValues().array().inverse(), 0) ).asDiagonal() *
-         svd->matrixU().adjoint();
-}
+}  // jhmr
+
+#endif
 

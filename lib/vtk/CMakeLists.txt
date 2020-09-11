@@ -25,6 +25,3 @@ add_library(jhmr_vtk OBJECT jhmrVTKBasicUtils.cpp
                             jhmrVTKMeshUtils.cpp
                             jhmrVTK3DPlotter.cpp)
 
-target_link_libraries(jhmr_vtk PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-
-

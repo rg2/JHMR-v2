@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRFITCIRCLE_H_
 #define JHMRFITCIRCLE_H_
 

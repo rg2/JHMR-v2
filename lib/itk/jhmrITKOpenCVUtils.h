@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRITKOPENCVUTILS_H_
 #define JHMRITKOPENCVUTILS_H_
 

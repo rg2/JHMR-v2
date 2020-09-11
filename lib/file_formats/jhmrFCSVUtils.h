@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRFCSVUTILS_H_
 #define JHMRFCSVUTILS_H_
 

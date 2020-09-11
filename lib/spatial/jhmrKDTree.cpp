@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrKDTree.h"
 
 #include "jhmrSpatialPrimitives.h"

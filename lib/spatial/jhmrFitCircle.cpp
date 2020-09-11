@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrFitCircle.h"
 
 #include "jhmrCMAESInterface.h"

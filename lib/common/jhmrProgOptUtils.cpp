@@ -61,9 +61,7 @@
 #include "jhmrStringUtils.h"
 #include "jhmrFilesystemUtils.h"
 
-#ifdef JHMR_INC_GIT_HASH_IN_VERSION
-extern const char* jhmrGIT_SHA1;
-#endif
+#include "jhmrVersionInfo.h"
 
 namespace
 {
@@ -874,9 +872,7 @@ std::string jhmr::ProgOpts::Readable(const StoreAction a, const ArgValList& vals
 
 jhmr::ProgOpts::ProgOpts()
 {
-#ifdef JHMR_INC_GIT_HASH_IN_VERSION
-  version_num_str_ = jhmrGIT_SHA1;
-#endif
+  version_num_str_ = ProjVerStrAndGitSHA1IfAvail();
 
   opencl_id_str_to_dev_map_ = BuildDevIDStrsToDevMap();
 }
@@ -1033,7 +1029,7 @@ void jhmr::ProgOpts::print_help(std::ostream& out) const
 
   if (!version_num_str_.empty())
   {
-    out << "jhmr Git: " << version_num_str_ << std::endl;
+    out << "   jhmr Version: " << version_num_str_ << std::endl;
   }
 
   out << "  Boost Version: " << (BOOST_VERSION / 100000) << '.' << ((BOOST_VERSION / 100) % 1000) << '.' << (BOOST_VERSION % 100) << std::endl;

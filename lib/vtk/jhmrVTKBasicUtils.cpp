@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrVTKBasicUtils.h"
 
 #include <algorithm>

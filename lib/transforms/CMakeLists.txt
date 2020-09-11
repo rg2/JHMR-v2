@@ -26,6 +26,3 @@ add_library(jhmr_transforms OBJECT jhmrRotUtils.cpp
                                    jhmrPointCloudUtils.cpp
                                    jhmrAnatCoordFrames.cpp)
 
-target_link_libraries(jhmr_transforms PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-
-

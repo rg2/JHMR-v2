@@ -35,7 +35,8 @@ set(JHMR_LIB_SUB_DIRS common
                       optim
                       hip_surgery
                       ray_cast
-                      opencl)
+                      opencl
+                      version)
 
 # build up the list of include directories for the jhmr library
 set(JHMR_LIB_INC_DIRS)
@@ -52,25 +53,38 @@ list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/regi/sim_metrics_2d"
                               "${CMAKE_CURRENT_SOURCE_DIR}/regi/penalty_fns_2d_3d"
                               "${CMAKE_CURRENT_SOURCE_DIR}/regi/interfaces_2d_3d")
 
-# blanket set the include directories for all subdirectories added here
-# so we do not need to do it in each subdirectory's CMakeLists
-include_directories(${JHMR_LIB_INC_DIRS})
+# this will be the list of all of the object files created
+set(JHMR_LIB_OBJS)
 
 # build the sub-components
+# an object library is created in each subdirectory, e.g. jhmr_basic_math, jhmr_optim
 foreach (JHMR_CUR_LIB_DIR ${JHMR_LIB_SUB_DIRS})
   add_subdirectory(${JHMR_CUR_LIB_DIR})
-endforeach()
 
-# create a list of all of the object files created
-set(JHMR_LIB_OBJS)
-foreach (JHMR_CUR_LIB ${JHMR_LIB_SUB_DIRS})
-  list(APPEND JHMR_LIB_OBJS $<TARGET_OBJECTS:jhmr_${JHMR_CUR_LIB}>)
+  target_include_directories(jhmr_${JHMR_CUR_LIB_DIR} PRIVATE ${JHMR_LIB_INC_DIRS})
+  
+  target_link_libraries(jhmr_${JHMR_CUR_LIB_DIR}
+                        PUBLIC ${JHMR_EXT_LIBS_TO_LINK}
+                        PRIVATE cmaes)
+  
+  # add to the list of all of the object files created
+  list(APPEND JHMR_LIB_OBJS $<TARGET_OBJECTS:jhmr_${JHMR_CUR_LIB_DIR}>)
 endforeach()
 
 # combine the subcomponents into a single library
-add_library(jhmr STATIC ${JHMR_LIB_OBJS})
+add_library(jhmr ${JHMR_LIB_OBJS})
 
-# These properties are propogated to the executables in the apps directory
-target_include_directories(jhmr PUBLIC ${JHMR_LIB_INC_DIRS})
-target_link_libraries(jhmr PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
+# IMPORTANT NOTE: Since we are providing a list of include directories,
+# the $<BUILD_INTERFACE:${JHMR_LIB_INC_DIRS}> must be surrounded by quotes.
+# Otherwise the include directories are not propagated to other targets
+# dependent on the jhmr target (e.g. executables) in this build tree.
+# e.g. "$<BUILD_INTERFACE:${JHMR_LIB_INC_DIRS}>"
+target_include_directories(jhmr PUBLIC
+                                  "$<BUILD_INTERFACE:${JHMR_LIB_INC_DIRS}>"
+                                  $<INSTALL_INTERFACE:include>)
+
+target_link_libraries(jhmr PUBLIC ${JHMR_EXT_LIBS_TO_LINK} PRIVATE cmaes)
+
+file(GLOB_RECURSE JHMR_ALL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+set_target_properties(jhmr PROPERTIES PUBLIC_HEADER "${JHMR_ALL_HEADERS}")
 

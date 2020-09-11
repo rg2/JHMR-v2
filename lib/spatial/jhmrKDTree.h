@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 /**
  * @file
  * @brief KD-Tree data structure along with utility functions and structs.

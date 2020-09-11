@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRCIOSFUSIONDICOM_H_
 #define JHMRCIOSFUSIONDICOM_H_
 

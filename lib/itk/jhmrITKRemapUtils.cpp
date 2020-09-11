@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include "jhmrITKRemapUtils.h"
 
 std::vector<itk::RGBPixel<unsigned char>> jhmr::GenericAnatomyLUT()

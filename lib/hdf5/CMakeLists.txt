@@ -22,5 +22,3 @@
 
 add_library(jhmr_hdf5 OBJECT jhmrHDF5.cpp)
 
-target_link_libraries(jhmr_hdf5 PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-

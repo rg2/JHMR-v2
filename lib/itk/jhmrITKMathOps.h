@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRITKMATHOPS_H_
 #define JHMRITKMATHOPS_H_
 

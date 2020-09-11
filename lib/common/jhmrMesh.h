@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 /**
  * @file
  * @brief Utilities and structures for mesh processing.

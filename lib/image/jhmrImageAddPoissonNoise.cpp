@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include "jhmrImageAddPoissonNoise.h"
 
 #include "jhmrITKBasicImageUtils.h"

@@ -35,5 +35,3 @@ add_library(jhmr_file_formats OBJECT jhmrDICOMUtils.cpp
                                      jhmrH5SE3OptVarsIO.cpp
                                      jhmrWriteVideo.cpp)
 
-target_link_libraries(jhmr_file_formats PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-

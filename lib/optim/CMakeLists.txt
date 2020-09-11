@@ -27,6 +27,3 @@ add_library(jhmr_optim OBJECT jhmrLineSearchOpt.cpp
                               jhmrCMAESInterface.cpp
                               jhmrOptimTestObjFns.cpp)
 
-target_link_libraries(jhmr_optim PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-
-

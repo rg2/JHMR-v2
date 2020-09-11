@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrCIOSFusionDICOM.h"
 
 #include <set>

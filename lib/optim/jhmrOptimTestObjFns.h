@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMROPTTESTOBJFNS_H_
 #define JHMROPTTESTOBJFNS_H_
 

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRVTKBASICUTILS_H_
 #define JHMRVTKBASICUTILS_H_
 

@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #ifndef JHMRLABELWARPING_H_
 #define JHMRLABELWARPING_H_
 

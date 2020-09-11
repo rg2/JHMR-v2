@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRACSVUTILS_H_
 #define JHMRACSVUTILS_H_
 

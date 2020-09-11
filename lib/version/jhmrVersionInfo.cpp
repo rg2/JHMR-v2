@@ -22,30 +22,40 @@
  * SOFTWARE.
  */
 
-#include "jhmrLinAlgUtils.h"
+#include "jhmrVersionInfo.h"
 
-jhmr::MatMxN jhmr::ComputePseudoInverse(const MatMxN& a,
-                                        Eigen::JacobiSVD<MatMxN>* svd_work)
+#include <fmt/format.h>
+
+extern const char* jhmrGIT_SHA1;
+
+extern bool jhmrHAS_GIT_SHA1;
+
+extern const char* jhmrPROJ_VERSION;
+
+std::string jhmr::ProjVerStr()
 {
-  constexpr CoordScalar eps = std::numeric_limits<CoordScalar>::epsilon();
-  
-  // Adapted from: http://eigen.tuxfamily.org/bz/show_bug.cgi?id=257
+  return jhmrPROJ_VERSION;
+}
 
-  Eigen::JacobiSVD<MatMxN> local_svd;
+bool jhmr::HasGitSHA1()
+{
+  return jhmrHAS_GIT_SHA1;
+}
 
-  Eigen::JacobiSVD<MatMxN>* svd = svd_work;
-  if (!svd)
+std::string jhmr::GitSHA1()
+{
+  return jhmrGIT_SHA1;
+}
+
+std::string jhmr::ProjVerStrAndGitSHA1IfAvail()
+{
+  if (HasGitSHA1())
   {
-    svd = &local_svd;
+    return fmt::format("{} ({})", ProjVerStr(), GitSHA1());
   }
-
-  svd->compute(a, Eigen::ComputeThinU | Eigen::ComputeThinV);
-
-  const CoordScalar tol = eps * std::max(a.cols(), a.rows()) * svd->singularValues().array().abs().maxCoeff();
-
-  return svd->matrixV() *
-         MatMxN((svd->singularValues().array().abs() > tol).select(
-                     svd->singularValues().array().inverse(), 0) ).asDiagonal() *
-         svd->matrixU().adjoint();
+  else
+  {
+    return ProjVerStr();
+  }
 }
 

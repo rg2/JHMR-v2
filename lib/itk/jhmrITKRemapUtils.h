@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #ifndef JHMRITKREMAPUTILS_H_
 #define JHMRITKREMAPUTILS_H_
 

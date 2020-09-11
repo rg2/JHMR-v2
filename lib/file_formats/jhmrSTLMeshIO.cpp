@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrSTLMeshIO.h"
 
 #include <fstream>

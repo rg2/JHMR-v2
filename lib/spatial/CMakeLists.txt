@@ -25,6 +25,3 @@ add_library(jhmr_spatial OBJECT jhmrSpatialPrimitives.cpp
                                 jhmrFitPlane.cpp
                                 jhmrKDTree.cpp)
 
-target_link_libraries(jhmr_spatial PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-
-

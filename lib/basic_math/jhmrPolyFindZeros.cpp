@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrPolyFindZeros.h"
 
 #include <cmath>

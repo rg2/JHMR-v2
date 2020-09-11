@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrCMAESInterface.h"
 
 #include <cmaes_interface.h>

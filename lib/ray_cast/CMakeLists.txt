@@ -37,6 +37,3 @@ add_library(jhmr_ray_cast OBJECT jhmrRayCastSyncBuf.cpp
                                  jhmrEdgesFromRayCast.cpp
                                  jhmrRayCastProgOpts.cpp)
 
-target_link_libraries(jhmr_ray_cast PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-
-

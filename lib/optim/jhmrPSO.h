@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRPSO_H_
 #define JHMRPSO_H_
 

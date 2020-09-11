@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRRIGIDUTILS_H_
 #define JHMRRIGIDUTILS_H_
 

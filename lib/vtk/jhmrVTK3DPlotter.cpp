@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrVTK3DPlotter.h"
 
 #include <ctime>

@@ -34,5 +34,3 @@ add_library(jhmr_common OBJECT jhmrAssert.cpp
                                jhmrStdStreamUtils.cpp
                                jhmrTimer.cpp)
 
-target_link_libraries(jhmr_common PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-

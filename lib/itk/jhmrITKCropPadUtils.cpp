@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrITKCropPadUtils.h"
 
 namespace

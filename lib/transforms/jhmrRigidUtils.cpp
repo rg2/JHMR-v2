@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrRigidUtils.h"
 
 #include "jhmrRotUtils.h"

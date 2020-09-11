@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrVTKMeshUtils.h"
 
 #include <vtkNew.h>

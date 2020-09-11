@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrPairedPointRegi3D3D.h"
 
 #include <Eigen/Eigenvalues>

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRMESHIO_H_
 #define JHMRMESHIO_H_
 

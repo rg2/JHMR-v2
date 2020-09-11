@@ -26,6 +26,3 @@ add_library(jhmr_itk OBJECT jhmrITKBasicImageUtils.cpp
                             jhmrITKCropPadUtils.cpp
                             jhmrITKLabelUtils.cpp)
 
-target_link_libraries(jhmr_itk PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
-
-

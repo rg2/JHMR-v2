@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRFITPLANE_H_
 #define JHMRFITPLANE_H_
 

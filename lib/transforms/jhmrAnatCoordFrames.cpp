@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrAnatCoordFrames.h"
 
 #include "jhmrAssert.h"

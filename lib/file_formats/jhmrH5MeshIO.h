@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRH5MESHIO_H_
 #define JHMRH5MESHIO_H_
 

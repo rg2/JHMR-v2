@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRVTKITKUTILS_H_
 #define JHMRVTKITKUTILS_H_
 

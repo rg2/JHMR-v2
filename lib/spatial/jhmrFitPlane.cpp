@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrFitPlane.h"
 
 #include "jhmrExceptionUtils.h"

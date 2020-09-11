@@ -80,6 +80,5 @@ add_library(jhmr_regi OBJECT jhmrPairedPointRegi3D3D.cpp
                              interfaces_2d_3d/jhmrMultiObjMultiLevel2D3DRegi.cpp
                              interfaces_2d_3d/jhmrMultiObjMultiLevel2D3DRegiDebug.cpp)
 
-target_link_libraries(jhmr_regi PUBLIC ${JHMR_EXT_LIBS_TO_LINK})
 target_compile_definitions(jhmr_regi PRIVATE VIENNACL_WITH_OPENCL)
 

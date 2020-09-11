@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include <fmt/format.h>
 
 #include <itkBinaryMorphologicalOpeningImageFilter.h>

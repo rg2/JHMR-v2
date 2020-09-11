@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrFCSVUtils.h"
 
 #include <fstream>

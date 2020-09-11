@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRCOMPAREUTILS_H_
 #define JHMRCOMPAREUTILS_H_
 

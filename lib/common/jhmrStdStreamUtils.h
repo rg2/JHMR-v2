@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRSTDSTREAMUTILS_H_
 #define JHMRSTDSTREAMUTILS_H_
 

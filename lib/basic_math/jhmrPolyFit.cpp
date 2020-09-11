@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrPolyFit.h"
 
 #include <Eigen/Dense>

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrPerspectiveXform.h"
 
 #include <cmath>

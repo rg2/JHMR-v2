@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #include "jhmrMeshIO.h"
 
 #include "jhmrFilesystemUtils.h"

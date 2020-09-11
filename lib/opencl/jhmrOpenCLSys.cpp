@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include "jhmrOpenCLSys.h"
 
 #include <boost/compute/system.hpp>

@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRSIMANN_H_
 #define JHMRSIMANN_H_
 

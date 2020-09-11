@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 /**
  * @file
  * \brief I/O routines for meshes in STL format.

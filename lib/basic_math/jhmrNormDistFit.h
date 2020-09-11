@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRNORMDISTFIT_H_
 #define JHMRNORMDISTFIT_H_
 

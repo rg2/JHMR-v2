@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-
-
 #ifndef JHMRDIFFEVO_H_
 #define JHMRDIFFEVO_H_
 

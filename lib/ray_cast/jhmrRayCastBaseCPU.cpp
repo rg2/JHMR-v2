@@ -22,7 +22,6 @@
  * SOFTWARE.
  */
 
-
 #include "jhmrRayCastBaseCPU.h"
 
 #include "jhmrExceptionUtils.h"
