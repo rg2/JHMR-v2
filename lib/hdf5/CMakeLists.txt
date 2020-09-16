@@ -20,5 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_hdf5 OBJECT jhmrHDF5.cpp)
+add_library(xreg_hdf5 OBJECT xregHDF5.cpp)
 

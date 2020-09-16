@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(EXE_NAME "${JHMR_EXE_PREFIX}create-mesh")
+set(EXE_NAME "${XREG_EXE_PREFIX}create-mesh")
 
-add_executable(${EXE_NAME} jhmr_create_mesh_main.cpp)
+add_executable(${EXE_NAME} xreg_create_mesh_main.cpp)
 
-target_link_libraries(${EXE_NAME} PUBLIC ${JHMR_EXE_LIBS_TO_LINK})
+target_link_libraries(${EXE_NAME} PUBLIC ${XREG_EXE_LIBS_TO_LINK})
 
 install(TARGETS ${EXE_NAME})
 

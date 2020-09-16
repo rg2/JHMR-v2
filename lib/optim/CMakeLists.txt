@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_optim OBJECT jhmrLineSearchOpt.cpp
-                              jhmrSimAnn.cpp
-                              jhmrDiffEvo.cpp
-                              jhmrPSO.cpp
-                              jhmrCMAESInterface.cpp
-                              jhmrOptimTestObjFns.cpp)
+add_library(xreg_optim OBJECT xregLineSearchOpt.cpp
+                              xregSimAnn.cpp
+                              xregDiffEvo.cpp
+                              xregPSO.cpp
+                              xregCMAESInterface.cpp
+                              xregOptimTestObjFns.cpp)
 

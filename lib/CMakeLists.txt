@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 # set the library sub-components/directories here
-set(JHMR_LIB_SUB_DIRS common
+set(XREG_LIB_SUB_DIRS common
                       file_formats
                       itk
                       vtk
@@ -38,53 +38,53 @@ set(JHMR_LIB_SUB_DIRS common
                       opencl
                       version)
 
-# build up the list of include directories for the jhmr library
-set(JHMR_LIB_INC_DIRS)
-foreach (JHMR_CUR_LIB_DIR ${JHMR_LIB_SUB_DIRS})
-  list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/${JHMR_CUR_LIB_DIR}")
+# build up the list of include directories for the xreg library
+set(XREG_LIB_INC_DIRS)
+foreach (XREG_CUR_LIB_DIR ${XREG_LIB_SUB_DIRS})
+  list(APPEND XREG_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/${XREG_CUR_LIB_DIR}")
 endforeach()
 
-# This is needed for any subdirectories of entries in JHMR_LIB_SUB_DIRS
+# This is needed for any subdirectories of entries in XREG_LIB_SUB_DIRS
 # Do something more intelligent with a for loop when more sub-subdirectories are added
 # OR restructure the library to only have one include directory at the root and
 # switch to including longer paths
-list(APPEND JHMR_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/regi/sim_metrics_2d"
+list(APPEND XREG_LIB_INC_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/regi/sim_metrics_2d"
                               "${CMAKE_CURRENT_SOURCE_DIR}/regi/pnp_solvers"
                               "${CMAKE_CURRENT_SOURCE_DIR}/regi/penalty_fns_2d_3d"
                               "${CMAKE_CURRENT_SOURCE_DIR}/regi/interfaces_2d_3d")
 
 # this will be the list of all of the object files created
-set(JHMR_LIB_OBJS)
+set(XREG_LIB_OBJS)
 
 # build the sub-components
-# an object library is created in each subdirectory, e.g. jhmr_basic_math, jhmr_optim
-foreach (JHMR_CUR_LIB_DIR ${JHMR_LIB_SUB_DIRS})
-  add_subdirectory(${JHMR_CUR_LIB_DIR})
+# an object library is created in each subdirectory, e.g. xreg_basic_math, xreg_optim
+foreach (XREG_CUR_LIB_DIR ${XREG_LIB_SUB_DIRS})
+  add_subdirectory(${XREG_CUR_LIB_DIR})
 
-  target_include_directories(jhmr_${JHMR_CUR_LIB_DIR} PRIVATE ${JHMR_LIB_INC_DIRS})
+  target_include_directories(xreg_${XREG_CUR_LIB_DIR} PRIVATE ${XREG_LIB_INC_DIRS})
   
-  target_link_libraries(jhmr_${JHMR_CUR_LIB_DIR}
-                        PUBLIC ${JHMR_EXT_LIBS_TO_LINK}
+  target_link_libraries(xreg_${XREG_CUR_LIB_DIR}
+                        PUBLIC ${XREG_EXT_LIBS_TO_LINK}
                         PRIVATE cmaes)
   
   # add to the list of all of the object files created
-  list(APPEND JHMR_LIB_OBJS $<TARGET_OBJECTS:jhmr_${JHMR_CUR_LIB_DIR}>)
+  list(APPEND XREG_LIB_OBJS $<TARGET_OBJECTS:xreg_${XREG_CUR_LIB_DIR}>)
 endforeach()
 
 # combine the subcomponents into a single library
-add_library(jhmr ${JHMR_LIB_OBJS})
+add_library(xreg ${XREG_LIB_OBJS})
 
 # IMPORTANT NOTE: Since we are providing a list of include directories,
-# the $<BUILD_INTERFACE:${JHMR_LIB_INC_DIRS}> must be surrounded by quotes.
+# the $<BUILD_INTERFACE:${XREG_LIB_INC_DIRS}> must be surrounded by quotes.
 # Otherwise the include directories are not propagated to other targets
-# dependent on the jhmr target (e.g. executables) in this build tree.
-# e.g. "$<BUILD_INTERFACE:${JHMR_LIB_INC_DIRS}>"
-target_include_directories(jhmr PUBLIC
-                                  "$<BUILD_INTERFACE:${JHMR_LIB_INC_DIRS}>"
+# dependent on the xreg target (e.g. executables) in this build tree.
+# e.g. "$<BUILD_INTERFACE:${XREG_LIB_INC_DIRS}>"
+target_include_directories(xreg PUBLIC
+                                  "$<BUILD_INTERFACE:${XREG_LIB_INC_DIRS}>"
                                   $<INSTALL_INTERFACE:include>)
 
-target_link_libraries(jhmr PUBLIC ${JHMR_EXT_LIBS_TO_LINK} PRIVATE cmaes)
+target_link_libraries(xreg PUBLIC ${XREG_EXT_LIBS_TO_LINK} PRIVATE cmaes)
 
-file(GLOB_RECURSE JHMR_ALL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-set_target_properties(jhmr PROPERTIES PUBLIC_HEADER "${JHMR_ALL_HEADERS}")
+file(GLOB_RECURSE XREG_ALL_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+set_target_properties(xreg PROPERTIES PUBLIC_HEADER "${XREG_ALL_HEADERS}")
 

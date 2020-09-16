@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(EXE_NAME "${JHMR_EXE_PREFIX}convert-dicom")
+set(EXE_NAME "${XREG_EXE_PREFIX}convert-dicom")
 
-add_executable(${EXE_NAME} jhmr_convert_resample_dicom_main.cpp)
+add_executable(${EXE_NAME} xreg_convert_resample_dicom_main.cpp)
 
-target_link_libraries(${EXE_NAME} ${JHMR_EXE_LIBS_TO_LINK})
+target_link_libraries(${EXE_NAME} ${XREG_EXE_LIBS_TO_LINK})
 
 install(TARGETS ${EXE_NAME})
 

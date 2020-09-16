@@ -20,5 +20,5 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_opencv OBJECT jhmrOpenCVUtils.cpp)
+add_library(xreg_opencv OBJECT xregOpenCVUtils.cpp)
 

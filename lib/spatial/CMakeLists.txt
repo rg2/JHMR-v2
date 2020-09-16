@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_spatial OBJECT jhmrSpatialPrimitives.cpp
-                                jhmrFitCircle.cpp
-                                jhmrFitPlane.cpp
-                                jhmrKDTree.cpp)
+add_library(xreg_spatial OBJECT xregSpatialPrimitives.cpp
+                                xregFitCircle.cpp
+                                xregFitPlane.cpp
+                                xregKDTree.cpp)
 

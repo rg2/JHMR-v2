@@ -20,20 +20,20 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_ray_cast OBJECT jhmrRayCastSyncBuf.cpp
-                                 jhmrRayCastInterface.cpp
-                                 jhmrRayCastBaseCPU.cpp
-                                 jhmrRayCastLineIntCPU.cpp
-                                 jhmrRayCastSurRenderCPU.cpp
-                                 jhmrRayCastOccContourCPU.cpp
-                                 jhmrRayCastDepthCPU.cpp
-                                 jhmrRayCastSparseCollCPU.cpp
-                                 jhmrSplatLineIntCPU.cpp
-                                 jhmrRayCastBaseOCL.cpp
-                                 jhmrRayCastLineIntOCL.cpp
-                                 jhmrRayCastSurRenderOCL.cpp
-                                 jhmrRayCastOccContourOCL.cpp
-                                 jhmrRayCastDepthOCL.cpp
-                                 jhmrEdgesFromRayCast.cpp
-                                 jhmrRayCastProgOpts.cpp)
+add_library(xreg_ray_cast OBJECT xregRayCastSyncBuf.cpp
+                                 xregRayCastInterface.cpp
+                                 xregRayCastBaseCPU.cpp
+                                 xregRayCastLineIntCPU.cpp
+                                 xregRayCastSurRenderCPU.cpp
+                                 xregRayCastOccContourCPU.cpp
+                                 xregRayCastDepthCPU.cpp
+                                 xregRayCastSparseCollCPU.cpp
+                                 xregSplatLineIntCPU.cpp
+                                 xregRayCastBaseOCL.cpp
+                                 xregRayCastLineIntOCL.cpp
+                                 xregRayCastSurRenderOCL.cpp
+                                 xregRayCastOccContourOCL.cpp
+                                 xregRayCastDepthOCL.cpp
+                                 xregEdgesFromRayCast.cpp
+                                 xregRayCastProgOpts.cpp)
 

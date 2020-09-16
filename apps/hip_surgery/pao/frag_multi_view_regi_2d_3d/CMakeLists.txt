@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(EXE_NAME "${JHMR_EXE_PREFIX}pao-frag-mult-view-regi-2d-3d")
+set(EXE_NAME "${XREG_EXE_PREFIX}pao-frag-mult-view-regi-2d-3d")
 
-add_executable(${EXE_NAME} jhmr_pao_frag_multi_view_regi_2d_3d_main.cpp)
+add_executable(${EXE_NAME} xreg_pao_frag_multi_view_regi_2d_3d_main.cpp)
 
-target_link_libraries(${EXE_NAME} PUBLIC ${JHMR_EXE_LIBS_TO_LINK})
+target_link_libraries(${EXE_NAME} PUBLIC ${XREG_EXE_LIBS_TO_LINK})
 
 install(TARGETS ${EXE_NAME})
 

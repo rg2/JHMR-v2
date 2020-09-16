@@ -20,18 +20,18 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_file_formats OBJECT jhmrDICOMUtils.cpp
-                                     jhmrCSVUtils.cpp
-                                     jhmrCIOSFusionDICOM.cpp
-                                     jhmrACSVUtils.cpp
-                                     jhmrFCSVUtils.cpp
-                                     jhmrSTLMeshIO.cpp
-                                     jhmrH5MeshIO.cpp
-                                     jhmrMeshIO.cpp
-                                     jhmrH5PAOIO.cpp
-                                     jhmrPAOIO.cpp
-                                     jhmrH5CamModelIO.cpp
-                                     jhmrH5ProjDataIO.cpp
-                                     jhmrH5SE3OptVarsIO.cpp
-                                     jhmrWriteVideo.cpp)
+add_library(xreg_file_formats OBJECT xregDICOMUtils.cpp
+                                     xregCSVUtils.cpp
+                                     xregCIOSFusionDICOM.cpp
+                                     xregACSVUtils.cpp
+                                     xregFCSVUtils.cpp
+                                     xregSTLMeshIO.cpp
+                                     xregH5MeshIO.cpp
+                                     xregMeshIO.cpp
+                                     xregH5PAOIO.cpp
+                                     xregPAOIO.cpp
+                                     xregH5CamModelIO.cpp
+                                     xregH5ProjDataIO.cpp
+                                     xregH5SE3OptVarsIO.cpp
+                                     xregWriteVideo.cpp)
 

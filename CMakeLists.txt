@@ -23,22 +23,22 @@
 cmake_minimum_required(VERSION 3.13.0 FATAL_ERROR)
 
 # Version format is YYYY.MM.DD for a release and YYYY.MM.DD.1 for devel after the release
-project(jhmr-v2 VERSION 2020.0.0.1)
+project(xreg VERSION 2020.0.0.1)
 
 set (CMAKE_CXX_STANDARD "11" CACHE STRING "C++ Standard (needs at least 11)")
 mark_as_advanced(CMAKE_CXX_STANDARD)
 
-set (JHMR_TOP_LEVEL_PROJ FALSE)
+set (XREG_TOP_LEVEL_PROJ FALSE)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
-  set (JHMR_TOP_LEVEL_PROJ TRUE)
+  set (XREG_TOP_LEVEL_PROJ TRUE)
 endif ()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
-option(JHMR_BUILD_APPS "Build jhmr applications in addition to the library" ${JHMR_TOP_LEVEL_PROJ})
+option(XREG_BUILD_APPS "Build xreg applications in addition to the library" ${XREG_TOP_LEVEL_PROJ})
 
-option(JHMR_INCLUDE_GIT_HASH_IN_VER_STR "Include the git hash in the version string that is embedded into the library" OFF)
-mark_as_advanced(JHMR_INCLUDE_GIT_HASH_IN_VER_STR)
+option(XREG_INCLUDE_GIT_HASH_IN_VER_STR "Include the git hash in the version string that is embedded into the library" OFF)
+mark_as_advanced(XREG_INCLUDE_GIT_HASH_IN_VER_STR)
 
 set(CMAKE_SKIP_BUILD_RPATH  FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
@@ -72,7 +72,7 @@ find_package(NLopt REQUIRED)
 
 add_subdirectory(third_party)
 
-set(JHMR_EXT_LIB_INC_DIRS ${Boost_INCLUDE_DIRS}
+set(XREG_EXT_LIB_INC_DIRS ${Boost_INCLUDE_DIRS}
                           ${EIGEN3_INCLUDE_DIR}
                           ${FMT_INCLUDE_DIRS}
                           ${ITK_INCLUDE_DIRS}
@@ -81,7 +81,7 @@ set(JHMR_EXT_LIB_INC_DIRS ${Boost_INCLUDE_DIRS}
                           ${VTK_INCLUDE_DIRS}
                           ${VIENNACL_INC_DIR})
 
-set(JHMR_EXT_LIBS_TO_LINK OpenCL::OpenCL
+set(XREG_EXT_LIBS_TO_LINK OpenCL::OpenCL
                           fmt::fmt
                           ${ITK_LIBRARIES}
                           ${OpenCV_LIBS}
@@ -89,25 +89,25 @@ set(JHMR_EXT_LIBS_TO_LINK OpenCL::OpenCL
                           ${VTK_LIBRARIES}
                           ${NLOPT_LIBRARIES})
 
-include_directories(SYSTEM ${JHMR_EXT_LIB_INC_DIRS})
+include_directories(SYSTEM ${XREG_EXT_LIB_INC_DIRS})
 
-if (JHMR_INCLUDE_GIT_HASH_IN_VER_STR)
+if (XREG_INCLUDE_GIT_HASH_IN_VER_STR)
   include(GetGitRevisionDescription)
-  get_git_head_revision(GIT_REFSPEC JHMR_GIT_SHA1)
-  set(JHMR_HAS_GIT_SHA1 true)
+  get_git_head_revision(GIT_REFSPEC XREG_GIT_SHA1)
+  set(XREG_HAS_GIT_SHA1 true)
 else ()
-  set(JHMR_GIT_SHA1 "")
-  set(JHMR_HAS_GIT_SHA1 false)
+  set(XREG_GIT_SHA1 "")
+  set(XREG_HAS_GIT_SHA1 false)
 endif ()
 
 add_subdirectory(lib)
 
-set(JHMR_EXE_LIBS_TO_LINK ${JHMR_EXT_LIBS_TO_LINK} jhmr)
+set(XREG_EXE_LIBS_TO_LINK ${XREG_EXT_LIBS_TO_LINK} xreg)
 
 # Prefix of each application executable filename
-set(JHMR_EXE_PREFIX "jhmr-")
+set(XREG_EXE_PREFIX "xreg-")
 
-if (JHMR_BUILD_APPS)
+if (XREG_BUILD_APPS)
   add_subdirectory(apps)
 endif ()
 
@@ -115,24 +115,24 @@ endif ()
 # as its own top-level project. This is needed for when the
 # library file tree is located within another project and added
 # via a call to add_subdirectory()
-if (JHMR_TOP_LEVEL_PROJ)
-  install(TARGETS jhmr cmaes EXPORT jhmr-targets)
+if (XREG_TOP_LEVEL_PROJ)
+  install(TARGETS xreg cmaes EXPORT xreg-targets)
 
   include(CMakePackageConfigHelpers)
 
-  configure_package_config_file(cmake/jhmrConfig.cmake.in
-                                ${PROJECT_BINARY_DIR}/jhmrConfig.cmake
+  configure_package_config_file(cmake/xregConfig.cmake.in
+                                ${PROJECT_BINARY_DIR}/xregConfig.cmake
                                 INSTALL_DESTINATION lib/cmake)
 
-  write_basic_package_version_file(${PROJECT_BINARY_DIR}/jhmrConfigVersion.cmake COMPATIBILITY AnyNewerVersion)
+  write_basic_package_version_file(${PROJECT_BINARY_DIR}/xregConfigVersion.cmake COMPATIBILITY AnyNewerVersion)
 
   # Even though the cmaes target may be static library with a private
-  # relationship to jhmr, CMake still requires it to be exported!
-  export(TARGETS jhmr cmaes NAMESPACE jhmr:: FILE ${PROJECT_BINARY_DIR}/jhmr-targets.cmake)
+  # relationship to xreg, CMake still requires it to be exported!
+  export(TARGETS xreg cmaes NAMESPACE xreg:: FILE ${PROJECT_BINARY_DIR}/xreg-targets.cmake)
 
-  install(FILES ${PROJECT_BINARY_DIR}/jhmrConfig.cmake ${PROJECT_BINARY_DIR}/jhmrConfigVersion.cmake
+  install(FILES ${PROJECT_BINARY_DIR}/xregConfig.cmake ${PROJECT_BINARY_DIR}/xregConfigVersion.cmake
           DESTINATION lib/cmake)
 
-  install(EXPORT jhmr-targets NAMESPACE jhmr:: DESTINATION lib/cmake)
+  install(EXPORT xreg-targets NAMESPACE xreg:: DESTINATION lib/cmake)
 endif ()
 

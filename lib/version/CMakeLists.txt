@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/jhmrVersionConfigVals.cpp.in"
-               "${CMAKE_CURRENT_BINARY_DIR}/jhmrVersionConfigVals.cpp" @ONLY)
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/xregVersionConfigVals.cpp.in"
+               "${CMAKE_CURRENT_BINARY_DIR}/xregVersionConfigVals.cpp" @ONLY)
 
-add_library(jhmr_version OBJECT jhmrVersionInfo.cpp
-                                ${CMAKE_CURRENT_BINARY_DIR}/jhmrVersionConfigVals.cpp)
+add_library(xreg_version OBJECT xregVersionInfo.cpp
+                                ${CMAKE_CURRENT_BINARY_DIR}/xregVersionConfigVals.cpp)
 

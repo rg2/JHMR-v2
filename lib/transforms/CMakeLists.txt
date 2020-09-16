@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_transforms OBJECT jhmrRotUtils.cpp
-                                   jhmrRigidUtils.cpp
-                                   jhmrPerspectiveXform.cpp
-                                   jhmrPointCloudUtils.cpp
-                                   jhmrAnatCoordFrames.cpp)
+add_library(xreg_transforms OBJECT xregRotUtils.cpp
+                                   xregRigidUtils.cpp
+                                   xregPerspectiveXform.cpp
+                                   xregPointCloudUtils.cpp
+                                   xregAnatCoordFrames.cpp)
 

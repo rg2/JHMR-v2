@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_vtk OBJECT jhmrVTKBasicUtils.cpp
-                            jhmrVTKITKUtils.cpp
-                            jhmrVTKMeshUtils.cpp
-                            jhmrVTK3DPlotter.cpp)
+add_library(xreg_vtk OBJECT xregVTKBasicUtils.cpp
+                            xregVTKITKUtils.cpp
+                            xregVTKMeshUtils.cpp
+                            xregVTK3DPlotter.cpp)
 

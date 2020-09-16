@@ -20,9 +20,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_itk OBJECT jhmrITKBasicImageUtils.cpp
-                            jhmrITKIOUtils.cpp
-                            jhmrITKRemapUtils.cpp
-                            jhmrITKCropPadUtils.cpp
-                            jhmrITKLabelUtils.cpp)
+add_library(xreg_itk OBJECT xregITKBasicImageUtils.cpp
+                            xregITKIOUtils.cpp
+                            xregITKRemapUtils.cpp
+                            xregITKCropPadUtils.cpp
+                            xregITKLabelUtils.cpp)
 

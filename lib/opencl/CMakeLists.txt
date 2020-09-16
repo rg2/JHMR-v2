@@ -20,10 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_opencl OBJECT jhmrOpenCLConvert.cpp
-                               jhmrOpenCLMath.cpp
-                               jhmrOpenCLSpatial.cpp
-                               jhmrOpenCLSys.cpp
-                               jhmrOpenCLMiscKernels.cpp
-                               jhmrViennaCLManager.cpp)
+add_library(xreg_opencl OBJECT xregOpenCLConvert.cpp
+                               xregOpenCLMath.cpp
+                               xregOpenCLSpatial.cpp
+                               xregOpenCLSys.cpp
+                               xregOpenCLMiscKernels.cpp
+                               xregViennaCLManager.cpp)
 

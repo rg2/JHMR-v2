@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_image OBJECT jhmrVariableSpacedSlices.cpp
-                              jhmrLabelWarping.cpp
-                              jhmrHUToLinAtt.cpp
-                              jhmrProjData.cpp
-                              jhmrImageIntensLogTrans.cpp
-                              jhmrImageAddPoissonNoise.cpp
-                              jhmrProjPreProc.cpp)
+add_library(xreg_image OBJECT xregVariableSpacedSlices.cpp
+                              xregLabelWarping.cpp
+                              xregHUToLinAtt.cpp
+                              xregProjData.cpp
+                              xregImageIntensLogTrans.cpp
+                              xregImageAddPoissonNoise.cpp
+                              xregProjPreProc.cpp)
 

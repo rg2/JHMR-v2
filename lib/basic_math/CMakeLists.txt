@@ -20,16 +20,16 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_basic_math OBJECT jhmrPolyFit.cpp
-                                   jhmrDistInterface.cpp
-                                   jhmrNormDist.cpp
-                                   jhmrFoldNormDist.cpp
-                                   jhmrLogNormDist.cpp
-                                   jhmrNullDist.cpp
-                                   jhmrNormDistFit.cpp
-                                   jhmrPolyFindZeros.cpp
-                                   jhmrBasicStats.cpp
-                                   jhmrSampleUniformUnitVecs.cpp
-                                   jhmrNDRange.cpp
-                                   jhmrLinAlgUtils.cpp)
+add_library(xreg_basic_math OBJECT xregPolyFit.cpp
+                                   xregDistInterface.cpp
+                                   xregNormDist.cpp
+                                   xregFoldNormDist.cpp
+                                   xregLogNormDist.cpp
+                                   xregNullDist.cpp
+                                   xregNormDistFit.cpp
+                                   xregPolyFindZeros.cpp
+                                   xregBasicStats.cpp
+                                   xregSampleUniformUnitVecs.cpp
+                                   xregNDRange.cpp
+                                   xregLinAlgUtils.cpp)
 

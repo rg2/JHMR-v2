@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Example script for building dependencies and jhmr-v2.
+# Example script for building dependencies and xReg.
 # This is not pretty, but can be used in a pinch and serves well to illustrate
 # the settings used for achieving a successful build.
 
@@ -12,7 +12,7 @@ cd build
 
 NEED_TO_DOWNLOAD=true
 NEED_TO_BUILD_THIRD_PARTY=true
-NEED_TO_START_JHMR=true
+NEED_TO_START_XREG=true
 
 DO_GUI=true
 
@@ -257,9 +257,9 @@ cd $NLOPT_DIR
   
 fi
 
-# START: JHMR BUILD:
+# START: XREG BUILD:
 
-if [ "$NEED_TO_START_JHMR" = true ]; then
+if [ "$NEED_TO_START_XREG" = true ]; then
 
   cmake -G Ninja .. \
     -DCMAKE_BUILD_TYPE:STRING=$BUILD_CONFIG \

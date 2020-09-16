@@ -129,13 +129,13 @@ RUN mkdir opencv_build && cd opencv_build && \
     cmake --build . && cmake --build . --target install && \
     cd / && rm -rf opencv_build
 
-FROM custom-deps as jhmr-build
+FROM custom-deps as xreg-build
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       ocl-icd-opencl-dev && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /jhmr_build
+WORKDIR /xreg_build
 
 COPY . .
 
@@ -154,6 +154,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
       ocl-icd-libopencl1 && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=jhmr-build /usr/local/bin /usr/local/bin
-COPY --from=jhmr-build /usr/local/lib /usr/local/lib
+COPY --from=xreg-build /usr/local/bin /usr/local/bin
+COPY --from=reg-build /usr/local/lib /usr/local/lib
 

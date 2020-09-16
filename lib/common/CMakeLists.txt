@@ -20,17 +20,17 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_common OBJECT jhmrAssert.cpp
-                               jhmrStringUtils.cpp
-                               jhmrFilesystemUtils.cpp
-                               jhmrSampleUtils.cpp
-                               jhmrEndianUtils.cpp
-                               jhmrExceptionUtils.cpp
-                               jhmrStreams.cpp
-                               jhmrProgOptUtils.cpp
-                               jhmrObjWithOStream.cpp
-                               jhmrLandmarkMapUtils.cpp
-                               jhmrMesh.cpp
-                               jhmrStdStreamUtils.cpp
-                               jhmrTimer.cpp)
+add_library(xreg_common OBJECT xregAssert.cpp
+                               xregStringUtils.cpp
+                               xregFilesystemUtils.cpp
+                               xregSampleUtils.cpp
+                               xregEndianUtils.cpp
+                               xregExceptionUtils.cpp
+                               xregStreams.cpp
+                               xregProgOptUtils.cpp
+                               xregObjWithOStream.cpp
+                               xregLandmarkMapUtils.cpp
+                               xregMesh.cpp
+                               xregStdStreamUtils.cpp
+                               xregTimer.cpp)
 

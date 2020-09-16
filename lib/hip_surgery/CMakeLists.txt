@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_library(jhmr_hip_surgery OBJECT jhmrHipSegUtils.cpp
-                                    jhmrPAOCuts.cpp
-                                    jhmrPAODrawBones.cpp
-                                    jhmrPAOVolAfterRepo.cpp
-                                    jhmrMetalObjs.cpp
-                                    jhmrMetalObjSampling.cpp
-                                    jhmrSegMetalInXRay.cpp)
+add_library(xreg_hip_surgery OBJECT xregHipSegUtils.cpp
+                                    xregPAOCuts.cpp
+                                    xregPAODrawBones.cpp
+                                    xregPAOVolAfterRepo.cpp
+                                    xregMetalObjs.cpp
+                                    xregMetalObjSampling.cpp
+                                    xregSegMetalInXRay.cpp)
 

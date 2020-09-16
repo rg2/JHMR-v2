@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(EXE_NAME "${JHMR_EXE_PREFIX}report-dcm")
+set(EXE_NAME "${XREG_EXE_PREFIX}report-dcm")
 
-add_executable(${EXE_NAME} jhmr_report_dicom_main.cpp)
+add_executable(${EXE_NAME} xreg_report_dicom_main.cpp)
 
-target_link_libraries(${EXE_NAME} PUBLIC ${JHMR_EXE_LIBS_TO_LINK})
+target_link_libraries(${EXE_NAME} PUBLIC ${XREG_EXE_LIBS_TO_LINK})
 
 install(TARGETS ${EXE_NAME})
 

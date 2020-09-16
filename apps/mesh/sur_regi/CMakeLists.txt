@@ -20,11 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set(EXE_NAME "${JHMR_EXE_PREFIX}sur-regi")
+set(EXE_NAME "${XREG_EXE_PREFIX}sur-regi")
 
-add_executable(${EXE_NAME} jhmr_sur_regi_main.cpp)
+add_executable(${EXE_NAME} xreg_sur_regi_main.cpp)
 
-target_link_libraries(${EXE_NAME} PUBLIC ${JHMR_EXE_LIBS_TO_LINK})
+target_link_libraries(${EXE_NAME} PUBLIC ${XREG_EXE_LIBS_TO_LINK})
 
 install(TARGETS ${EXE_NAME})
 
