@@ -6,4 +6,4 @@ A comprehensive listing of the program's usage may be obtained by passing `-h` o
 
 ## Examples
 Several examples of this tool are given by:
-  * [Single-View Pelvis Registration](../../hip_surgery/pelvis_single_view_regi_2d_3d)
+  * [Single-View Pelvis Registration Walkthrough Section](https://github.com/rg2/jhmr-v2/wiki/Walkthrough%3A-Single-View-Pelvis-Registration)
