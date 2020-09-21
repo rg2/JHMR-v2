@@ -499,7 +499,7 @@ xreg::ReadSingleImgFromProjDataH5U8FromDisk(const std::string& path, const size_
   return ReadSingleImgFromProjDataFromDiskHelper<unsigned char>(path, proj_idx);
 }
 
-std::vector<CameraModel> ReadCamModelsFromProjDataFromDisk(const std::string& path)
+std::vector<CameraModel> xreg::ReadCamModelsFromProjDataFromDisk(const std::string& path)
 {
   return ExtractCamModels(ReadProjDataH5F32FromDisk(path, false));
 }

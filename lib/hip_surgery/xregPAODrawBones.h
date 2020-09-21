@@ -73,6 +73,8 @@ struct DrawPAOBones : ObjWithOStream
 
   bool femur_pose_rel_to_frag = true;
 
+  bool show_contra_femur = true;
+
   boost::optional<FrameTransform> delta_sec_frag;
 
   bool do_frag_alpha = false;

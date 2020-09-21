@@ -30,6 +30,12 @@
 #include "xregCommon.h"
 #include "xregAssert.h"
 
+// Forward Declarations
+namespace H5
+{
+class CommonFG;
+}
+
 namespace xreg
 {
 
@@ -194,6 +200,11 @@ std::vector<cv::Mat> AllocContiguousBufferForOpenCVImages(const size_type num_ro
   
   return ocv_imgs;
 }
+
+void WriteImgsAsMultiChannelH5(const std::vector<cv::Mat>& imgs,
+                               const std::string& h5_dataset_name,
+                               H5::CommonFG* h5,
+                               const bool compress = true);
 
 }  // xreg
 

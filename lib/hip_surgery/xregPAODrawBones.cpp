@@ -189,20 +189,23 @@ void xreg::DrawPAOBones::operator()()
       femur_mesh = *femur_mesh_arg;
     }
 
-    if (!contra_femur_mesh_arg)
+    if (show_contra_femur)
     {
-      dout() << "creating contra-lateral femur mesh..." << std::endl;
-      create_mesh.labels[0] = con_femur_label;
-      contra_femur_mesh = create_mesh(labels.GetPointer());
-    }
-    else
-    {
-      contra_femur_mesh = *contra_femur_mesh_arg;
-    }
+      if (!contra_femur_mesh_arg)
+      {
+        dout() << "creating contra-lateral femur mesh..." << std::endl;
+        create_mesh.labels[0] = con_femur_label;
+        contra_femur_mesh = create_mesh(labels.GetPointer());
+      }
+      else
+      {
+        contra_femur_mesh = *contra_femur_mesh_arg;
+      }
 
-    dout() << "plotting contra-lateral femur surface..." << std::endl;
-    plotter.add_mesh(contra_femur_mesh,
-                     contra_femur_color[0], contra_femur_color[1], contra_femur_color[2]);
+      dout() << "plotting contra-lateral femur surface..." << std::endl;
+      plotter.add_mesh(contra_femur_mesh,
+                       contra_femur_color[0], contra_femur_color[1], contra_femur_color[2]);
+    }
   
     dout() << "transforming femur surface..." << std::endl;
     TriMesh femur_mesh_to_disp = femur_mesh;

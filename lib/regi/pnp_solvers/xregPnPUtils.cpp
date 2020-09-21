@@ -53,3 +53,20 @@ xreg::PnPPOSITAndReprojCMAES(const CameraModel& cam,
   return cmaes_regi->regi_cam_to_world();
 }
 
+xreg::FrameTransform xreg::PnPReprojCMAES(const CameraModel& cam,
+                                          const LandMap3& pts_3d,
+                                          const LandMap2& inds_2d,
+                                          const FrameTransform init_cam_to_world)
+{
+  auto cmaes_regi = MakeLand2D3DRegiReprojCMAESStandardParams();
+
+  cmaes_regi->set_cam(cam);
+  cmaes_regi->set_inds_2d_and_world_pts_3d(inds_2d, pts_3d);
+
+  cmaes_regi->set_init_cam_to_world(init_cam_to_world);
+  
+  cmaes_regi->run();
+
+  return cmaes_regi->regi_cam_to_world();
+}
+

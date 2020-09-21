@@ -35,5 +35,6 @@ add_library(xreg_ray_cast OBJECT xregRayCastSyncBuf.cpp
                                  xregRayCastOccContourOCL.cpp
                                  xregRayCastDepthOCL.cpp
                                  xregEdgesFromRayCast.cpp
-                                 xregRayCastProgOpts.cpp)
+                                 xregRayCastProgOpts.cpp
+                                 xregProj3DLabelsTo2D.cpp)
 

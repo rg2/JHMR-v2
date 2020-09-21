@@ -52,7 +52,7 @@ if (${VIENNACL_INC_DIR} STREQUAL "VIENNACL_INC_DIR-NOTFOUND")
 endif ()
 
 find_package(TBB REQUIRED)
-install(FILES $<TARGET_FILE:tbb> TYPE LIB)
+#install(FILES $<TARGET_FILE:tbb> TYPE LIB)
 
 find_package(Boost REQUIRED)
 
@@ -88,8 +88,6 @@ set(XREG_EXT_LIBS_TO_LINK OpenCL::OpenCL
                           tbb
                           ${VTK_LIBRARIES}
                           ${NLOPT_LIBRARIES})
-
-include_directories(SYSTEM ${XREG_EXT_LIB_INC_DIRS})
 
 if (XREG_INCLUDE_GIT_HASH_IN_VER_STR)
   include(GetGitRevisionDescription)

@@ -97,6 +97,11 @@ int main(int argc, char* argv[])
          "combined fragment/femur pose will not be used to visualize the femur.")
     << false;
 
+  po.add("hide-contra-femur", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_TRUE,
+         "hide-contra-femur",
+         "Do not render/display the contra-lateral femur.")
+    << false;
+
   po.add("femur-frag-xform2", ProgOpts::kNO_SHORT_FLAG, ProgOpts::kSTORE_STRING,
          "femur-frag-xform2",
          "(Draw another fragment) The transformation, in the APP, that is "
@@ -218,8 +223,6 @@ int main(int argc, char* argv[])
                                 "Color of the rendered background.");
     bg_color_arg.default_vals.resize(3);
     bg_color_arg.num_vals = 3;
-    //bg_color_arg << draw_bones.contra_femur_color[0] << draw_bones.contra_femur_color[1]
-    //                       << draw_bones.contra_femur_color[2];
   }
 
   try
@@ -444,6 +447,9 @@ int main(int argc, char* argv[])
   {
     vout << "no femur only transform specified, using identity..." << std::endl;
   }
+
+  draw_bones.show_contra_femur = !po.get("hide-contra-femur").as_bool();
+  vout << "  show contra. femur? " << BoolToYesNo(draw_bones.show_contra_femur) << std::endl;
 
   if (!femur_and_frag_xform2_path.empty())
   {

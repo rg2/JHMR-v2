@@ -62,6 +62,7 @@ foreach (XREG_CUR_LIB_DIR ${XREG_LIB_SUB_DIRS})
   add_subdirectory(${XREG_CUR_LIB_DIR})
 
   target_include_directories(xreg_${XREG_CUR_LIB_DIR} PRIVATE ${XREG_LIB_INC_DIRS})
+  target_include_directories(xreg_${XREG_CUR_LIB_DIR} SYSTEM PUBLIC ${XREG_EXT_LIB_INC_DIRS})
   
   target_link_libraries(xreg_${XREG_CUR_LIB_DIR}
                         PUBLIC ${XREG_EXT_LIBS_TO_LINK}
@@ -82,6 +83,7 @@ add_library(xreg ${XREG_LIB_OBJS})
 target_include_directories(xreg PUBLIC
                                   "$<BUILD_INTERFACE:${XREG_LIB_INC_DIRS}>"
                                   $<INSTALL_INTERFACE:include>)
+target_include_directories(xreg SYSTEM PUBLIC ${XREG_EXT_LIB_INC_DIRS})
 
 target_link_libraries(xreg PUBLIC ${XREG_EXT_LIBS_TO_LINK} PRIVATE cmaes)
 

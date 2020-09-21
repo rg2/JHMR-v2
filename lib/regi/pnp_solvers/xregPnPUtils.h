@@ -37,6 +37,11 @@ FrameTransform PnPPOSITAndReprojCMAES(const CameraModel& cam,
                                       const LandMap3& pts_3d,
                                       const LandMap2& inds_2d);
 
+FrameTransform PnPReprojCMAES(const CameraModel& cam,
+                              const LandMap3& pts_3d,
+                              const LandMap2& inds_2d,
+                              const FrameTransform init_cam_to_world);
+
 }  // xreg
 
 #endif

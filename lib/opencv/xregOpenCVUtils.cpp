@@ -31,6 +31,7 @@
 #include "xregITKOpenCVUtils.h"
 #include "xregITKIOUtils.h"
 #include "xregTBBUtils.h"
+#include "xregHDF5.h"
 
 #define xregOCV_TO_ITK_IMAGE_REMAP_AND_WRITE_CASE(OCV_TYPE, SCALAR_TYPE) \
   case OCV_TYPE: \
@@ -1959,5 +1960,107 @@ std::tuple<double,double> xreg::MeanStdDev(const cv::Mat& img)
   }
 
   return mean_std_dev;
+}
+
+namespace  // un-named
+{
+
+template <class tPixelScalar>
+void WriteImgsAsMultiChannelH5Helper(const std::vector<cv::Mat>& imgs,
+                                     const std::string& h5_dataset_name,
+                                     H5::CommonFG* h5,
+                                     const bool compress)
+{
+  using PixelScalar = tPixelScalar;
+
+  const size_type num_imgs = imgs.size();
+
+  const hsize_t nr = imgs[0].rows;
+  const hsize_t nc = imgs[0].cols;
+
+  for (size_type i = 1; i < num_imgs; ++i)
+  {
+    xregASSERT((nr == imgs[i].rows) && (nc == imgs[i].cols));
+    xregASSERT(imgs[i].isContinuous());
+  }
+
+  std::array<hsize_t,3> multi_chan_dims = { num_imgs, nr, nc };
+
+  H5::DataSpace data_space(multi_chan_dims.size(), multi_chan_dims.data());
+    
+  // 1 image channel in memory (lets us write imgs[i] contiguously)
+  std::array<hsize_t,3> mem_dims = { 1, nr, nc };
+
+  H5::DSetCreatPropList props;
+  props.copy(H5::DSetCreatPropList::DEFAULT);
+
+  if (compress)
+  {
+    // chunk of 1 image channel - reuse memory dims
+    props.setChunk(mem_dims.size(), mem_dims.data());
+    props.setDeflate(9);
+  }
+
+  H5::DataSet multi_chan_ds = h5->createDataSet(h5_dataset_name,
+                                                LookupH5DataType<PixelScalar>(),
+                                                data_space, props);
+  
+  H5::DataSpace ds_m(mem_dims.size(), mem_dims.data());
+
+  for (size_type i = 0; i < num_imgs; ++i)
+  {
+    const std::array<hsize_t,3> f_start = { i, 0, 0 };
+
+    H5::DataSpace ds_f = multi_chan_ds.getSpace();
+    ds_f.selectHyperslab(H5S_SELECT_SET, mem_dims.data(), f_start.data());
+    
+    multi_chan_ds.write(imgs[i].data, LookupH5DataType<PixelScalar>(), ds_m, ds_f);
+  }
+}
+
+}  // un-named
+
+void xreg::WriteImgsAsMultiChannelH5(const std::vector<cv::Mat>& imgs,
+                                     const std::string& h5_dataset_name,
+                                     H5::CommonFG* h5,
+                                     const bool compress)
+{
+  const size_type num_imgs = imgs.size();
+  xregASSERT(num_imgs);
+
+  const auto img_type = imgs[0].type();
+
+  for (size_type i = 1; i < num_imgs; ++i)
+  {
+    xregASSERT(img_type == imgs[i].type());
+  }
+  
+  switch (img_type)
+  {
+  case CV_8U:
+    WriteImgsAsMultiChannelH5Helper<unsigned char>(imgs, h5_dataset_name, h5, compress);
+    break;
+  case CV_8S:
+    WriteImgsAsMultiChannelH5Helper<char>(imgs, h5_dataset_name, h5, compress);
+    break;
+  case CV_16U:
+    WriteImgsAsMultiChannelH5Helper<unsigned short>(imgs, h5_dataset_name, h5, compress);
+    break;
+  case CV_16S:
+    WriteImgsAsMultiChannelH5Helper<short>(imgs, h5_dataset_name, h5, compress);
+    break;
+  case CV_32S:
+    WriteImgsAsMultiChannelH5Helper<int>(imgs, h5_dataset_name, h5, compress);
+    break;
+  case CV_32F:
+    WriteImgsAsMultiChannelH5Helper<float>(imgs, h5_dataset_name, h5, compress);
+    break;
+  case CV_64F:
+    WriteImgsAsMultiChannelH5Helper<double>(imgs, h5_dataset_name, h5, compress);
+    break;
+  default:
+    xregThrow("unsupported OpenCV Mat Type!");
+    break;
+  }
 }
 
