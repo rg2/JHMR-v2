@@ -1,3 +1,5 @@
+# MOVED HERE: https://github.com/rg2/xreg
+
 # xReg: Modeling and Registration Software for Surgery
 This repository contains library routines and stand-alone programs for various modeling and registration tasks relating to surgery, with a particular focus on 2D/3D registration for intraoperative X-ray navigation.
 Although xReg was developed from a practical approach and provides an out-of-the-box capability for intraoperative fluoroscopic navigation, it is also very much compatible with research-oriented goals.
